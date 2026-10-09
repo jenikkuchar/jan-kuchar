@@ -15,4 +15,4 @@ User-agent: Google-Extended
 User-agent: Applebot-Extended
 Allow: /
 
-Sitemap: https://jan-kuchar.cz/sitemap.xml
+Sitemap: https://www.jan-kuchar.cz/sitemap.xml
