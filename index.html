@@ -11,6 +11,28 @@
 <meta property="og:description" content="Jan Kuchař – AI, technologie, inovace.">
 <meta property="og:url" content="https://jan-kuchar.cz">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfilePage",
+  "url": "https://jan-kuchar.cz/",
+  "name": "Jan Kuchař",
+  "inLanguage": "cs",
+  "mainEntity": {
+    "@type": "Person",
+    "@id": "https://jan-kuchar.cz/#jan",
+    "name": "Jan Kuchař",
+    "alternateName": "Honza Kuchař",
+    "url": "https://jan-kuchar.cz/",
+    "jobTitle": "Product Owner",
+    "description": "Product Owner v doméně e-commerce AI ve společnosti HP Tronic (Datart, ETA, NAY).",
+    "worksFor": { "@type": "Organization", "name": "HP Tronic" },
+    "homeLocation": { "@type": "Place", "name": "Beskydy", "address": { "@type": "PostalAddress", "addressCountry": "CZ" } },
+    "knowsAbout": ["Umělá inteligence", "E-commerce", "Automatizace", "Technologie", "Inovace"],
+    "sameAs": ["https://www.linkedin.com/in/jan-kucha%C5%99-16925532/"]
+  }
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
@@ -124,6 +146,7 @@ body.searching footer{display:none}
   .row{padding:11px 10px;font-size:16px}
   .row.sel{background:transparent}
 }
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -151,12 +174,30 @@ body.searching footer{display:none}
   </div>
 
   <div class="chips" id="chips"></div>
+  <!-- Obsah pro vyhledávače a AI – vizuálně skrytý, Spotlight ho načítá odsud. Texty upravuj tady. -->
+  <div class="sr-only" id="obsah">
+    <section data-id="kdo"><h2>Kdo jsem</h2><div class="body">
+      <p>Jmenuji se Honza a jsem z Beskyd. Baví mě AI, technologie a všechno kolem nich a taky mě to živí.</p>
+      <p>Odreagovat se chodím do přírody, nejraději někam do hor.</p>
+    </div></section>
+    <section data-id="co"><h2>Co dělám</h2><div class="body">
+      <p>Aktuálně pracuji jako <b>Product Owner</b> v doméně e-commerce AI ve společnosti <b>HP Tronic</b> (Datart, ETA, NAY a další).</p>
+      <p class="dim">Méně omáčky, více AI.</p>
+    </div></section>
+    <section data-id="zajmy"><h2>Zájmy</h2><div class="body">
+      <p>Co mě baví mimo práci:</p>
+      <div class="tags"><span class="chip">🏃 Sport</span><span class="chip">🏔️ Hory</span><span class="chip">🌲 Příroda</span><span class="chip">✈️ Cestování</span></div>
+    </div></section>
+    <section><h2>Kontakt</h2><p><a href="https://www.linkedin.com/in/jan-kucha%C5%99-16925532/">LinkedIn</a></p></section>
+  </div>
 </main>
 
 <footer>Napiš cokoliv – nebo zkus „kontakt“ · © <span id="year"></span> Jan Kuchař</footer>
 
 <script>
 /* ======== Obsah – uprav podle sebe ======== */
+// Texty položek Kdo jsem / Co dělám / Zájmy jsou v HTML v <div id="obsah"> (kvůli vyhledávačům a AI)
+const fromHtml = id => document.querySelector(`#obsah [data-id="${id}"] .body`).innerHTML;
 // E-mail je zakódovaný jako kódy znaků, aby ho roboti nenašli ve zdrojovém kódu – skládá se až v prohlížeči
 const EMAIL = String.fromCharCode(106,97,110,46,107,117,99,104,97,114,64,105,99,108,111,117,100,46,99,111,109);
 const LINKEDIN = 'https://www.linkedin.com/in/jan-kucha%C5%99-16925532/';
@@ -172,18 +213,15 @@ const G = {                                     // barvy ikon
 const ITEMS = [
   { id:'kdo', section:'O Janovi', title:'Kdo jsem', icon:'👤', color:G.blue, kind:'Info', chip:'👋 Kdo jsi?',
     keys:'kdo jsi jan honza o mne about info jmeno clovek beskydy odkud hory priroda',
-    body:`<p>Jmenuji se Honza a jsem z Beskyd. Baví mě AI, technologie a všechno kolem nich a taky mě to živí.</p>
-          <p>Odreagovat se chodím do přírody, nejraději někam do hor.</p>`,
+    body:fromHtml('kdo'),
     meta:[['Druh','Info'],['Lokalita','Beskydy'],['Režim','výhradně tmavý']] },
   { id:'co', section:'O Janovi', title:'Co dělám', icon:'✦', color:G.yellow, kind:'Poznámka', chip:'💼 Co děláš?',
     keys:'co delas prace job zamestnani pozice product owner hp tronic datart eta nay ai umela inteligence ecommerce eshop automatizace',
-    body:`<p>Aktuálně pracuji jako <b>Product Owner</b> v doméně e-commerce AI ve společnosti <b>HP Tronic</b> (Datart, ETA, NAY a další).</p>
-          <p class="dim">Méně omáčky, více AI.</p>`,
+    body:fromHtml('co'),
     meta:[['Druh','Poznámka'],['Upraveno','dnes'],['Štítky','AI · e-commerce · automatizace']] },
   { id:'zajmy', section:'O Janovi', title:'Zájmy', icon:'♥', color:G.pink, kind:'Seznam', chip:'✨ Co tě baví?',
     keys:'zajmy konicky hobby bavi volny cas sport hory priroda cestovani turistika',
-    body:`<p>Co mě baví mimo práci:</p>
-          <div class="tags"><span class="chip">🏃 Sport</span><span class="chip">🏔️ Hory</span><span class="chip">🌲 Příroda</span><span class="chip">✈️ Cestování</span></div>` },
+    body:fromHtml('zajmy') },
   { id:'kontakt', section:'O Janovi', title:'Kontakt', icon:'✉', color:G.green, kind:'Kontakt', chip:'✉️ Jak tě kontaktovat?',
     keys:'kontakt email mail napis spojeni linkedin', contact:true },
   { id:'mail', section:'Akce', title:'Napsat e-mail', icon:'✉', color:G.green, kind:'Akce', href:'mailto:'+EMAIL,

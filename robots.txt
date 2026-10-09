@@ -1,0 +1,18 @@
+# Vítáni jsou všichni – vyhledávače i AI asistenti
+User-agent: *
+Allow: /
+
+# AI crawlery (výslovně povoleno)
+User-agent: GPTBot
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: ClaudeBot
+User-agent: Claude-SearchBot
+User-agent: Claude-User
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+Allow: /
+
+Sitemap: https://jan-kuchar.cz/sitemap.xml
