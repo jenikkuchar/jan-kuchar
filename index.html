@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Jan Kuchař</title>
-<meta name="description" content="Jan Kuchař – AI, e-commerce a produkty. Osobní stránka.">
+<meta name="description" content="Jan Kuchař – AI, technologie, inovace.">
 <meta name="theme-color" content="#08080c">
 <meta name="color-scheme" content="dark">
 <meta property="og:title" content="Jan Kuchař">
-<meta property="og:description" content="AI, e-commerce a produkty, které dávají smysl.">
+<meta property="og:description" content="Jan Kuchař – AI, technologie, inovace.">
 <meta property="og:url" content="https://jan-kuchar.cz">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -133,13 +133,13 @@ body.searching footer{display:none}
 <main>
   <header>
     <h1>Jan <b>Kuchař</b></h1>
-    <p class="tagline">AI · e-commerce · produkty</p>
+    <p class="tagline">AI · Technologie · Inovace · Hory · Příroda</p>
   </header>
 
   <div class="search" role="search">
     <div class="bar">
       <svg width="20" height="20" viewBox="0 0 16 16" fill="none" stroke="#fff" stroke-width="1.6" aria-hidden="true"><circle cx="6.5" cy="6.5" r="5"/><path d="m10.5 10.5 4 4" stroke-linecap="round"/></svg>
-      <input id="q" type="text" placeholder="Na co se chceš zeptat?" autocomplete="off" spellcheck="false"
+      <input id="q" type="text" placeholder="Hledat ve Spotlightu" autocomplete="off" spellcheck="false"
              aria-label="Hledat" aria-controls="list" aria-autocomplete="list">
       <button class="clear" id="clear" aria-label="Smazat"><svg width="8" height="8" viewBox="0 0 8 8" stroke="#000" stroke-width="1.6" stroke-linecap="round"><path d="M1 1l6 6M7 1 1 7"/></svg></button>
       <kbd class="k">⌘K</kbd>
@@ -153,13 +153,13 @@ body.searching footer{display:none}
   <div class="chips" id="chips"></div>
 </main>
 
-<footer>Napiš cokoli – nebo zkus „kontakt“ · © <span id="year"></span> Jan Kuchař</footer>
+<footer>Napiš cokoliv – nebo použij AI · © <span id="year"></span> Jan Kuchař</footer>
 
 <script>
 /* ======== Obsah – uprav podle sebe ======== */
-const EMAIL = 'ahoj@jan-kuchar.cz';            // TODO: doplň svůj skutečný e-mail
-const LINKEDIN = 'https://www.linkedin.com/';  // TODO: doplň odkaz na svůj profil
-const GITHUB = 'https://github.com/jenikkuchar';
+// E-mail je zakódovaný jako kódy znaků, aby ho roboti nenašli ve zdrojovém kódu – skládá se až v prohlížeči
+const EMAIL = String.fromCharCode(106,97,110,46,107,117,99,104,97,114,64,105,99,108,111,117,100,46,99,111,109);
+const LINKEDIN = 'https://www.linkedin.com/in/jan-kucha%C5%99-16925532/';
 
 const G = {                                     // barvy ikon
   blue:'linear-gradient(160deg,#5ac8fa,#0a60ff)', yellow:'linear-gradient(160deg,#ffd60a,#ff9f0a)',
@@ -171,33 +171,31 @@ const G = {                                     // barvy ikon
 // hidden: v seznamu se neukáže, najde se jen když se na ni někdo zeptá
 const ITEMS = [
   { id:'kdo', section:'O Janovi', title:'Kdo jsem', icon:'👤', color:G.blue, kind:'Info', chip:'👋 Kdo jsi?',
-    keys:'kdo jsi jan o mne about info jmeno clovek',
-    body:`<p>Jmenuju se Jan a pracuju na průsečíku <b>umělé inteligence</b> a <b>e-commerce</b>.</p>
-          <p>Baví mě brát nové technologie a měnit je v produkty, které lidem reálně pomáhají.</p>`,
-    meta:[['Druh','Info'],['Lokalita','Česko'],['Režim','výhradně tmavý']] },
+    keys:'kdo jsi jan honza o mne about info jmeno clovek beskydy odkud hory priroda',
+    body:`<p>Jmenuji se Honza a jsem z Beskyd. Baví mě AI, technologie a všechno kolem nich a taky mě to živí.</p>
+          <p>Odreagovat se chodím do přírody, nejraději někam do hor.</p>`,
+    meta:[['Druh','Info'],['Lokalita','Beskydy'],['Režim','výhradně tmavý']] },
   { id:'co', section:'O Janovi', title:'Co dělám', icon:'✦', color:G.yellow, kind:'Poznámka', chip:'💼 Co děláš?',
-    keys:'co delas prace job ai umela inteligence ecommerce eshop produkty',
-    body:`<p>Pracuju na průsečíku umělé inteligence a e-commerce. Beru nové technologie a měním je v produkty, které lidem reálně pomáhají.</p>
-          <p class="dim">Méně slajdů, víc prototypů.</p>`,
-    meta:[['Druh','Poznámka'],['Upraveno','dnes'],['Štítky','AI · e-commerce · produkty']] },
+    keys:'co delas prace job zamestnani pozice product owner hp tronic datart eta nay ai umela inteligence ecommerce eshop automatizace',
+    body:`<p>Aktuálně pracuji jako <b>Product Owner</b> v doméně e-commerce AI ve společnosti <b>HP Tronic</b> (Datart, ETA, NAY a další).</p>
+          <p class="dim">Méně omáčky, více AI.</p>`,
+    meta:[['Druh','Poznámka'],['Upraveno','dnes'],['Štítky','AI · e-commerce · automatizace']] },
   { id:'zajmy', section:'O Janovi', title:'Zájmy', icon:'♥', color:G.pink, kind:'Seznam', chip:'✨ Co tě baví?',
-    keys:'zajmy konicky hobby bavi',
-    body:`<p>Co mě baví, když zrovna nestavím produkty:</p>
-          <div class="tags"><span class="chip">🤖 AI</span><span class="chip">🛒 E-commerce</span><span class="chip">📦 Produkty</span><span class="chip">⚙️ Automatizace</span><span class="chip">✈️ Cestování</span><span class="chip">☕ Dobrá káva</span></div>` },
+    keys:'zajmy konicky hobby bavi volny cas sport hory priroda cestovani turistika',
+    body:`<p>Co mě baví mimo práci:</p>
+          <div class="tags"><span class="chip">🏃 Sport</span><span class="chip">🏔️ Hory</span><span class="chip">🌲 Příroda</span><span class="chip">✈️ Cestování</span></div>` },
   { id:'kontakt', section:'O Janovi', title:'Kontakt', icon:'✉', color:G.green, kind:'Kontakt', chip:'✉️ Jak tě kontaktovat?',
-    keys:'kontakt email mail napis spojeni linkedin github', contact:true },
+    keys:'kontakt email mail napis spojeni linkedin', contact:true },
   { id:'mail', section:'Akce', title:'Napsat e-mail', icon:'✉', color:G.green, kind:'Akce', href:'mailto:'+EMAIL,
     keys:'napsat email mail zprava', sub:EMAIL },
   { id:'li', section:'Odkazy', title:'LinkedIn', icon:'in', color:'#0a66c2', kind:'↗', href:LINKEDIN,
-    keys:'linkedin profil cv zivotopis' },
-  { id:'gh', section:'Odkazy', title:'GitHub', icon:'⌥', color:'#24292f', kind:'↗', href:GITHUB,
-    keys:'github kod code repo' },
-  { id:'kava', section:'Jiné', title:'Káva', icon:'☕', color:G.brown, kind:'Easter egg', hidden:true,
-    keys:'kava kafe coffee espresso',
-    body:`<p>Hladina kofeinu: <b>82 %</b> a stoupá.</p><p class="dim">Pohon všech výše uvedených projektů.</p>` },
+    keys:'linkedin profil cv zivotopis', sub:'Profesní profil' },
+  { id:'caj', section:'Jiné', title:'Čaj', icon:'🫖', color:G.brown, kind:'Easter egg', hidden:true,
+    keys:'caj tea konvice',
+    body:`<p>No jasně, jdu si uvařit 🫖</p>` },
   { id:'light', section:'Jiné', title:'Světlý režim', icon:'☀', color:G.purple, kind:'Nastavení', hidden:true,
     keys:'svetly rezim light mode bily theme tema',
-    body:`<p>Tady ne. 🌙</p><p class="dim">Tahle stránka je výhradně v tmavém režimu.</p>` },
+    body:`<p>To neprojde! 🌙</p><p class="dim">Tahle stránka je výhradně v tmavém režimu.</p>` },
 ];
 
 /* ======== Logika ======== */
@@ -253,9 +251,8 @@ function renderPreview(){
       <div class="acts">
         <a class="act" href="mailto:${EMAIL}"><i>✉</i>E-mail</a>
         <a class="act" href="${LINKEDIN}" target="_blank" rel="noopener"><i>in</i>LinkedIn</a>
-        <a class="act" href="${GITHUB}" target="_blank" rel="noopener"><i>⌥</i>GitHub</a>
       </div>
-      <div class="meta"><span>E-mail</span><span>${EMAIL}</span><span>GitHub</span><span>@jenikkuchar</span></div>`;
+      <div class="meta"><span>E-mail</span><span>${EMAIL}</span><span>LinkedIn</span><span>Jan Kuchař</span></div>`;
   } else if (it.href) {
     const ext = it.href.startsWith('http') ? 'target="_blank" rel="noopener"' : '';
     prev.innerHTML = back + `${icon(it, true)}<h2>${it.title}</h2>
