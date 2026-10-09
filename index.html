@@ -1,0 +1,941 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Jan Kuchař</title>
+<meta name="description" content="Jan Kuchař – AI, e-commerce a produkty. Osobní stránka.">
+<meta name="theme-color" content="#0b0b12">
+<meta name="color-scheme" content="dark">
+<meta property="og:title" content="Jan Kuchař">
+<meta property="og:description" content="AI, e-commerce a produkty, které dávají smysl.">
+<meta property="og:url" content="https://jan-kuchar.cz">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&family=Caveat:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07070d;
+  --glass:rgba(30,30,40,.55);
+  --glass-strong:rgba(28,28,36,.82);
+  --stroke:rgba(255,255,255,.09);
+  --stroke-2:rgba(255,255,255,.16);
+  --text:#f5f5f7;
+  --text-2:rgba(235,235,245,.62);
+  --text-3:rgba(235,235,245,.35);
+  --blue:#0a84ff; --green:#30d158; --yellow:#ffd60a; --orange:#ff9f0a;
+  --red:#ff453a; --pink:#ff375f; --purple:#bf5af2; --teal:#64d2ff;
+  --radius:14px;
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","Inter",system-ui,sans-serif;
+  --mono:"SF Mono","JetBrains Mono",ui-monospace,Menlo,monospace;
+  --shadow:0 30px 80px -10px rgba(0,0,0,.7),0 0 0 .5px rgba(255,255,255,.12) inset;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{background:var(--bg);color:var(--text);font-family:var(--font);
+  -webkit-font-smoothing:antialiased;user-select:none;-webkit-user-select:none;font-size:14px}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+a{color:var(--blue);text-decoration:none}
+
+/* ---------- Wallpaper ---------- */
+.wall{position:fixed;inset:0;overflow:hidden;z-index:0;
+  background:radial-gradient(120% 80% at 50% 120%,#1a0f3a 0%,#0b0b18 55%,#06060b 100%)}
+.blob{position:absolute;border-radius:50%;filter:blur(70px);opacity:.55;mix-blend-mode:screen;
+  animation:drift 26s ease-in-out infinite alternate}
+.b1{width:55vmax;height:55vmax;left:-12vmax;top:-18vmax;background:radial-gradient(circle,#5e2bff 0%,transparent 65%)}
+.b2{width:45vmax;height:45vmax;right:-14vmax;top:5vmax;background:radial-gradient(circle,#ff2d87 0%,transparent 65%);animation-duration:32s;animation-delay:-8s}
+.b3{width:50vmax;height:50vmax;left:20vmax;bottom:-25vmax;background:radial-gradient(circle,#0a84ff 0%,transparent 65%);animation-duration:38s;animation-delay:-16s}
+.b4{width:30vmax;height:30vmax;left:45vmax;top:20vmax;background:radial-gradient(circle,#ff9f0a 0%,transparent 70%);opacity:.25;animation-duration:44s}
+@keyframes drift{
+  0%{transform:translate(0,0) scale(1)}
+  50%{transform:translate(6vmax,4vmax) scale(1.12)}
+  100%{transform:translate(-4vmax,7vmax) scale(.95)}
+}
+.hills{position:absolute;left:0;right:0;bottom:0;width:100%;height:46vh;opacity:.9}
+.grain{position:absolute;inset:0;opacity:.07;pointer-events:none;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+
+/* ---------- Intro ---------- */
+.intro{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;background:#000;
+  transition:opacity .8s ease, visibility .8s}
+.intro.gone{opacity:0;visibility:hidden}
+.hello{font-family:"Caveat",cursive;font-size:clamp(90px,18vw,200px);line-height:1;
+  background:linear-gradient(90deg,#64d2ff,#bf5af2 40%,#ff375f 70%,#ff9f0a);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  clip-path:inset(0 100% 0 0);animation:write 1.6s cubic-bezier(.6,.1,.3,1) .25s forwards;
+  filter:drop-shadow(0 0 30px rgba(191,90,242,.35))}
+@keyframes write{to{clip-path:inset(0 0 0 0)}}
+.intro small{position:absolute;bottom:40px;color:var(--text-3);font-size:12px;letter-spacing:.04em}
+
+/* ---------- Menu bar (macOS) ---------- */
+.menubar{position:fixed;top:0;left:0;right:0;height:28px;z-index:500;display:flex;align-items:center;
+  padding:0 10px;gap:4px;font-size:13px;
+  background:rgba(20,20,28,.35);backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);
+  border-bottom:.5px solid rgba(255,255,255,.06)}
+.mb-item{padding:3px 9px;border-radius:5px;white-space:nowrap}
+.mb-item:hover,.mb-item.on{background:rgba(255,255,255,.12)}
+.mb-logo{font-weight:800;font-size:12px;letter-spacing:-.02em;padding:2px 7px;
+  background:linear-gradient(135deg,#64d2ff,#bf5af2);-webkit-background-clip:text;background-clip:text;color:transparent}
+.mb-app{font-weight:700}
+.mb-right{margin-left:auto;display:flex;align-items:center;gap:2px}
+.mb-right svg{display:block}
+.menu{position:fixed;top:30px;min-width:230px;padding:5px;border-radius:10px;z-index:600;
+  background:var(--glass-strong);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);
+  box-shadow:var(--shadow);display:none;font-size:13px}
+.menu.show{display:block;animation:pop .14s ease-out}
+.menu button,.menu .sep{display:flex;width:100%;justify-content:space-between;padding:4px 10px;border-radius:6px;text-align:left}
+.menu button:hover{background:var(--blue)}
+.menu .sep{height:1px;padding:0;margin:5px 8px;width:auto;background:var(--stroke-2)}
+.menu kbd{font-family:var(--font);color:var(--text-3)}
+.menu button:hover kbd{color:#fff}
+@keyframes pop{from{opacity:0;transform:scale(.97) translateY(-4px)}}
+
+/* ---------- Desktop widgets ---------- */
+.desktop{position:fixed;inset:28px 0 0 0;z-index:1}
+.widgets{position:absolute;left:22px;top:22px;display:grid;grid-template-columns:repeat(2,158px);gap:16px}
+.widget{border-radius:22px;padding:14px;height:158px;position:relative;overflow:hidden;
+  background:var(--glass);backdrop-filter:blur(30px) saturate(170%);-webkit-backdrop-filter:blur(30px) saturate(170%);
+  box-shadow:0 0 0 .5px var(--stroke-2) inset,0 10px 30px rgba(0,0,0,.35)}
+.widget.wide{grid-column:span 2}
+.w-clock{display:grid;place-items:center}
+.analog{width:126px;height:126px;border-radius:50%;position:relative;
+  background:radial-gradient(circle at 50% 40%,#2a2a35,#121218);box-shadow:0 0 0 .5px var(--stroke-2) inset}
+.analog i{position:absolute;left:50%;top:50%;transform-origin:50% 100%;border-radius:4px}
+.analog .h{width:4px;height:32px;margin:-32px 0 0 -2px;background:#fff}
+.analog .m{width:3px;height:46px;margin:-46px 0 0 -1.5px;background:#fff}
+.analog .s{width:1.5px;height:52px;margin:-52px 0 0 -.75px;background:var(--orange)}
+.analog .dot{position:absolute;left:50%;top:50%;width:8px;height:8px;margin:-4px;border-radius:50%;background:var(--orange);box-shadow:0 0 0 2px #121218}
+.analog .tick{position:absolute;left:50%;top:6px;width:2px;height:7px;margin-left:-1px;background:rgba(255,255,255,.35);transform-origin:50% 57px;border-radius:2px}
+.analog .num{position:absolute;font-size:10px;font-weight:600;color:var(--text-2)}
+.w-cal .day{color:var(--red);font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+.w-cal .big{font-size:54px;font-weight:300;line-height:1;margin:2px 0 8px}
+.w-cal .ev{font-size:11px;border-left:3px solid var(--purple);padding-left:7px;color:var(--text-2);line-height:1.35}
+.w-cal .ev b{color:var(--text);font-weight:600;display:block}
+.w-np{display:flex;gap:14px;align-items:center;height:auto}
+.art{width:92px;height:92px;flex:none;border-radius:12px;position:relative;overflow:hidden;
+  background:conic-gradient(from 0deg,#ff375f,#bf5af2,#0a84ff,#64d2ff,#30d158,#ffd60a,#ff9f0a,#ff375f);
+  animation:spin 14s linear infinite;box-shadow:0 8px 24px rgba(191,90,242,.35)}
+.art::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,transparent 20%,rgba(0,0,0,.35) 70%)}
+@keyframes spin{to{filter:hue-rotate(360deg)}}
+.np-meta{min-width:0;flex:1}
+.np-meta .lbl{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--pink);font-weight:700}
+.np-meta .t{font-weight:700;font-size:15px;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.np-meta .a{color:var(--text-2);font-size:12px}
+.bars{display:flex;gap:3px;align-items:flex-end;height:18px;margin-top:10px}
+.bars span{width:3px;background:var(--pink);border-radius:2px;animation:eq 1s ease-in-out infinite alternate}
+.bars span:nth-child(2){animation-delay:-.3s}.bars span:nth-child(3){animation-delay:-.6s}
+.bars span:nth-child(4){animation-delay:-.15s}.bars span:nth-child(5){animation-delay:-.45s}
+@keyframes eq{from{height:3px}to{height:18px}}
+.prog{height:4px;border-radius:2px;background:rgba(255,255,255,.15);margin-top:10px;overflow:hidden}
+.prog i{display:block;height:100%;width:40%;background:#fff;border-radius:2px;animation:prog 30s linear infinite}
+@keyframes prog{from{width:0}to{width:100%}}
+
+/* Desktop icons right side */
+.dicons{position:absolute;right:20px;top:18px;display:flex;flex-direction:column;gap:14px;align-items:center}
+.dicon{width:88px;display:flex;flex-direction:column;align-items:center;gap:5px;padding:6px 4px;border-radius:8px;font-size:12px;text-align:center;text-shadow:0 1px 3px rgba(0,0,0,.8)}
+.dicon:focus,.dicon:hover{background:rgba(255,255,255,.08);outline:0}
+.dicon .file{width:52px;height:62px;position:relative;border-radius:4px;
+  background:linear-gradient(#fff,#e8e8ed);clip-path:polygon(0 0,72% 0,100% 22%,100% 100%,0 100%)}
+.dicon .file::after{content:"";position:absolute;right:0;top:0;width:28%;height:22%;background:#c7c7cc;border-bottom-left-radius:3px}
+.dicon .file b{position:absolute;bottom:8px;left:0;right:0;text-align:center;font-size:9px;color:#fff;
+  background:var(--red);margin:0 8px;border-radius:3px;padding:1px 0;text-shadow:none}
+.dicon .folder{width:62px;height:50px;position:relative;margin-top:8px;border-radius:5px;
+  background:linear-gradient(#6ac4ff,#2f8ff0)}
+.dicon .folder::before{content:"";position:absolute;left:0;top:-7px;width:26px;height:10px;border-radius:4px 4px 0 0;background:#4aa6f6}
+
+/* ---------- Windows ---------- */
+.win{position:absolute;display:none;flex-direction:column;border-radius:var(--radius);overflow:hidden;
+  background:var(--glass-strong);backdrop-filter:blur(50px) saturate(180%);-webkit-backdrop-filter:blur(50px) saturate(180%);
+  box-shadow:var(--shadow);min-width:300px;max-width:calc(100vw - 20px);max-height:calc(100vh - 140px)}
+.win.open{display:flex;animation:winIn .32s cubic-bezier(.2,.9,.3,1.15)}
+.win.closing{animation:winOut .2s ease-in forwards}
+.win.minimizing{animation:winMin .45s cubic-bezier(.6,0,.4,1) forwards}
+.win.max{left:8px!important;top:8px!important;width:calc(100vw - 16px)!important;height:calc(100vh - 28px - 110px)!important;max-height:none}
+@keyframes winIn{from{opacity:0;transform:scale(.88) translateY(12px)}}
+@keyframes winOut{to{opacity:0;transform:scale(.92)}}
+@keyframes winMin{to{opacity:0;transform:translate(var(--mx,0),var(--my,400px)) scale(.08)}}
+.win.inactive .lights .l{background:#4a4a52!important}
+.win.inactive .titlebar{color:var(--text-3)}
+.titlebar{height:40px;flex:none;display:flex;align-items:center;padding:0 14px;position:relative;cursor:default;
+  border-bottom:.5px solid var(--stroke)}
+.lights{display:flex;gap:8px;z-index:1}
+.lights .l{width:12px;height:12px;border-radius:50%;position:relative;box-shadow:0 0 0 .5px rgba(0,0,0,.25) inset}
+.l.close{background:#ff5f57}.l.min{background:#febc2e}.l.max{background:#28c840}
+.lights .l::after{position:absolute;inset:0;display:grid;place-items:center;font-size:10px;line-height:1;font-weight:800;color:rgba(0,0,0,.55);opacity:0}
+.l.close::after{content:"×"}.l.min::after{content:"–"}.l.max::after{content:"+"}
+.lights:hover .l::after{opacity:1}
+.wtitle{position:absolute;left:0;right:0;text-align:center;font-weight:600;font-size:13px;pointer-events:none}
+.ios-back{display:none}
+.wbody{overflow:auto;flex:1;user-select:text;-webkit-user-select:text}
+.wbody::-webkit-scrollbar{width:8px}.wbody::-webkit-scrollbar-thumb{background:rgba(255,255,255,.18);border-radius:8px}
+
+/* About */
+.about{padding:30px 34px 26px;text-align:center;width:420px;max-width:100%}
+.avatar{width:120px;height:120px;margin:0 auto 16px;border-radius:50%;position:relative;
+  background:conic-gradient(from 210deg,#0a84ff,#bf5af2,#ff375f,#ff9f0a,#0a84ff);padding:3px;
+  box-shadow:0 12px 40px rgba(191,90,242,.35)}
+.avatar>div{width:100%;height:100%;border-radius:50%;display:grid;place-items:center;
+  background:radial-gradient(circle at 35% 30%,#2b2b3a,#111118);font-size:44px;font-weight:800;letter-spacing:-.04em}
+.avatar>div span{background:linear-gradient(135deg,#fff,#a9b5ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.avatar .wave{position:absolute;right:-2px;bottom:4px;font-size:30px;transform-origin:70% 70%;animation:wave 2.4s ease-in-out 2.2s 2}
+@keyframes wave{0%,60%,100%{transform:rotate(0)}10%,30%{transform:rotate(16deg)}20%,40%{transform:rotate(-8deg)}}
+.about h1{font-size:30px;font-weight:700;letter-spacing:-.02em}
+.about .sub{color:var(--text-2);margin:4px 0 20px;font-size:13px}
+.spec{text-align:left;display:grid;grid-template-columns:auto 1fr;gap:7px 16px;font-size:13px;
+  background:rgba(255,255,255,.04);border:.5px solid var(--stroke);border-radius:12px;padding:14px 16px}
+.spec dt{color:var(--text-2);text-align:right}
+.spec dd{font-weight:500}
+.about .btns{display:flex;gap:10px;justify-content:center;margin-top:20px}
+.pill{padding:6px 14px;border-radius:8px;background:rgba(255,255,255,.1);font-size:13px;font-weight:500;
+  box-shadow:0 0 0 .5px var(--stroke-2) inset;transition:background .15s}
+.pill:hover{background:rgba(255,255,255,.17)}
+.pill.primary{background:var(--blue)}
+.pill.primary:hover{background:#2c96ff}
+.about .copy{margin-top:18px;font-size:11px;color:var(--text-3)}
+
+/* Notes */
+.notes{display:flex;width:520px;max-width:100%;min-height:330px}
+.notes aside{width:160px;flex:none;border-right:.5px solid var(--stroke);padding:12px 8px;background:rgba(0,0,0,.15)}
+.notes aside div{padding:8px 10px;border-radius:8px;font-size:12px;margin-bottom:4px}
+.notes aside div.sel{background:rgba(255,214,10,.22)}
+.notes aside b{display:block;font-size:13px;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.notes aside span{color:var(--text-2)}
+.note{padding:20px 26px;flex:1;line-height:1.6;font-size:14px}
+.note .date{color:var(--text-3);font-size:11px;text-align:center;margin-bottom:12px}
+.note h2{font-size:22px;margin-bottom:10px;letter-spacing:-.01em}
+.note p{color:rgba(245,245,247,.88);margin-bottom:12px}
+.note ul{list-style:none;margin-bottom:10px}
+.note li{display:flex;gap:10px;align-items:center;padding:3px 0}
+.chk{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--text-3);flex:none;display:grid;place-items:center;cursor:pointer;transition:.2s}
+.chk.on{background:var(--yellow);border-color:var(--yellow)}
+.chk.on::after{content:"";width:5px;height:9px;border:solid #000;border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.done{color:var(--text-3);text-decoration:line-through}
+mark{background:rgba(255,214,10,.25);color:inherit;padding:0 3px;border-radius:3px}
+
+/* Terminal */
+.term{width:600px;max-width:100%;height:360px;background:rgba(12,12,16,.88);font-family:var(--mono);font-size:13px;line-height:1.55;padding:12px 14px;overflow:auto;cursor:text}
+.term .p{color:var(--green)}.term .path{color:var(--teal)}.term .o{color:#d8d8e0;white-space:pre-wrap}
+.term .dim{color:var(--text-3)}.term .acc{color:var(--pink)}
+.term .line{white-space:pre-wrap;word-break:break-word}
+.term input{background:transparent;border:0;outline:0;color:#fff;font:inherit;width:60%;caret-color:transparent}
+.cursor{display:inline-block;width:8px;height:15px;background:#d8d8e0;vertical-align:-2px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+
+/* Music */
+.music{width:380px;max-width:100%;padding:22px}
+.player{display:flex;gap:16px;align-items:center;margin-bottom:18px}
+.player .art{width:110px;height:110px;border-radius:14px}
+.player h3{font-size:18px}.player p{color:var(--text-2);font-size:13px}
+.ctrls{display:flex;gap:18px;margin-top:10px;align-items:center}
+.ctrls button{opacity:.9}.ctrls button:hover{opacity:1}
+.tracks{list-style:none;border-top:.5px solid var(--stroke)}
+.tracks li{display:grid;grid-template-columns:22px 1fr auto;gap:10px;align-items:center;padding:9px 6px;border-bottom:.5px solid var(--stroke);border-radius:6px;cursor:pointer}
+.tracks li:hover{background:rgba(255,255,255,.05)}
+.tracks li.cur{color:var(--pink)}
+.tracks .n{color:var(--text-3);font-size:12px;text-align:center}
+.tracks .d{color:var(--text-3);font-size:12px;font-variant-numeric:tabular-nums}
+.tracks small{display:block;color:var(--text-2);font-size:11px}
+
+/* Mail / Contact */
+.mail{width:400px;max-width:100%}
+.mhead{padding:14px 18px;border-bottom:.5px solid var(--stroke);font-size:13px;display:grid;grid-template-columns:auto 1fr;gap:6px 10px}
+.mhead span{color:var(--text-2)}
+.mhead input{background:transparent;border:0;outline:0;color:var(--text);font:inherit}
+.mbody{padding:16px 18px}
+.mbody textarea{width:100%;min-height:90px;background:transparent;border:0;outline:0;color:var(--text);font:inherit;resize:none;line-height:1.5}
+.links{display:grid;gap:8px;padding:0 18px 18px}
+.link{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.05);
+  box-shadow:0 0 0 .5px var(--stroke) inset;color:var(--text);transition:.15s}
+.link:hover{background:rgba(255,255,255,.1);transform:translateY(-1px)}
+.link .ico{width:32px;height:32px;border-radius:8px;display:grid;place-items:center;flex:none}
+.link small{display:block;color:var(--text-2);font-size:11px}
+.link .chev{margin-left:auto;color:var(--text-3)}
+
+/* Settings */
+.settings{width:380px;max-width:100%;padding:18px}
+.group{background:rgba(255,255,255,.05);border-radius:12px;box-shadow:0 0 0 .5px var(--stroke) inset;margin-bottom:16px;overflow:hidden}
+.row{display:flex;align-items:center;gap:12px;padding:10px 14px;border-bottom:.5px solid var(--stroke)}
+.row:last-child{border-bottom:0}
+.row .ico{width:28px;height:28px;border-radius:7px;display:grid;place-items:center;flex:none;font-size:15px}
+.row .lbl{flex:1}.row .lbl small{display:block;color:var(--text-2);font-size:11px}
+.tog{width:44px;height:26px;border-radius:13px;background:rgba(120,120,128,.36);position:relative;transition:.25s;flex:none}
+.tog::after{content:"";position:absolute;left:2px;top:2px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.3);transition:.25s cubic-bezier(.3,1.4,.5,1)}
+.tog.on{background:var(--green)}.tog.on::after{left:20px}
+.tog.locked{cursor:not-allowed}
+.shake{animation:shake .4s}
+@keyframes shake{20%,60%{transform:translateX(-5px)}40%,80%{transform:translateX(5px)}}
+.slider{width:100%;accent-color:var(--blue)}
+
+/* ---------- Dock ---------- */
+.dock-wrap{position:fixed;left:0;right:0;bottom:8px;display:flex;justify-content:center;z-index:400;pointer-events:none}
+.dock{pointer-events:auto;display:flex;align-items:flex-end;gap:6px;padding:6px 8px 7px;border-radius:24px;height:72px;
+  background:rgba(40,40,50,.35);backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);
+  box-shadow:0 0 0 .5px rgba(255,255,255,.18) inset,0 10px 40px rgba(0,0,0,.4)}
+.dock .app{width:56px;height:56px;position:relative;transform-origin:50% 100%;transition:width .12s,height .12s}
+.dock .app .icon{width:100%;height:100%}
+.dock .app::after{content:"";position:absolute;bottom:-6px;left:50%;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:rgba(255,255,255,.75);opacity:0}
+.dock .app.running::after{opacity:1}
+.dock .app.bounce .icon{animation:bounce .6s cubic-bezier(.3,0,.3,1) 2}
+@keyframes bounce{50%{transform:translateY(-22px)}}
+.dock .tip{position:absolute;bottom:calc(100% + 12px);left:50%;transform:translateX(-50%);padding:4px 10px;border-radius:7px;font-size:12px;white-space:nowrap;
+  background:var(--glass-strong);box-shadow:0 0 0 .5px var(--stroke-2);opacity:0;pointer-events:none;transition:opacity .12s}
+.dock .app:hover .tip{opacity:1}
+.dock .divider{width:1px;align-self:stretch;margin:6px 4px;background:rgba(255,255,255,.2)}
+
+/* ---------- App icons ---------- */
+.icon{border-radius:22.5%;position:relative;overflow:hidden;display:grid;place-items:center;
+  box-shadow:0 0 0 .5px rgba(255,255,255,.15) inset,0 4px 12px rgba(0,0,0,.35)}
+.icon::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.18),transparent 45%);pointer-events:none}
+.icon svg{width:58%;height:58%}
+.ic-about{background:linear-gradient(160deg,#5ac8fa,#0a60ff)}
+.ic-notes{background:#fff;display:block}
+.ic-notes::after{content:"";position:absolute;left:0;right:0;top:0;height:26%;background:linear-gradient(#ffe259,#ffc800)}
+.ic-notes i{position:absolute;left:14%;right:14%;height:2px;background:#d6d6d6}
+.ic-term{background:linear-gradient(#3a3a3c,#1c1c1e)}
+.ic-term b{font-family:var(--mono);font-size:clamp(12px,30%,22px);color:#fff;position:absolute;left:16%;top:14%;font-weight:600}
+.ic-music{background:linear-gradient(160deg,#ff6482,#fa233b)}
+.ic-mail{background:linear-gradient(160deg,#4fb4ff,#1a6ef5)}
+.ic-settings{background:linear-gradient(160deg,#8e8e93,#48484a)}
+.ic-trash{background:transparent;box-shadow:none}
+.ic-trash::before{display:none}
+
+/* ---------- Spotlight ---------- */
+.spot-bg{position:fixed;inset:0;z-index:800;display:none}
+.spot-bg.show{display:block}
+.spot{position:fixed;left:50%;top:22vh;width:min(640px,calc(100vw - 32px));transform:translateX(-50%);z-index:801;border-radius:16px;overflow:hidden;
+  background:var(--glass-strong);backdrop-filter:blur(50px) saturate(180%);-webkit-backdrop-filter:blur(50px) saturate(180%);box-shadow:var(--shadow);animation:pop .16s ease-out}
+.spot .in{display:flex;gap:12px;align-items:center;padding:14px 18px}
+.spot input{flex:1;background:transparent;border:0;outline:0;color:var(--text);font:inherit;font-size:22px;font-weight:300}
+.spot ul{list-style:none;border-top:.5px solid var(--stroke);padding:6px;max-height:300px;overflow:auto}
+.spot ul:empty{display:none}
+.spot li{display:flex;gap:12px;align-items:center;padding:7px 10px;border-radius:8px;cursor:pointer}
+.spot li .icon{width:30px;height:30px}
+.spot li small{color:var(--text-2);margin-left:auto;font-size:12px}
+.spot li.sel{background:var(--blue)}
+.spot li.sel small{color:rgba(255,255,255,.8)}
+
+/* ---------- Notification ---------- */
+.notif{position:fixed;right:14px;top:40px;width:350px;max-width:calc(100vw - 24px);z-index:700;border-radius:18px;padding:12px 14px;display:flex;gap:12px;
+  background:var(--glass);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);
+  box-shadow:0 0 0 .5px var(--stroke-2) inset,0 14px 40px rgba(0,0,0,.45);
+  transform:translateX(120%);transition:transform .55s cubic-bezier(.2,1.2,.3,1);cursor:pointer}
+.notif.show{transform:none}
+.notif .icon{width:38px;height:38px;flex:none;background:linear-gradient(160deg,#5df774,#1fbf3a)}
+.notif .t{display:flex;justify-content:space-between;font-weight:600;font-size:13px}
+.notif .t small{font-weight:400;color:var(--text-2);font-size:11px}
+.notif p{font-size:13px;color:rgba(245,245,247,.85);margin-top:2px;line-height:1.35}
+
+/* ---------- iOS (mobile) ---------- */
+.ios{display:none}
+.island{position:fixed;top:10px;left:50%;transform:translateX(-50%);width:120px;height:34px;border-radius:20px;background:#000;z-index:900;
+  transition:width .5s cubic-bezier(.3,1.3,.4,1),height .5s cubic-bezier(.3,1.3,.4,1);display:flex;align-items:center;justify-content:space-between;padding:0 12px;overflow:hidden}
+.island.wide{width:min(340px,calc(100vw - 24px));height:44px}
+.island .ia{width:24px;height:24px;border-radius:6px;opacity:0;transition:opacity .3s .2s;background:conic-gradient(#ff375f,#bf5af2,#0a84ff,#30d158,#ff9f0a,#ff375f)}
+.island .bars{margin:0;opacity:0;transition:opacity .3s .2s;height:16px}
+.island.wide .ia,.island.wide .bars{opacity:1}
+.island .itxt{font-size:12px;font-weight:600;opacity:0;transition:opacity .3s .2s;white-space:nowrap}
+.island.wide .itxt{opacity:1}
+
+@media (max-width:760px){
+  .menubar,.widgets,.dicons,.dock-wrap,.notif{display:none!important}
+  .ios{display:block}
+  .desktop{inset:0}
+  .status{position:fixed;top:0;left:0;right:0;height:54px;z-index:870;display:flex;align-items:center;justify-content:space-between;padding:6px 30px 0;font-weight:600;font-size:16px;pointer-events:none}
+  .status .r{display:flex;gap:6px;align-items:center}
+  .home{position:fixed;inset:0;padding:66px 22px 0;z-index:2;transition:transform .45s cubic-bezier(.2,.9,.3,1),filter .45s,opacity .45s}
+  .home.behind{transform:scale(.9);filter:blur(6px);opacity:.5}
+  .iw-row{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:22px}
+  .iw{border-radius:22px;padding:14px;aspect-ratio:1;position:relative;overflow:hidden;
+    background:var(--glass);backdrop-filter:blur(30px) saturate(170%);-webkit-backdrop-filter:blur(30px) saturate(170%);box-shadow:0 0 0 .5px var(--stroke-2) inset}
+  .iw.hero{grid-column:span 2;aspect-ratio:auto;display:flex;gap:14px;align-items:center;padding:16px}
+  .iw.hero .av{width:70px;height:70px;flex:none;border-radius:50%;padding:2px;background:conic-gradient(from 210deg,#0a84ff,#bf5af2,#ff375f,#ff9f0a,#0a84ff)}
+  .iw.hero .av div{width:100%;height:100%;border-radius:50%;display:grid;place-items:center;background:#15151d;font-weight:800;font-size:24px}
+  .iw.hero h1{font-size:22px;letter-spacing:-.02em}
+  .iw.hero p{color:var(--text-2);font-size:13px;line-height:1.35;margin-top:2px}
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px 14px}
+  .grid .app{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11px;font-weight:500;text-shadow:0 1px 3px rgba(0,0,0,.6)}
+  .grid .icon{width:62px;height:62px;max-width:100%;aspect-ratio:1;height:auto}
+  .grid .app:active .icon{transform:scale(.9);filter:brightness(.8)}
+  .dots{display:flex;gap:7px;justify-content:center;position:fixed;bottom:116px;left:0;right:0}
+  .dots i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.3)}.dots i:first-child{background:#fff}
+  .idock{position:fixed;left:12px;right:12px;bottom:max(12px,env(safe-area-inset-bottom));height:92px;border-radius:32px;display:grid;grid-template-columns:repeat(4,1fr);place-items:center;
+    background:rgba(60,60,70,.35);backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);box-shadow:0 0 0 .5px rgba(255,255,255,.15) inset}
+  .idock .icon{width:62px;height:62px}
+
+  .win{position:fixed!important;left:0!important;top:0!important;width:100vw!important;height:100%!important;max-width:none;max-height:none;border-radius:0;z-index:860!important;
+    background:rgba(18,18,24,.92)}
+  .win.open{animation:sheetIn .45s cubic-bezier(.2,.9,.25,1)}
+  .win.closing{animation:sheetOut .3s ease-in forwards}
+  .titlebar{height:auto;padding:58px 16px 10px;border-bottom:0}
+  .lights{display:none}
+  .wtitle{position:static;text-align:left;font-size:30px;font-weight:800;letter-spacing:-.02em;order:2;width:100%}
+  .titlebar{flex-direction:column;align-items:flex-start;gap:6px}
+  .ios-back{display:block;color:var(--blue);font-size:17px;order:1}
+  .wbody>*{width:100%!important}
+  .notes{flex-direction:column}.notes aside{display:none}
+  .term{height:100%;min-height:60vh}
+  .about{padding-top:10px}
+  .homebar{position:absolute;bottom:8px;left:50%;width:134px;height:5px;margin-left:-67px;border-radius:3px;background:rgba(255,255,255,.7);z-index:5}
+}
+@media (min-width:761px){.homebar{display:none}}
+@keyframes sheetIn{from{transform:translateY(100%);border-radius:40px}}
+@keyframes sheetOut{to{transform:translateY(100%);border-radius:40px}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+
+<!-- Intro -->
+<div class="intro" id="intro"><div class="hello">ahoj</div><small>klikni kamkoli</small></div>
+
+<!-- Wallpaper -->
+<div class="wall" aria-hidden="true">
+  <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div><div class="blob b4"></div>
+  <svg class="hills" viewBox="0 0 1440 400" preserveAspectRatio="none">
+    <defs>
+      <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b1c7a" stop-opacity=".85"/><stop offset="1" stop-color="#0b0b18"/></linearGradient>
+      <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7a1f5c" stop-opacity=".7"/><stop offset="1" stop-color="#0b0b18"/></linearGradient>
+      <linearGradient id="g3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#14204d"/><stop offset="1" stop-color="#05050a"/></linearGradient>
+    </defs>
+    <path fill="url(#g2)" d="M0 170 C 220 90, 420 220, 700 150 S 1180 60, 1440 140 L1440 400 L0 400Z"/>
+    <path fill="url(#g1)" d="M0 240 C 260 160, 520 300, 820 220 S 1260 170, 1440 230 L1440 400 L0 400Z"/>
+    <path fill="url(#g3)" d="M0 320 C 300 260, 600 360, 900 300 S 1300 280, 1440 310 L1440 400 L0 400Z"/>
+  </svg>
+  <div class="grain"></div>
+</div>
+
+<!-- macOS menu bar -->
+<nav class="menubar" id="menubar">
+  <button class="mb-item mb-logo" data-menu="jk" aria-label="Menu">JK</button>
+  <button class="mb-item mb-app" id="mbApp" data-menu="app">Jan Kuchař</button>
+  <button class="mb-item" data-menu="file">Soubor</button>
+  <button class="mb-item" data-menu="view">Zobrazení</button>
+  <button class="mb-item" data-menu="go">Přejít</button>
+  <button class="mb-item" data-menu="help">Nápověda</button>
+  <div class="mb-right">
+    <span class="mb-item" title="Baterie: 100 % kreativity">
+      <svg width="26" height="13" viewBox="0 0 26 13"><rect x=".5" y=".5" width="22" height="12" rx="3.5" fill="none" stroke="currentColor" opacity=".5"/><rect x="2" y="2" width="19" height="9" rx="2" fill="currentColor"/><rect x="23.5" y="4.5" width="1.6" height="4" rx=".8" fill="currentColor" opacity=".5"/></svg>
+    </span>
+    <span class="mb-item"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><path d="M8 11.5 5.6 9a3.4 3.4 0 0 1 4.8 0zM3.5 7a6.4 6.4 0 0 1 9 0l1.4-1.4a8.4 8.4 0 0 0-11.8 0zM.7 4.2a10.4 10.4 0 0 1 14.6 0L16 3.5l-.7-.7a11.4 11.4 0 0 0-14.6 0L0 3.5z"/></svg></span>
+    <button class="mb-item" id="spotBtn" aria-label="Spotlight"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6.5" cy="6.5" r="5"/><path d="m10.5 10.5 4 4" stroke-linecap="round"/></svg></button>
+    <span class="mb-item" id="mbClock"></span>
+  </div>
+</nav>
+<div class="menu" id="menu"></div>
+
+<!-- iOS status + island -->
+<div class="ios">
+  <div class="status"><span id="iosClock">9:41</span><span class="r">
+    <svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+    <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><path d="M8 11.5 5.6 9a3.4 3.4 0 0 1 4.8 0zM3.5 7a6.4 6.4 0 0 1 9 0l1.4-1.4a8.4 8.4 0 0 0-11.8 0zM.7 4.2a10.4 10.4 0 0 1 14.6 0L16 3.5l-.7-.7a11.4 11.4 0 0 0-14.6 0L0 3.5z"/></svg>
+    <svg width="26" height="13" viewBox="0 0 26 13"><rect x=".5" y=".5" width="22" height="12" rx="3.5" fill="none" stroke="currentColor" opacity=".5"/><rect x="2" y="2" width="19" height="9" rx="2" fill="currentColor"/></svg>
+  </span></div>
+  <div class="island" id="island"><span class="ia"></span><span class="itxt">Teď hraje: Zvědavost</span><span class="bars"><span></span><span></span><span></span><span></span><span></span></span></div>
+</div>
+
+<main class="desktop" id="desktop">
+  <!-- macOS widgets -->
+  <div class="widgets">
+    <div class="widget w-clock"><div class="analog" id="analog"><i class="h"></i><i class="m"></i><i class="s"></i><span class="dot"></span></div></div>
+    <div class="widget w-cal"><div class="day" id="calDay"></div><div class="big" id="calNum"></div>
+      <div class="ev"><b>Stavět něco nového</b>celý den · každý den</div></div>
+    <div class="widget wide w-np">
+      <div class="art"></div>
+      <div class="np-meta"><div class="lbl">Teď hraje</div><div class="t" id="npTitle">Umělá inteligence</div><div class="a">Jan Kuchař — Zvědavost (Deluxe)</div>
+        <div class="bars"><span></span><span></span><span></span><span></span><span></span></div><div class="prog"><i></i></div></div>
+    </div>
+  </div>
+
+  <!-- macOS desktop icons -->
+  <div class="dicons">
+    <button class="dicon" data-open="about"><div class="folder"></div>O mně</button>
+    <button class="dicon" data-open="notes"><div class="file"><b>TXT</b></div>cteni_na_10s.txt</button>
+    <button class="dicon" data-open="mail"><div class="folder" style="background:linear-gradient(#ffb36b,#ff8a1f)"></div>Kontakt</button>
+  </div>
+
+  <!-- iOS home -->
+  <div class="ios home" id="home">
+    <div class="iw-row">
+      <div class="iw hero" data-open="about">
+        <div class="av"><div>JK</div></div>
+        <div><h1>Jan Kuchař</h1><p>AI · e-commerce · produkty.<br>Stavím věci, co dávají smysl.</p></div>
+      </div>
+    </div>
+    <div class="grid" id="iosGrid"></div>
+    <div class="dots"><i></i><i></i></div>
+    <div class="idock" id="iosDock"></div>
+  </div>
+
+  <!-- ===== Windows ===== -->
+  <section class="win" id="win-about" data-app="about" aria-label="O mně">
+    <header class="titlebar"><div class="lights"><button class="l close" aria-label="Zavřít"></button><button class="l min" aria-label="Minimalizovat"></button><button class="l max" aria-label="Zvětšit"></button></div><button class="ios-back">‹ Domů</button><div class="wtitle">O mně</div></header>
+    <div class="wbody"><div class="about">
+      <div class="avatar"><div><span>JK</span></div><span class="wave">👋</span></div>
+      <h1>Jan Kuchař</h1>
+      <div class="sub">Člověk · edice 2026</div>
+      <dl class="spec">
+        <dt>Procesor</dt><dd>Zvědavost M∞ Max</dd>
+        <dt>Specializace</dt><dd>AI, e-commerce, produkty</dd>
+        <dt>Paměť</dt><dd>neomezené nápady, ~3 otevřené taby</dd>
+        <dt>Grafika</dt><dd>výhradně dark mode</dd>
+        <dt>Pohon</dt><dd>káva · ☕☕☕</dd>
+        <dt>Systém</dt><dd>macOS Hlava 26.0</dd>
+      </dl>
+      <div class="btns"><button class="pill" data-open="notes">Víc o mně…</button><button class="pill primary" data-open="mail">Napiš mi</button></div>
+      <div class="copy">™ a © 1990–2026 Jan Kuchař. Všechna práva vyhrazena.</div>
+    </div></div>
+    <div class="homebar"></div>
+  </section>
+
+  <section class="win" id="win-notes" data-app="notes" aria-label="Poznámky">
+    <header class="titlebar"><div class="lights"><button class="l close"></button><button class="l min"></button><button class="l max"></button></div><button class="ios-back">‹ Domů</button><div class="wtitle">Poznámky</div></header>
+    <div class="wbody"><div class="notes">
+      <aside><div class="sel"><b>Čtení na 10 sekund</b><span>Dnes · Ahoj, jsem Jan</span></div><div><b>Co mě baví</b><span>Včera · AI, data…</span></div><div><b>Nápady</b><span>Neustále · ∞ položek</span></div></aside>
+      <article class="note">
+        <div class="date" id="noteDate"></div>
+        <h2>Ahoj, jsem Jan 👋</h2>
+        <p>Pracuju na průsečíku <mark>umělé inteligence</mark> a <mark>e-commerce</mark>. Baví mě brát nové technologie a měnit je v produkty, které lidem reálně pomáhají.</p>
+        <ul id="todo">
+          <li><span class="chk on"></span><span class="done">Zjistit, co AI umí</span></li>
+          <li><span class="chk on"></span><span class="done">Nasadit ji do praxe</span></li>
+          <li><span class="chk"></span><span>Postavit další věc, co dává smysl</span></li>
+          <li><span class="chk"></span><span>Dopít kávu, dokud je teplá</span></li>
+        </ul>
+        <p style="color:var(--text-2)">Méně slajdů, víc prototypů.</p>
+      </article>
+    </div></div>
+    <div class="homebar"></div>
+  </section>
+
+  <section class="win" id="win-term" data-app="term" aria-label="Terminál">
+    <header class="titlebar"><div class="lights"><button class="l close"></button><button class="l min"></button><button class="l max"></button></div><button class="ios-back">‹ Domů</button><div class="wtitle">jan — zsh — 80×24</div></header>
+    <div class="wbody term" id="term"></div>
+    <div class="homebar"></div>
+  </section>
+
+  <section class="win" id="win-music" data-app="music" aria-label="Hudba">
+    <header class="titlebar"><div class="lights"><button class="l close"></button><button class="l min"></button><button class="l max"></button></div><button class="ios-back">‹ Domů</button><div class="wtitle">Hudba</div></header>
+    <div class="wbody"><div class="music">
+      <div class="player"><div class="art"></div><div style="min-width:0"><p style="font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--pink);font-weight:700">Album</p><h3>Zvědavost (Deluxe)</h3><p>Jan Kuchař · 2026</p>
+        <div class="ctrls"><button id="prev" aria-label="Předchozí"><svg width="22" height="16" viewBox="0 0 24 16" fill="currentColor"><path d="M11 0v16L0 8zM23 0v16L12 8z"/></svg></button>
+          <button id="play" aria-label="Přehrát"><svg width="22" height="22" viewBox="0 0 16 16" fill="currentColor"><rect x="3" y="2" width="3.5" height="12" rx="1"/><rect x="9.5" y="2" width="3.5" height="12" rx="1"/></svg></button>
+          <button id="next" aria-label="Další"><svg width="22" height="16" viewBox="0 0 24 16" fill="currentColor"><path d="M1 0v16l11-8zM13 0v16l11-8z"/></svg></button></div></div></div>
+      <ol class="tracks" id="tracks"></ol>
+    </div></div>
+    <div class="homebar"></div>
+  </section>
+
+  <section class="win" id="win-mail" data-app="mail" aria-label="Kontakt">
+    <header class="titlebar"><div class="lights"><button class="l close"></button><button class="l min"></button><button class="l max"></button></div><button class="ios-back">‹ Domů</button><div class="wtitle">Nová zpráva</div></header>
+    <div class="wbody"><div class="mail">
+      <div class="mhead"><span>Komu:</span><b id="mailTo"></b><span>Předmět:</span><input id="mailSubj" value="Ahoj Jane 👋" aria-label="Předmět"></div>
+      <div class="mbody"><textarea id="mailBody" aria-label="Zpráva">Ahoj, narazil(a) jsem na tvůj web a…</textarea>
+        <button class="pill primary" id="mailSend" style="margin-top:8px">Odeslat ↑</button></div>
+      <div class="links" id="links"></div>
+    </div></div>
+    <div class="homebar"></div>
+  </section>
+
+  <section class="win" id="win-settings" data-app="settings" aria-label="Nastavení">
+    <header class="titlebar"><div class="lights"><button class="l close"></button><button class="l min"></button><button class="l max"></button></div><button class="ios-back">‹ Domů</button><div class="wtitle">Nastavení</div></header>
+    <div class="wbody"><div class="settings">
+      <div class="group">
+        <div class="row"><span class="ico" style="background:#5e5ce6">🌙</span><span class="lbl">Tmavý režim<small>Jinak to nejde.</small></span><button class="tog on locked" data-tog="dark" aria-label="Tmavý režim"></button></div>
+        <div class="row"><span class="ico" style="background:var(--orange)">💡</span><span class="lbl">Zvědavost</span><button class="tog on" data-tog="cur" aria-label="Zvědavost"></button></div>
+        <div class="row"><span class="ico" style="background:var(--red)">⏳</span><span class="lbl">Prokrastinace<small id="procMsg">Vypnuto od roku 2020</small></span><button class="tog" data-tog="proc" aria-label="Prokrastinace"></button></div>
+      </div>
+      <div class="group">
+        <div class="row"><span class="ico" style="background:#8b5a2b">☕</span><span class="lbl">Hladina kofeinu<input class="slider" type="range" min="0" max="100" value="82" id="coffee"></span></div>
+        <div class="row"><span class="ico" style="background:var(--blue)">🤖</span><span class="lbl">AI asistent<small>Ve všem, kde to dává smysl</small></span><button class="tog on" data-tog="ai" aria-label="AI asistent"></button></div>
+      </div>
+    </div></div>
+    <div class="homebar"></div>
+  </section>
+</main>
+
+<!-- Dock -->
+<div class="dock-wrap"><div class="dock" id="dock"></div></div>
+
+<!-- Spotlight -->
+<div class="spot-bg" id="spotBg"><div class="spot" role="dialog" aria-label="Spotlight">
+  <div class="in"><svg width="22" height="22" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" opacity=".6"><circle cx="6.5" cy="6.5" r="5"/><path d="m10.5 10.5 4 4" stroke-linecap="round"/></svg><input id="spotIn" placeholder="Hledání Spotlight" autocomplete="off"></div>
+  <ul id="spotList"></ul>
+</div></div>
+
+<!-- Notification -->
+<div class="notif" id="notif" data-open="mail">
+  <div class="icon"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 3C6.5 3 2 6.8 2 11.5c0 2.6 1.4 5 3.7 6.5L5 21l3.6-1.8c1.1.3 2.2.5 3.4.5 5.5 0 10-3.8 10-8.5S17.5 3 12 3z"/></svg></div>
+  <div><div class="t">Jan Kuchař <small>teď</small></div><p>Ahoj! Díky, že ses zastavil(a). Klikni sem, kdybys chtěl(a) něco probrat. 🙂</p></div>
+</div>
+
+<script>
+/* ======== Obsah – uprav podle sebe ======== */
+const CONTACT = {
+  email: 'ahoj@jan-kuchar.cz',                 // TODO: doplň svůj skutečný e-mail
+  links: [
+    { name:'LinkedIn', sub:'Profesní profil', href:'https://www.linkedin.com/', color:'#0a66c2',
+      svg:'<svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.5h4V21H3zM9.5 9.5h3.8v1.6h.1c.5-1 1.8-2 3.8-2 4 0 4.8 2.6 4.8 6V21h-4v-5.1c0-1.2 0-2.8-1.7-2.8s-2 1.3-2 2.7V21h-4z"/></svg>' },
+    { name:'GitHub', sub:'@jenikkuchar', href:'https://github.com/jenikkuchar', color:'#24292f',
+      svg:'<svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-6 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.6 18.3 5 18.3 5c.6 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .5z"/></svg>' },
+  ]
+};
+const TRACKS = [
+  ['Umělá inteligence','feat. velké jazykové modely','4:20'],
+  ['E-commerce','Remix pro rok 2026','3:33'],
+  ['Produkty, co dávají smysl','Acoustic','3:07'],
+  ['Data & automatizace','Live','5:01'],
+  ['Méně slajdů, víc prototypů','Single','2:22'],
+  ['Káva o půlnoci','Bonus track','1:59'],
+];
+const APPS = [
+  { id:'about',    name:'O mně',     hint:'Kdo jsem' },
+  { id:'notes',    name:'Poznámky',  hint:'Čtení na 10 sekund' },
+  { id:'term',     name:'Terminál',  hint:'whoami' },
+  { id:'music',    name:'Hudba',     hint:'Co mě baví' },
+  { id:'mail',     name:'Kontakt',   hint:'Napiš mi' },
+  { id:'settings', name:'Nastavení', hint:'Konfigurace Jana' },
+];
+
+/* ======== Ikony ======== */
+const ICONS = {
+  about:'<div class="icon ic-about"><svg viewBox="0 0 24 24" fill="#fff"><circle cx="12" cy="8" r="4.2"/><path d="M3.5 21c.8-4.3 4.2-7 8.5-7s7.7 2.7 8.5 7z"/></svg></div>',
+  notes:'<div class="icon ic-notes"><i style="top:42%"></i><i style="top:58%"></i><i style="top:74%"></i></div>',
+  term:'<div class="icon ic-term"><b>&gt;_</b></div>',
+  music:'<div class="icon ic-music"><svg viewBox="0 0 24 24" fill="#fff"><path d="M9 17.5V5.8l11-2.3v11.7a3 3 0 1 1-2-2.8V7.4l-7 1.5v8.6a3 3 0 1 1-2-2.8z"/></svg></div>',
+  mail:'<div class="icon ic-mail"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="5.5" width="18" height="13" rx="2.5" fill="#fff" stroke="none"/><path d="m3.8 7 8.2 6 8.2-6" stroke="#1a6ef5"/></svg></div>',
+  settings:'<div class="icon ic-settings"><svg viewBox="0 0 24 24" fill="none" stroke="#e5e5ea" stroke-width="1.7"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1" stroke-linecap="round"/><circle cx="12" cy="12" r="7" stroke-dasharray="2 2.4"/></svg></div>',
+  trash:'<div class="icon ic-trash"><svg viewBox="0 0 24 24" style="width:80%;height:80%"><path d="M5 6h14l-1.3 14.2a1.5 1.5 0 0 1-1.5 1.3H7.8a1.5 1.5 0 0 1-1.5-1.3z" fill="rgba(255,255,255,.25)" stroke="rgba(255,255,255,.55)" stroke-width=".8"/><path d="M8.5 9v10M12 9v10M15.5 9v10" stroke="rgba(255,255,255,.4)" stroke-width=".8"/><rect x="4" y="4" width="16" height="2.2" rx="1" fill="rgba(255,255,255,.5)"/></svg></div>',
+};
+
+const $ = (s, el=document) => el.querySelector(s);
+const $$ = (s, el=document) => [...el.querySelectorAll(s)];
+const isMobile = () => matchMedia('(max-width:760px)').matches;
+
+/* ======== Intro ======== */
+const intro = $('#intro');
+const endIntro = () => { if (intro.classList.contains('gone')) return; intro.classList.add('gone'); boot(); };
+intro.addEventListener('click', endIntro);
+setTimeout(endIntro, matchMedia('(prefers-reduced-motion:reduce)').matches ? 300 : 2600);
+
+/* ======== Hodiny ======== */
+const analog = $('#analog');
+for (let i = 0; i < 12; i++) {
+  const t = document.createElement('span'); t.className = 'tick';
+  t.style.transform = `rotate(${i*30}deg)`; if (i % 3 === 0) t.style.background = '#fff';
+  analog.appendChild(t);
+}
+function tick(){
+  const d = new Date();
+  const s = d.getSeconds(), m = d.getMinutes(), h = d.getHours() % 12;
+  $('.h', analog).style.transform = `rotate(${h*30 + m/2}deg)`;
+  $('.m', analog).style.transform = `rotate(${m*6 + s/10}deg)`;
+  $('.s', analog).style.transform = `rotate(${s*6}deg)`;
+  const day = d.toLocaleDateString('cs-CZ', { weekday:'short' });
+  const date = d.toLocaleDateString('cs-CZ', { day:'numeric', month:'numeric' });
+  const time = d.toLocaleTimeString('cs-CZ', { hour:'2-digit', minute:'2-digit' });
+  $('#mbClock').textContent = `${day} ${date} ${time}`;
+  $('#iosClock').textContent = d.toLocaleTimeString('cs-CZ', { hour:'numeric', minute:'2-digit' });
+  $('#calDay').textContent = d.toLocaleDateString('cs-CZ', { weekday:'long' });
+  $('#calNum').textContent = d.getDate();
+}
+tick(); setInterval(tick, 1000);
+$('#noteDate').textContent = new Date().toLocaleDateString('cs-CZ', { day:'numeric', month:'long', year:'numeric' }) + ' v ' + new Date().toLocaleTimeString('cs-CZ',{hour:'2-digit',minute:'2-digit'});
+
+/* ======== Dock + iOS mřížka ======== */
+const dock = $('#dock');
+APPS.forEach(a => {
+  const b = document.createElement('button');
+  b.className = 'app'; b.dataset.open = a.id; b.setAttribute('aria-label', a.name);
+  b.innerHTML = ICONS[a.id] + `<span class="tip">${a.name}</span>`;
+  dock.appendChild(b);
+});
+dock.insertAdjacentHTML('beforeend', `<span class="divider"></span><button class="app" id="trash" aria-label="Koš">${ICONS.trash}<span class="tip">Koš</span></button>`);
+
+const grid = $('#iosGrid'), idock = $('#iosDock');
+APPS.forEach(a => {
+  grid.insertAdjacentHTML('beforeend', `<button class="app" data-open="${a.id}">${ICONS[a.id]}<span>${a.name}</span></button>`);
+});
+['about','term','music','mail'].forEach(id => idock.insertAdjacentHTML('beforeend', `<button class="app" data-open="${id}" aria-label="${id}">${ICONS[id]}</button>`));
+
+// Zvětšování ikon v Docku
+const BASE = 56, MAXS = 88, RANGE = 150;
+dock.addEventListener('mousemove', e => {
+  $$('.app', dock).forEach(el => {
+    const r = el.getBoundingClientRect();
+    const dist = Math.abs(e.clientX - (r.left + r.width / 2));
+    const k = Math.max(0, 1 - dist / RANGE);
+    const s = BASE + (MAXS - BASE) * Math.cos((1 - k) * Math.PI / 2) ** 2 * (k > 0 ? 1 : 0);
+    el.style.width = el.style.height = s + 'px';
+  });
+});
+dock.addEventListener('mouseleave', () => $$('.app', dock).forEach(el => el.style.width = el.style.height = BASE + 'px'));
+
+/* ======== Okna ======== */
+let z = 10, cascade = 0;
+const placed = new Set();
+function place(win){
+  if (placed.has(win)) return; placed.add(win);
+  const w = win.offsetWidth, h = win.offsetHeight;
+  const vw = innerWidth, vh = innerHeight - 28 - 100;
+  const preset = { about:[.5,.46], notes:[.68,.4], term:[.4,.5], music:[.75,.55], mail:[.6,.5], settings:[.32,.45] }[win.dataset.app] || [.5,.5];
+  let x = vw * preset[0] - w / 2 + cascade, y = vh * preset[1] - h / 2 + cascade;
+  x = Math.min(Math.max(10, x), vw - w - 10); y = Math.min(Math.max(10, y), vh - h);
+  win.style.left = x + 'px'; win.style.top = y + 'px';
+  cascade = (cascade + 18) % 72;
+}
+function focusWin(win){
+  $$('.win.open').forEach(w => w.classList.toggle('inactive', w !== win));
+  win.style.zIndex = ++z;
+  $('#mbApp').textContent = APPS.find(a => a.id === win.dataset.app)?.name || 'Jan Kuchař';
+}
+function openApp(id){
+  const win = $('#win-' + id); if (!win) return;
+  closeMenus(); closeSpot();
+  const dockApp = $(`.dock .app[data-open="${id}"]`);
+  if (!win.classList.contains('open')) {
+    if (dockApp && !isMobile()) { dockApp.classList.add('bounce'); setTimeout(() => dockApp.classList.remove('bounce'), 1200); }
+    win.classList.remove('closing','minimizing');
+    win.classList.add('open');
+    if (!isMobile()) place(win);
+    dockApp?.classList.add('running');
+    if (id === 'term') startTerm();
+  }
+  if (isMobile()) { $('#home').classList.add('behind'); }
+  focusWin(win);
+}
+function closeWin(win, how='closing'){
+  if (how === 'minimizing') {
+    const d = $(`.dock .app[data-open="${win.dataset.app}"]`).getBoundingClientRect(), r = win.getBoundingClientRect();
+    win.style.setProperty('--mx', (d.left + d.width/2 - r.left - r.width/2) + 'px');
+    win.style.setProperty('--my', (d.top - r.top - r.height/2) + 'px');
+  }
+  win.classList.add(how);
+  setTimeout(() => {
+    win.classList.remove('open', how, 'max');
+    if (how === 'closing') $(`.dock .app[data-open="${win.dataset.app}"]`)?.classList.remove('running');
+    if (!$('.win.open')) { $('#mbApp').textContent = 'Jan Kuchař'; $('#home').classList.remove('behind'); }
+  }, how === 'minimizing' ? 440 : 280);
+}
+
+document.addEventListener('click', e => {
+  const opener = e.target.closest('[data-open]');
+  if (opener && !e.target.closest('.titlebar')) {
+    if (opener.id === 'notif') hideNotif();
+    openApp(opener.dataset.open); return;
+  }
+  const l = e.target.closest('.lights .l'); const win = e.target.closest('.win');
+  if (l && win) {
+    if (l.classList.contains('close')) closeWin(win);
+    else if (l.classList.contains('min')) closeWin(win, 'minimizing');
+    else win.classList.toggle('max');
+    return;
+  }
+  if (e.target.closest('.ios-back') && win) { closeWin(win); return; }
+});
+$$('.win').forEach(win => {
+  win.addEventListener('pointerdown', () => focusWin(win));
+  const bar = $('.titlebar', win);
+  bar.addEventListener('dblclick', () => !isMobile() && win.classList.toggle('max'));
+  bar.addEventListener('pointerdown', e => {
+    if (isMobile() || e.target.closest('button') || win.classList.contains('max')) return;
+    const sx = e.clientX - win.offsetLeft, sy = e.clientY - win.offsetTop;
+    bar.setPointerCapture(e.pointerId);
+    const move = ev => {
+      win.style.left = Math.min(innerWidth - 80, Math.max(-win.offsetWidth + 80, ev.clientX - sx)) + 'px';
+      win.style.top = Math.min(innerHeight - 120, Math.max(0, ev.clientY - sy)) + 'px';
+    };
+    const up = () => { bar.removeEventListener('pointermove', move); bar.removeEventListener('pointerup', up); };
+    bar.addEventListener('pointermove', move); bar.addEventListener('pointerup', up);
+  });
+  // iOS: swipe dolů nebo klik na home indikátor zavře appku
+  $('.homebar', win).addEventListener('click', () => closeWin(win));
+  let ty = null;
+  win.addEventListener('touchstart', e => { ty = e.touches[0].clientY > innerHeight - 50 ? e.touches[0].clientY : null; }, { passive:true });
+  win.addEventListener('touchend', e => { if (ty !== null && ty - e.changedTouches[0].clientY > 40) closeWin(win); ty = null; });
+});
+
+/* ======== Koš ======== */
+$('#trash').addEventListener('click', () => notify('Koš', 'Koš je prázdný. Stejně jako výmluvy.', '#8e8e93'));
+
+/* ======== Notifikace ======== */
+const notif = $('#notif');
+function hideNotif(){ notif.classList.remove('show'); }
+function notify(title, text, color){
+  $('.t', notif).firstChild.textContent = title + ' ';
+  $('p', notif).textContent = text;
+  if (color) $('.icon', notif).style.background = color;
+  notif.classList.add('show'); clearTimeout(notify.t); notify.t = setTimeout(hideNotif, 5000);
+}
+
+/* ======== Menu ======== */
+const MENUS = {
+  jk:[['O tomto Janovi',()=>openApp('about')],'-',['Nastavení systému…',()=>openApp('settings')],'-',['Restartovat…',()=>location.reload()]],
+  app:[['O mně',()=>openApp('about')],['Napsat mi',()=>openApp('mail'),'⌘M']],
+  file:[['Nová zpráva',()=>openApp('mail'),'⌘N'],['Otevřít poznámky',()=>openApp('notes'),'⌘O'],'-',['Zavřít okno',()=>{const w=topWin(); w&&closeWin(w);},'⌘W']],
+  view:[['Spotlight',()=>openSpot(),'⌘K'],['Terminál',()=>openApp('term'),'⌘T']],
+  go:APPS.map(a=>[a.name,()=>openApp(a.id)]),
+  help:[['Jak to tu funguje?',()=>notify('Nápověda','Táhni okna za lištu, ⌘K otevře Spotlight a v Terminálu zkus „help“.','#0a84ff')]],
+};
+const menu = $('#menu');
+function closeMenus(){ menu.classList.remove('show'); $$('.mb-item.on').forEach(b => b.classList.remove('on')); }
+$$('[data-menu]').forEach(btn => btn.addEventListener('click', e => {
+  e.stopPropagation();
+  const wasOn = btn.classList.contains('on'); closeMenus(); if (wasOn) return;
+  btn.classList.add('on');
+  menu.innerHTML = '';
+  MENUS[btn.dataset.menu].forEach(it => {
+    if (it === '-') return menu.insertAdjacentHTML('beforeend', '<div class="sep"></div>');
+    const b = document.createElement('button');
+    b.innerHTML = `<span>${it[0]}</span><kbd>${it[2] || ''}</kbd>`;
+    b.onclick = () => { closeMenus(); it[1](); };
+    menu.appendChild(b);
+  });
+  menu.style.left = btn.getBoundingClientRect().left + 'px';
+  menu.classList.add('show');
+}));
+document.addEventListener('click', e => { if (!e.target.closest('.menu')) closeMenus(); });
+const topWin = () => $$('.win.open').sort((a,b) => b.style.zIndex - a.style.zIndex)[0];
+
+/* ======== Spotlight ======== */
+const spotBg = $('#spotBg'), spotIn = $('#spotIn'), spotList = $('#spotList');
+let spotSel = 0, spotItems = [];
+function openSpot(){ spotBg.classList.add('show'); spotIn.value = ''; renderSpot(); setTimeout(() => spotIn.focus(), 10); }
+function closeSpot(){ spotBg.classList.remove('show'); }
+function renderSpot(){
+  const q = spotIn.value.trim().toLowerCase();
+  spotItems = q ? APPS.filter(a => (a.name + ' ' + a.hint + ' ' + a.id).toLowerCase().includes(q)) : APPS;
+  spotSel = Math.min(spotSel, Math.max(0, spotItems.length - 1));
+  spotList.innerHTML = spotItems.map((a,i) => `<li class="${i===spotSel?'sel':''}" data-i="${i}">${ICONS[a.id]}<span>${a.name}</span><small>${a.hint}</small></li>`).join('');
+}
+spotIn.addEventListener('input', () => { spotSel = 0; renderSpot(); });
+spotIn.addEventListener('keydown', e => {
+  if (e.key === 'ArrowDown') { spotSel = (spotSel + 1) % spotItems.length; renderSpot(); e.preventDefault(); }
+  if (e.key === 'ArrowUp') { spotSel = (spotSel - 1 + spotItems.length) % spotItems.length; renderSpot(); e.preventDefault(); }
+  if (e.key === 'Enter' && spotItems[spotSel]) openApp(spotItems[spotSel].id);
+});
+spotList.addEventListener('click', e => { const li = e.target.closest('li'); if (li) openApp(spotItems[li.dataset.i].id); });
+spotBg.addEventListener('click', e => { if (e.target === spotBg) closeSpot(); });
+$('#spotBtn').addEventListener('click', e => { e.stopPropagation(); openSpot(); });
+document.addEventListener('keydown', e => {
+  if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === ' ')) { e.preventDefault(); spotBg.classList.contains('show') ? closeSpot() : openSpot(); }
+  if (e.key === 'Escape') { closeSpot(); closeMenus(); }
+});
+
+/* ======== Poznámky – odškrtávání ======== */
+$('#todo').addEventListener('click', e => {
+  const c = e.target.closest('.chk'); if (!c) return;
+  c.classList.toggle('on'); c.nextElementSibling.classList.toggle('done', c.classList.contains('on'));
+});
+
+/* ======== Terminál ======== */
+const term = $('#term');
+const PROMPT = '<span class="p">jan@jan-kuchar</span> <span class="path">~</span> <span class="dim">%</span> ';
+const CMDS = {
+  help:   () => 'Příkazy: <span class="acc">whoami</span>, <span class="acc">zajmy</span>, <span class="acc">kontakt</span>, <span class="acc">motto</span>, <span class="acc">kava</span>, <span class="acc">date</span>, <span class="acc">clear</span>, <span class="acc">exit</span>',
+  whoami: () => 'jan kuchař — člověk, co mění AI v produkty',
+  zajmy:  () => TRACKS.map(t => '• ' + t[0]).join('\n'),
+  'cat zajmy.txt': () => CMDS.zajmy(),
+  kontakt:() => { setTimeout(() => openApp('mail'), 500); return 'Otevírám Kontakt…'; },
+  motto:  () => '„Méně slajdů, víc prototypů.“',
+  kava:   () => '   ( (\n    ) )\n  ........\n  |      |]\n  \\      /\n   `----\'   hladina kofeinu: ' + $('#coffee').value + ' %',
+  date:   () => new Date().toLocaleString('cs-CZ'),
+  uptime: () => 'běží od narození, zatím bez restartu ☕',
+  ls:     () => 'o-mne.md   zajmy.txt   napady/   kava.sh',
+  pwd:    () => '/Users/jan',
+  exit:   () => { setTimeout(() => closeWin($('#win-term')), 400); return 'Sbohem 👋'; },
+};
+let termStarted = false, termBusy = false;
+function line(html){ const d = document.createElement('div'); d.className = 'line'; d.innerHTML = html; term.appendChild(d); term.scrollTop = term.scrollHeight; return d; }
+function run(cmd){
+  const c = cmd.trim(); if (!c) return '';
+  if (c === 'clear') { term.innerHTML = ''; return null; }
+  if (c.startsWith('sudo')) return '<span class="acc">Hezký pokus.</span> Tenhle incident bude nahlášen Janovi. 😄';
+  if (c.startsWith('echo ')) return c.slice(5).replace(/[<>]/g, '');
+  const f = CMDS[c.toLowerCase()];
+  return f ? f() : `zsh: command not found: ${c.replace(/[<>&]/g,'')} — zkus <span class="acc">help</span>`;
+}
+async function typeCmd(cmd){
+  const l = line(PROMPT + '<span class="tx"></span><span class="cursor"></span>');
+  const tx = $('.tx', l);
+  for (const ch of cmd) { tx.textContent += ch; await new Promise(r => setTimeout(r, 55 + Math.random() * 60)); }
+  await new Promise(r => setTimeout(r, 250));
+  $('.cursor', l).remove();
+  const out = run(cmd); if (out) line(`<span class="o">${out}</span>`);
+  await new Promise(r => setTimeout(r, 350));
+}
+function inputLine(){
+  const l = line(PROMPT + '<input aria-label="Příkaz" spellcheck="false" autocomplete="off"><span class="cursor"></span>');
+  const inp = $('input', l);
+  inp.style.width = '1ch';
+  inp.addEventListener('input', () => inp.style.width = Math.max(1, inp.value.length) + 'ch');
+  inp.addEventListener('keydown', e => {
+    if (e.key !== 'Enter') return;
+    const v = inp.value; $('.cursor', l).remove();
+    inp.replaceWith(Object.assign(document.createElement('span'), { textContent: v }));
+    const out = run(v); if (out) line(`<span class="o">${out}</span>`);
+    inputLine();
+  });
+  if (!isMobile()) inp.focus();
+}
+async function startTerm(){
+  if (termStarted) return; termStarted = true;
+  line('<span class="dim">Last login: ' + new Date().toLocaleString('cs-CZ') + ' on ttys001</span>');
+  for (const c of ['whoami', 'cat zajmy.txt', 'motto']) await typeCmd(c);
+  line('<span class="dim">Teď ty. Napiš </span><span class="acc">help</span>');
+  inputLine();
+}
+term.addEventListener('click', () => $('input', term)?.focus());
+
+/* ======== Hudba ======== */
+let cur = 0, playing = true;
+const tracksEl = $('#tracks');
+function renderTracks(){
+  tracksEl.innerHTML = TRACKS.map((t,i) => `<li class="${i===cur?'cur':''}" data-i="${i}"><span class="n">${i===cur && playing ? '♫' : i+1}</span><span>${t[0]}<small>${t[1]}</small></span><span class="d">${t[2]}</span></li>`).join('');
+  $('#npTitle').textContent = TRACKS[cur][0];
+  $('.itxt').textContent = 'Teď hraje: ' + TRACKS[cur][0];
+}
+tracksEl.addEventListener('click', e => { const li = e.target.closest('li'); if (li) { cur = +li.dataset.i; playing = true; renderTracks(); } });
+$('#next').onclick = () => { cur = (cur + 1) % TRACKS.length; renderTracks(); };
+$('#prev').onclick = () => { cur = (cur - 1 + TRACKS.length) % TRACKS.length; renderTracks(); };
+$('#play').onclick = () => {
+  playing = !playing; renderTracks();
+  $('#play').innerHTML = playing
+    ? '<svg width="22" height="22" viewBox="0 0 16 16" fill="currentColor"><rect x="3" y="2" width="3.5" height="12" rx="1"/><rect x="9.5" y="2" width="3.5" height="12" rx="1"/></svg>'
+    : '<svg width="22" height="22" viewBox="0 0 16 16" fill="currentColor"><path d="M4 2.2v11.6a.8.8 0 0 0 1.2.7l9.3-5.8a.8.8 0 0 0 0-1.4L5.2 1.5A.8.8 0 0 0 4 2.2z"/></svg>';
+  $$('.bars span').forEach(s => s.style.animationPlayState = playing ? 'running' : 'paused');
+};
+renderTracks();
+setInterval(() => { if (playing) { cur = (cur + 1) % TRACKS.length; renderTracks(); } }, 30000);
+
+/* ======== Kontakt ======== */
+$('#mailTo').textContent = CONTACT.email;
+$('#links').innerHTML = CONTACT.links.map(l => `<a class="link" href="${l.href}" target="_blank" rel="noopener"><span class="ico" style="background:${l.color}">${l.svg}</span><span>${l.name}<small>${l.sub}</small></span><span class="chev">›</span></a>`).join('');
+$('#mailSend').onclick = () => {
+  location.href = `mailto:${CONTACT.email}?subject=${encodeURIComponent($('#mailSubj').value)}&body=${encodeURIComponent($('#mailBody').value)}`;
+};
+
+/* ======== Nastavení ======== */
+$$('.tog').forEach(t => t.addEventListener('click', () => {
+  if (t.classList.contains('locked')) { t.classList.remove('shake'); void t.offsetWidth; t.classList.add('shake'); notify('Nastavení', 'Světlý režim? Tady ne. 🌙', '#5e5ce6'); return; }
+  t.classList.toggle('on');
+  if (t.dataset.tog === 'proc' && t.classList.contains('on')) {
+    $('#procMsg').textContent = 'Zapnu to zítra…';
+    setTimeout(() => { t.classList.remove('on'); $('#procMsg').textContent = 'Vypnuto od roku 2020'; }, 1200);
+  }
+  if (t.dataset.tog === 'cur' && !t.classList.contains('on')) setTimeout(() => { t.classList.add('on'); notify('Zvědavost', 'Nejde vypnout. Zkoušel jsem to.', '#ff9f0a'); }, 700);
+}));
+
+/* ======== Start ======== */
+function boot(){
+  if (isMobile()) {
+    setTimeout(() => { const i = $('#island'); i.classList.add('wide'); setTimeout(() => i.classList.remove('wide'), 3500); }, 900);
+  } else {
+    openApp('about');
+    setTimeout(() => notify('Jan Kuchař', 'Ahoj! Díky, že ses zastavil(a). Klikni sem, kdybys chtěl(a) něco probrat. 🙂', 'linear-gradient(160deg,#5df774,#1fbf3a)'), 2200);
+  }
+}
+$('#island').addEventListener('click', () => openApp('music'));
+</script>
+</body>
+</html>
