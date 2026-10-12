@@ -1,0 +1,94 @@
+/* =====================================================================
+   JK · design tokeny  (v1.0)
+   Jediný zdroj pravdy pro www.jan-kuchar.cz a nástroje AI Statistiky.
+   Vizuální manuál: brand/README.md
+   Použití:  <link rel="stylesheet" href="https://www.jan-kuchar.cz/brand/tokens.css">
+   Režim: výhradně tmavý.
+   ===================================================================== */
+:root{
+  color-scheme:dark;
+
+  /* --- Plochy (neutrální, téměř černá – žádná slate modrá) --- */
+  --jk-bg:#08080c;                     /* pozadí stránky */
+  --jk-surface-1:#111117;              /* karty, panely */
+  --jk-surface-2:#18181f;              /* vstupy, vnořené bloky */
+  --jk-surface-3:#22222b;              /* hover, vybraný řádek v tabulce */
+  --jk-glass:rgba(32,32,40,.72);       /* horní lišta, popovery (+ backdrop-filter) */
+
+  /* --- Linky (hairline) --- */
+  --jk-line:rgba(255,255,255,.10);
+  --jk-line-2:rgba(255,255,255,.14);
+  --jk-line-3:rgba(255,255,255,.22);   /* hover / přerušovaný okraj dropzóny */
+
+  /* --- Text --- */
+  --jk-text:#f5f5f7;
+  --jk-text-2:rgba(235,235,245,.60);   /* popisky, sekundární text */
+  --jk-text-3:rgba(235,235,245,.38);   /* meta, labely (ne pro souvislý text) */
+
+  /* --- Akcent: jedna modrá --- */
+  --jk-accent:#0a84ff;                 /* odkazy, ikony, focus, aktivní stav */
+  --jk-accent-hover:#409cff;
+  --jk-accent-strong:#0071e3;          /* výplň primárního tlačítka (bílý text 4.7:1) */
+  --jk-accent-strong-hover:#0077ed;
+  --jk-accent-soft:rgba(10,132,255,.16);
+  --jk-focus:0 0 0 3px rgba(10,132,255,.45);
+
+  /* --- Sémantika (stav, ne dekorace) --- */
+  --jk-success:#30d158;  --jk-success-soft:rgba(48,209,88,.16);
+  --jk-warning:#ff9f0a;  --jk-warning-soft:rgba(255,159,10,.16);
+  --jk-danger:#ff453a;   --jk-danger-soft:rgba(255,69,58,.16);
+  --jk-info:#64d2ff;     --jk-info-soft:rgba(100,210,255,.16);
+
+  /* --- Grafy: pořadí sérií je závazné --- */
+  --jk-chart-1:#0a84ff; --jk-chart-2:#30d158; --jk-chart-3:#ff9f0a; --jk-chart-4:#bf5af2;
+  --jk-chart-5:#ff375f; --jk-chart-6:#64d2ff; --jk-chart-7:#ffd60a; --jk-chart-8:#ac8e68;
+  --jk-chart-grid:rgba(255,255,255,.08);
+  --jk-chart-axis:rgba(235,235,245,.38);
+
+  /* --- Značka (gradient jen pro logo, avatar a ikony aplikací) --- */
+  --jk-brand-gradient:linear-gradient(135deg,#0a84ff,#bf5af2 50%,#ff375f);
+  --jk-tile-blue:linear-gradient(160deg,#5ac8fa,#0a60ff);
+  --jk-tile-yellow:linear-gradient(160deg,#ffd60a,#ff9f0a);
+  --jk-tile-pink:linear-gradient(160deg,#ff6482,#fa233b);
+  --jk-tile-green:linear-gradient(160deg,#30d158,#1fa045);
+  --jk-tile-purple:linear-gradient(160deg,#bf5af2,#5e5ce6);
+  --jk-ambient:
+    radial-gradient(60% 50% at 50% 30%,rgba(94,92,230,.20),transparent 70%),
+    radial-gradient(40% 40% at 85% 95%,rgba(255,55,95,.09),transparent 70%),
+    radial-gradient(35% 35% at 10% 90%,rgba(10,132,255,.07),transparent 70%);
+  --jk-ambient-app:radial-gradient(70% 40% at 50% -10%,rgba(94,92,230,.14),transparent 70%);
+
+  /* --- Typografie --- */
+  --jk-font:-apple-system,BlinkMacSystemFont,"SF Pro Text","Inter",system-ui,sans-serif;
+  --jk-font-mono:"SF Mono",ui-monospace,"JetBrains Mono",Menlo,Consolas,monospace;
+  --jk-fs-xs:11px;    /* labely sekcí (600) */
+  --jk-fs-sm:12px;    /* meta, patička, badge */
+  --jk-fs-base:14px;  /* základ UI */
+  --jk-fs-md:16px;    /* perex */
+  --jk-fs-lg:20px;    /* nadpis karty / prázdného stavu */
+  --jk-fs-xl:24px;    /* nadpis sekce */
+  --jk-fs-2xl:32px;   /* nadpis stránky */
+  --jk-fs-display:clamp(46px,9vw,76px); /* jen hlavní web, váha 200 */
+  --jk-lh:1.5;
+  --jk-tracking-tight:-.02em;
+
+  /* --- Tvar a prostor (mřížka 4 px) --- */
+  --jk-r-xs:5px;   /* kbd, malé badge */
+  --jk-r-sm:8px;   /* řádky seznamu, vstupy */
+  --jk-r-md:10px;  /* tlačítka */
+  --jk-r-lg:14px;  /* karty */
+  --jk-r-xl:18px;  /* panely, modaly, dropzóna */
+  --jk-r-pill:999px;
+  --jk-hairline:0 0 0 .5px var(--jk-line-2) inset;
+  --jk-shadow-pop:0 0 0 .5px var(--jk-line-2) inset,0 40px 100px -20px rgba(0,0,0,.8);
+  --jk-topbar-h:56px;
+  --jk-content-max:1200px;
+  --jk-gutter:24px;
+
+  /* --- Pohyb --- */
+  --jk-ease:cubic-bezier(.2,.9,.3,1);
+  --jk-dur-fast:.15s;
+  --jk-dur:.22s;
+}
+@media (max-width:640px){ :root{ --jk-gutter:16px } }
+@media (prefers-reduced-motion:reduce){ *{animation:none!important;transition:none!important} }
