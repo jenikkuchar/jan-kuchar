@@ -335,6 +335,7 @@ const icon = (it, big) => `<span class="ico${big ? ' big' : ''}" style="backgrou
 function search(query){
   const n = norm(query);
   if (!n) return ITEMS.filter(i => !i.hidden);
+  if (n === '*') return ITEMS;                  // hvězdička = všechny položky včetně skrytých
   const words = n.split(/\s+/);
   return ITEMS
     .map(it => {
