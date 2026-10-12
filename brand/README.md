@@ -20,6 +20,8 @@ Jednotný vizuální jazyk pro www.jan-kuchar.cz a nástroje **AI Statistiky**. 
 | search-log-analyzer | Search **Analyzer** | Search Analyzer · AI Statistiky | `icons/search-analyzer.svg` (žlutá) |
 | blmr-reports-visualizer | Reports **Visualizer** | Reports Visualizer · AI Statistiky | `icons/reports-visualizer.svg` (zelená) |
 
+Všechny tři nástroje jsou **pouze pro přihlášené uživatele** – u odkazů na ně (web, manuál) vždy ikona zámku a text „Pouze pro přihlášené uživatele“.
+
 Slovní značka: první slovo váha 300, druhé 600 (stejně jako „Jan **Kuchař**“).
 
 ## Barvy
