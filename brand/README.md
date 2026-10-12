@@ -61,7 +61,7 @@ Každá aplikace podporuje oba režimy a má přepínač. Chování je všude st
 **Kde**
 - Aplikace: v horní liště úplně vpravo, za akcemi, odsazený 8 px od posledního tlačítka. Na mobilu zůstává v liště (nikdy ne v menu).
 - Web bez lišty (www.jan-kuchar.cz): plovoucí v pravém horním rohu, 14 px od okrajů (+ `safe-area-inset`).
-- Jinde (patička, nastavení, menu) ho nedávej. Volitelně navíc položka „Světlý režim“ / „Tmavý režim“ ve vyhledávání (⌘K), jako na webu.
+- Jinde (patička, nastavení, menu) ho nedávej. Volitelně navíc jedna položka „Tmavý režim“ s přepínačem (switch) ve vyhledávání (⌘K), jako na webu.
 
 **Jak vypadá**
 - Kruhové ikonové tlačítko: 32 px v liště aplikace, 38 px plovoucí na webu. Ikona 18 px, tah 1,8, `currentColor`.
