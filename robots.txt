@@ -16,4 +16,3 @@ User-agent: Applebot-Extended
 Allow: /
 
 Sitemap: https://www.jan-kuchar.cz/sitemap.xml
-Disallow: /brand/
