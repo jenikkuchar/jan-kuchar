@@ -427,7 +427,8 @@ q.addEventListener('keydown', e => {
   else if (e.key === 'Enter') { choose(sel, true); }
   list.querySelector('.sel')?.scrollIntoView({ block:'nearest' });
 });
-list.addEventListener('click', e => { const r = e.target.closest('.row'); if (r) choose(+r.dataset.i); });
+// Klik na odkaz ho rovnou otevře, ostatní položky jen vybere
+list.addEventListener('click', e => { const r = e.target.closest('.row'); if (r) choose(+r.dataset.i, !!results[+r.dataset.i].href); });
 list.addEventListener('mousemove', e => {
   const r = e.target.closest('.row'); if (!r || isMobile() || +r.dataset.i === sel) return;
   sel = +r.dataset.i; renderList();
