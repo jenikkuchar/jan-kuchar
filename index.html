@@ -260,6 +260,8 @@ const G = {                                     // barvy ikon
   purple:'linear-gradient(160deg,#bf5af2,#5e5ce6)', brown:'linear-gradient(160deg,#c08552,#7b4a24)',
 };
 
+const appIcon = name => `<img src="/brand/icons/${name}.svg" alt="" style="width:100%;height:100%;border-radius:inherit">`;
+
 // section: skupina v seznamu · chip: návrh pod polem · keys: slova, podle kterých se položka najde (bez diakritiky)
 // hidden: v seznamu se neukáže, najde se jen když se na ni někdo zeptá
 const ITEMS = [
@@ -280,6 +282,18 @@ const ITEMS = [
     keys:'napsat email mail zprava', sub:EMAIL },
   { id:'li', section:'Odkazy', title:'LinkedIn', icon:'in', color:'#0a66c2', kind:'↗', href:LINKEDIN,
     keys:'linkedin profil cv zivotopis', sub:'Profesní profil' },
+  { id:'chat', section:'Nástroje', title:'Chat Inspector', icon:appIcon('chat-inspector'), color:G.blue, kind:'↗',
+    href:'https://chatbot-message-reader.jan-kuchar.cz', sub:'Čtečka zpráv chatbota · AI Statistiky',
+    keys:'chat inspector chatbot zpravy konverzace message reader ai statistiky nastroje' },
+  { id:'search', section:'Nástroje', title:'Search Analyzer', icon:appIcon('search-analyzer'), color:G.yellow, kind:'↗',
+    href:'https://search-log-analyzer.jan-kuchar.cz', sub:'Analýza vyhledávacích logů · AI Statistiky',
+    keys:'search analyzer vyhledavani hledani logy log analyza ai statistiky nastroje' },
+  { id:'reports', section:'Nástroje', title:'Reports Visualizer', icon:appIcon('reports-visualizer'), color:G.green, kind:'↗',
+    href:'https://blmr-reports-visualizer.jan-kuchar.cz', sub:'Vizualizace reportů · AI Statistiky',
+    keys:'reports visualizer reporty grafy vizualizace blmr ai statistiky nastroje' },
+  { id:'manual', section:'Nástroje', title:'Grafický manuál', icon:'🎨', color:G.purple, kind:'↗',
+    href:'https://www.jan-kuchar.cz/brand/manual.html', sub:'Design systém pro nástroje AI Statistiky',
+    keys:'graficky manual design system tokeny barvy brand styl ai statistiky nastroje' },
   { id:'caj', section:'Jiné', title:'Čaj', icon:'🫖', color:G.brown, kind:'Easter egg', hidden:true,
     keys:'caj tea konvice',
     body:`<p>No jasně, jdu si uvařit 🫖</p>` },
