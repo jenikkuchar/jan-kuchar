@@ -184,14 +184,6 @@ body.searching .chips{display:none}
   box-shadow:0 0 0 .5px var(--stroke-2) inset;color:var(--chip-text);transition:background .15s}
 button.chip:hover{background:var(--fill-2)}
 
-/* Přepínač tématu */
-.theme{position:fixed;top:max(14px,env(safe-area-inset-top));right:max(14px,env(safe-area-inset-right));z-index:10;
-  width:38px;height:38px;border-radius:50%;display:grid;place-items:center;color:var(--text-2);
-  background:var(--glass);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
-  box-shadow:0 0 0 .5px var(--stroke-2) inset;transition:color .15s,background .15s}
-.theme:hover{color:var(--text)}
-.theme svg{width:18px;height:18px}
-:root[data-theme="light"] .theme .sun,:root:not([data-theme="light"]) .theme .moon{display:none}
 
 footer{padding:0 16px max(18px,env(safe-area-inset-bottom));text-align:center;font-size:12px;color:var(--text-3)}
 body.searching footer{display:none}
@@ -201,7 +193,6 @@ body.searching footer{display:none}
   main{padding-top:72px}
   body.searching main{padding-top:24px}
   body.searching header{display:none}
-  body.searching .theme{display:none}            /* nepřekrývat pole hledání; režim jde přepnout i ve Spotlightu */
   .tagline{margin-bottom:26px}
   .bar{height:50px;padding:0 16px}
   .bar input{font-size:17px}
@@ -221,10 +212,6 @@ body.searching footer{display:none}
 </head>
 <body>
 <div class="bg" aria-hidden="true"></div>
-<button class="theme" id="theme" aria-label="Přepnout světlý / tmavý režim" title="Přepnout režim (⌘⇧L)">
-  <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
-  <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11z"/></svg>
-</button>
 
 <main>
   <header>
@@ -465,7 +452,6 @@ function setTheme(t, save = true){
   if (row) row.textContent = themeState();
 }
 const toggleTheme = () => setTheme(theme() === 'light' ? 'dark' : 'light');
-$('#theme').onclick = toggleTheme;
 matchMedia('(prefers-color-scheme: light)').addEventListener('change', e => {
   let saved; try { saved = localStorage.getItem('theme'); } catch (_) {}
   if (!saved) setTheme(e.matches ? 'light' : 'dark', false);
@@ -474,7 +460,7 @@ matchMedia('(prefers-color-scheme: light)').addEventListener('change', e => {
 // ⌘⇧L / Ctrl+Shift+L – přepnout režim
 document.addEventListener('keydown', e => {
   if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key.toLowerCase() === 'l') {
-    e.preventDefault(); $('#theme').click();
+    e.preventDefault(); toggleTheme();
   }
 });
 
@@ -487,7 +473,7 @@ document.addEventListener('keydown', e => {
 
 // Klik mimo Spotlight – zavřít, ale text v poli nechat; klik / fokus do pole ho znovu otevře
 document.addEventListener('pointerdown', e => {
-  if (!e.target.closest('.search, #theme')) document.body.classList.remove('searching');
+  if (!e.target.closest('.search')) document.body.classList.remove('searching');
 });
 q.addEventListener('focus', () => { if (q.value.trim()) document.body.classList.add('searching'); });
 q.addEventListener('click', () => { if (q.value.trim()) document.body.classList.add('searching'); });

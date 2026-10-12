@@ -61,7 +61,8 @@ Každá aplikace podporuje oba režimy a má přepínač. Chování je všude st
 
 **Kde**
 - Aplikace: v horní liště úplně vpravo, za akcemi, odsazený 8 px od posledního tlačítka. Na mobilu zůstává v liště (nikdy ne v menu).
-- Web bez lišty (www.jan-kuchar.cz): plovoucí v pravém horním rohu, 14 px od okrajů (+ `safe-area-inset`).
+- Stránka bez lišty (např. přihlašovací obrazovka StatiCrypt): plovoucí v pravém horním rohu, 14 px od okrajů (+ `safe-area-inset`).
+- Hlavní web www.jan-kuchar.cz: tlačítko nemá, režim se přepíná jen položkou „Vzhled“ ve Spotlightu (⌘K) nebo zkratkou ⌘⇧L.
 - Jinde (patička, nastavení, menu) ho nedávej. Volitelně navíc jedna položka „Vzhled“ se segmentovým přepínačem Světlý / Tmavý ve vyhledávání (⌘K), jako na webu.
 
 **Jak vypadá**
