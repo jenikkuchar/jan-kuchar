@@ -1,9 +1,10 @@
 /* =====================================================================
-   JK · design tokeny  (v1.0)
+   JK · design tokeny  (v1.1)
    Jediný zdroj pravdy pro www.jan-kuchar.cz a nástroje AI Statistiky.
    Vizuální manuál: brand/README.md
    Použití:  <link rel="stylesheet" href="https://www.jan-kuchar.cz/brand/tokens.css">
-   Režim: výhradně tmavý.
+   Režim: tmavý (výchozí, :root) a světlý ([data-theme="light"] na <html>).
+   Atribut data-theme nastavuje brand/theme.js – viz README, sekce Režim.
    ===================================================================== */
 :root{
   color-scheme:dark;
@@ -24,6 +25,11 @@
   --jk-text:#f5f5f7;
   --jk-text-2:rgba(235,235,245,.60);   /* popisky, sekundární text */
   --jk-text-3:rgba(235,235,245,.38);   /* meta, labely (ne pro souvislý text) */
+
+  /* --- Výplně (průhledné, na sekundární tlačítka, čipy, kbd, hover řádku) --- */
+  --jk-fill:rgba(255,255,255,.07);
+  --jk-fill-hover:rgba(255,255,255,.12);
+  --jk-code-bg:#050508;                /* blok kódu */
 
   /* --- Akcent: jedna modrá --- */
   --jk-accent:#0a84ff;                 /* odkazy, ikony, focus, aktivní stav */
@@ -80,7 +86,8 @@
   --jk-r-xl:18px;  /* panely, modaly, dropzóna */
   --jk-r-pill:999px;
   --jk-hairline:0 0 0 .5px var(--jk-line-2) inset;
-  --jk-shadow-pop:0 0 0 .5px var(--jk-line-2) inset,0 40px 100px -20px rgba(0,0,0,.8);
+  --jk-shadow-color:rgba(0,0,0,.8);
+  --jk-shadow-pop:0 0 0 .5px var(--jk-line-2) inset,0 40px 100px -20px var(--jk-shadow-color);
   --jk-topbar-h:56px;
   --jk-content-max:1200px;
   --jk-gutter:24px;
@@ -89,6 +96,51 @@
   --jk-ease:cubic-bezier(.2,.9,.3,1);
   --jk-dur-fast:.15s;
   --jk-dur:.22s;
+}
+
+/* ---------- Světlý režim ----------
+   Přepisuje jen barvy. Značka (gradient, dlaždice), série grafů, typografie a tvary jsou v obou režimech stejné.
+   Stavové barvy jsou tmavší varianty, aby text štítků měl na světlém podkladu kontrast. */
+:root[data-theme="light"]{
+  color-scheme:light;
+
+  --jk-bg:#f5f5f7;
+  --jk-surface-1:#ffffff;
+  --jk-surface-2:#f2f2f5;
+  --jk-surface-3:#e8e8ed;
+  --jk-glass:rgba(255,255,255,.72);
+
+  --jk-line:rgba(0,0,0,.08);
+  --jk-line-2:rgba(0,0,0,.10);
+  --jk-line-3:rgba(0,0,0,.18);
+
+  --jk-text:#1d1d1f;
+  --jk-text-2:rgba(60,60,67,.62);
+  --jk-text-3:rgba(60,60,67,.42);
+
+  --jk-fill:rgba(0,0,0,.05);
+  --jk-fill-hover:rgba(0,0,0,.09);
+  --jk-code-bg:#fbfbfd;
+
+  --jk-accent:#007aff;
+  --jk-accent-hover:#0062cc;
+  --jk-accent-soft:rgba(0,122,255,.12);
+  --jk-focus:0 0 0 3px rgba(0,122,255,.35);
+
+  --jk-success:#248a3d;  --jk-success-soft:rgba(52,199,89,.16);
+  --jk-warning:#c93400;  --jk-warning-soft:rgba(255,149,0,.16);
+  --jk-danger:#d70015;   --jk-danger-soft:rgba(255,59,48,.12);
+  --jk-info:#0071a4;     --jk-info-soft:rgba(50,173,230,.14);
+
+  --jk-chart-grid:rgba(0,0,0,.08);
+  --jk-chart-axis:rgba(60,60,67,.5);
+
+  --jk-ambient:
+    radial-gradient(60% 50% at 50% 30%,rgba(94,92,230,.12),transparent 70%),
+    radial-gradient(40% 40% at 85% 95%,rgba(255,55,95,.06),transparent 70%),
+    radial-gradient(35% 35% at 10% 90%,rgba(10,132,255,.05),transparent 70%);
+  --jk-ambient-app:radial-gradient(70% 40% at 50% -10%,rgba(94,92,230,.08),transparent 70%);
+  --jk-shadow-color:rgba(0,0,0,.18);
 }
 @media (max-width:640px){ :root{ --jk-gutter:16px } }
 @media (prefers-reduced-motion:reduce){ *{animation:none!important;transition:none!important} }
