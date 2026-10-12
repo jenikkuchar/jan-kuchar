@@ -237,7 +237,7 @@ body.searching footer{display:none}
       <svg width="20" height="20" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="6.5" cy="6.5" r="5"/><path d="m10.5 10.5 4 4" stroke-linecap="round"/></svg>
       <input id="q" type="text" placeholder="Hledat ve Spotlightu" autocomplete="off" spellcheck="false"
              aria-label="Hledat" aria-controls="list" aria-autocomplete="list">
-      <button class="clear" id="clear" aria-label="Smazat"><svg width="8" height="8" viewBox="0 0 8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M1 1l6 6M7 1 1 7"/></svg></button>
+      <button class="clear" id="clear" aria-label="Smazat" tabindex="-1"><svg width="8" height="8" viewBox="0 0 8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M1 1l6 6M7 1 1 7"/></svg></button>
       <kbd class="k">⌘K</kbd>
     </div>
     <div class="panel" id="panel">
@@ -359,7 +359,7 @@ function renderList(){
     const sec = best ? 'Nejlepší shoda' : it.section;
     if (sec !== lastSec) html += `<div class="sec">${sec}</div>`;
     lastSec = best ? null : sec;
-    html += `<button class="row${i === sel ? ' sel' : ''}" role="option" aria-selected="${i === sel}" data-i="${i}">${icon(it)}${it.title}<small>${it.locked ? LOCK : ''}${it.theme ? themeState() : it.kind}</small></button>`;
+    html += `<button class="row${i === sel ? ' sel' : ''}" tabindex="-1" role="option" aria-selected="${i === sel}" data-i="${i}">${icon(it)}${it.title}<small>${it.locked ? LOCK : ''}${it.theme ? themeState() : it.kind}</small></button>`;
   });
   list.innerHTML = html;
   renderPreview();
@@ -377,6 +377,11 @@ function renderPreview(){
       </div>
       <div class="meta"><span>Aktuálně</span><span id="theme-now">${themeName()}</span><span>Přepnout</span><span><kbd>↵ Enter</kbd> · <kbd>⌘⇧L</kbd></span></div>`;
     $('#seg').onclick = e => { const b = e.target.closest('[data-t]'); if (b) setTheme(b.dataset.t); };
+    // Enter na přepínači vždy přepne režim a fokus jde na nově zapnutou volbu
+    $('#seg').onkeydown = e => {
+      if (e.key !== 'Enter') return;
+      e.preventDefault(); toggleTheme(); $(`#seg [data-t="${theme()}"]`).focus();
+    };
   } else if (it.contact) {
     prev.innerHTML = back + `
       <div class="contact"><div class="av"><div>JK</div></div>
@@ -418,8 +423,13 @@ function choose(i, viaKeyboard){
 
 q.addEventListener('input', update);
 q.addEventListener('keydown', e => {
-  if (e.key === 'Escape') { q.value = ''; update(); return; }
   if (!results.length) return;
+  // Tab skočí z pole rovnou na odkaz / přepínač v detailu položky
+  if (e.key === 'Tab' && !e.shiftKey) {
+    const target = prev.querySelector('#seg [aria-checked="true"]') || prev.querySelector('.act');
+    if (target) { e.preventDefault(); target.focus(); }
+    return;
+  }
   if (e.key === 'ArrowDown') { sel = (sel + 1) % results.length; renderList(); e.preventDefault(); }
   else if (e.key === 'ArrowUp') { sel = (sel - 1 + results.length) % results.length; renderList(); e.preventDefault(); }
   else if (e.key === 'Enter') { choose(sel, true); }
@@ -473,6 +483,12 @@ document.addEventListener('keydown', e => {
   if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k' || e.key === '/' && document.activeElement !== q) {
     e.preventDefault(); q.focus(); q.select();
   }
+});
+
+// Esc kdekoliv – zavřít Spotlight a vrátit se do pole
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  q.value = ''; update(); q.focus();
 });
 
 update();
