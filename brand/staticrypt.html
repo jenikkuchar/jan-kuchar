@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="cs" class="staticrypt-html">
+<head>
+<!--
+  JK · šablona přihlašovací obrazovky pro StatiCrypt (v1.0)
+  Použití ve workflow:  curl -fsSL https://www.jan-kuchar.cz/brand/staticrypt.html -o /tmp/staticrypt.html
+                        npx staticrypt … -t /tmp/staticrypt.html --template-title "<Název aplikace> · přihlášení"
+  Název aplikace se bere z --template-title (část před „ · “); podle něj se načte ikona z brand/icons/<název-malými-s-pomlčkami>.svg.
+  Proměnné /*[|…|]*/0 doplňuje StatiCrypt při šifrování – neměnit.
+-->
+<meta charset="utf-8">
+<title>/*[|template_title|]*/0</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#08080c">
+<!-- nekešovat -->
+<meta http-equiv="cache-control" content="max-age=0">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<meta http-equiv="pragma" content="no-cache">
+<link rel="icon" id="favicon" href="https://www.jan-kuchar.cz/favicon.svg">
+<script src="https://www.jan-kuchar.cz/brand/theme.js"></script>
+<link rel="stylesheet" href="https://www.jan-kuchar.cz/brand/tokens.css">
+<style>
+/* Záloha, kdyby se tokens.css nenačetl */
+:root{--jk-bg:#08080c;--jk-surface-1:#111117;--jk-surface-2:#18181f;--jk-text:#f5f5f7;--jk-text-2:rgba(235,235,245,.6);--jk-text-3:rgba(235,235,245,.38);
+  --jk-line-2:rgba(255,255,255,.14);--jk-fill:rgba(255,255,255,.07);--jk-fill-hover:rgba(255,255,255,.12);--jk-accent:#0a84ff;--jk-accent-strong:#0071e3;
+  --jk-accent-strong-hover:#0077ed;--jk-danger:#ff453a;--jk-danger-soft:rgba(255,69,58,.16);--jk-focus:0 0 0 3px rgba(10,132,255,.45);
+  --jk-font:-apple-system,BlinkMacSystemFont,"SF Pro Text","Inter",system-ui,sans-serif}
+
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{font-family:var(--jk-font);font-size:14px;line-height:1.5;color:var(--jk-text);background:var(--jk-bg);
+  background-image:var(--jk-ambient,none);background-attachment:fixed;-webkit-font-smoothing:antialiased;
+  display:flex;flex-direction:column;min-height:100vh;min-height:100dvh}
+.hidden{display:none!important}
+
+.staticrypt-spinner-container{flex:1;display:grid;place-items:center}
+.staticrypt-spinner{width:28px;height:28px;border-radius:50%;border:2.5px solid var(--jk-line-2);border-top-color:var(--jk-accent);animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.staticrypt-content{flex:1;display:flex;flex-direction:column}
+main{flex:1;display:grid;place-items:center;padding:24px 16px}
+.card{width:100%;max-width:380px;padding:32px 28px 28px;border-radius:18px;background:var(--jk-surface-1);
+  box-shadow:0 0 0 .5px var(--jk-line-2) inset,0 24px 60px rgba(0,0,0,.35);text-align:center}
+.app-icon{width:56px;height:56px;margin:0 auto 16px;border-radius:13px;display:grid;place-items:center;overflow:hidden;
+  background:var(--jk-brand-gradient,linear-gradient(135deg,#0a84ff,#bf5af2 50%,#ff375f))}
+.app-icon img{width:100%;height:100%;display:block}
+.app-icon svg{width:26px;height:26px}
+.wordmark{font-size:24px;font-weight:300;letter-spacing:-.02em;line-height:1.2}
+.wordmark b{font-weight:600}
+.sub{margin-top:6px;color:var(--jk-text-2);font-size:13px}
+
+form{margin-top:24px;display:flex;flex-direction:column;gap:12px;text-align:left}
+.field{position:relative}
+#staticrypt-password{width:100%;height:44px;padding:0 44px 0 14px;border:0;border-radius:10px;font:inherit;font-size:15px;color:var(--jk-text);
+  background:var(--jk-surface-2);box-shadow:0 0 0 .5px var(--jk-line-2) inset;outline:none;transition:box-shadow .15s}
+#staticrypt-password::placeholder{color:var(--jk-text-3)}
+#staticrypt-password:focus{box-shadow:0 0 0 .5px var(--jk-line-2) inset,var(--jk-focus)}
+.field.error #staticrypt-password{box-shadow:0 0 0 1px var(--jk-danger) inset}
+.eye{position:absolute;right:6px;top:6px;width:32px;height:32px;border:0;border-radius:8px;background:transparent;color:var(--jk-text-2);
+  display:grid;place-items:center;cursor:pointer}
+.eye:hover{color:var(--jk-text);background:var(--jk-fill)}
+.eye:focus-visible{outline:none;box-shadow:var(--jk-focus)}
+.eye svg{width:18px;height:18px}
+.eye .off{display:none}.eye.on .on{display:none}.eye.on .off{display:block}
+
+.err{display:flex;gap:8px;align-items:center;padding:8px 12px;border-radius:8px;font-size:13px;color:var(--jk-danger);background:var(--jk-danger-soft)}
+.staticrypt-remember{display:flex;gap:8px;align-items:center;color:var(--jk-text-2);font-size:13px;cursor:pointer;user-select:none}
+.staticrypt-remember input{width:16px;height:16px;accent-color:var(--jk-accent);margin:0}
+.btn{height:44px;border:0;border-radius:10px;font:inherit;font-size:15px;font-weight:600;color:#fff;background:var(--jk-accent-strong);cursor:pointer;transition:background .15s}
+.btn:hover{background:var(--jk-accent-strong-hover)}
+.btn:focus-visible{outline:none;box-shadow:var(--jk-focus)}
+.btn:disabled{opacity:.6;cursor:default}
+
+[data-theme="light"] .card{box-shadow:0 0 0 .5px var(--jk-line-2) inset,0 16px 40px rgba(0,0,0,.08)}
+footer{padding:16px;text-align:center;font-size:12px;color:var(--jk-text-3)}
+footer a{color:inherit;text-decoration:none}
+footer a:hover{color:var(--jk-text-2)}
+
+.theme-toggle{position:fixed;top:max(14px,env(safe-area-inset-top));right:max(14px,env(safe-area-inset-right));width:38px;height:38px;border-radius:50%;
+  display:grid;place-items:center;border:0;cursor:pointer;color:var(--jk-text-2);background:var(--jk-glass,var(--jk-fill));
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 0 0 .5px var(--jk-line-2) inset;transition:color .15s,background .15s}
+.theme-toggle:hover{color:var(--jk-text);background:var(--jk-fill-hover)}
+.theme-toggle:focus-visible{outline:none;box-shadow:var(--jk-focus)}
+.theme-toggle svg{width:18px;height:18px}
+[data-theme="light"] .theme-toggle .sun,[data-theme="dark"] .theme-toggle .moon{display:none}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation-duration:0s!important}}
+</style>
+</head>
+<body class="staticrypt-body">
+<div id="staticrypt_loading" class="staticrypt-spinner-container"><div class="staticrypt-spinner" role="status" aria-label="Načítání"></div></div>
+
+<div id="staticrypt_content" class="staticrypt-content hidden">
+  <button class="theme-toggle" data-theme-toggle aria-label="Přepnout světlý / tmavý režim" title="Přepnout režim (⌘⇧L)">
+    <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11z"/></svg>
+  </button>
+
+  <main>
+    <div class="card">
+      <div class="app-icon" id="appIcon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+      </div>
+      <h1 class="wordmark" id="wordmark">/*[|template_title|]*/0</h1>
+      <p class="sub">/*[|template_instructions|]*/0</p>
+
+      <form id="staticrypt-form" action="#" method="post" novalidate>
+        <div class="field" id="field">
+          <input id="staticrypt-password" type="password" name="password" placeholder="/*[|template_placeholder|]*/0"
+                 autocomplete="current-password" aria-describedby="err" autofocus>
+          <button type="button" class="eye" id="eye" aria-label="/*[|template_toggle_show|]*/0" title="/*[|template_toggle_show|]*/0">
+            <svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.9 5.2A10.4 10.4 0 0 1 12 5c6.4 0 10 7 10 7a17.6 17.6 0 0 1-3.2 4.1M6.6 6.6C3.8 8.4 2 12 2 12s3.6 7 10 7a9.8 9.8 0 0 0 5.4-1.6M3 3l18 18M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>
+          </button>
+        </div>
+        <div class="err hidden" id="err" role="alert">/*[|template_error|]*/0</div>
+        <label id="staticrypt-remember-label" class="staticrypt-remember hidden">
+          <input id="staticrypt-remember" type="checkbox" name="remember">
+          /*[|template_remember|]*/0
+        </label>
+        <button type="submit" class="btn" id="submit">/*[|template_button|]*/0</button>
+      </form>
+    </div>
+  </main>
+
+  <footer><a href="https://www.jan-kuchar.cz">AI Statistiky · © <span id="year"></span> Jan Kuchař</a></footer>
+</div>
+
+<script>
+// Proměnné doplní StatiCrypt při šifrování (formát '/*[|variable_name|]*/0')
+const staticryptInitiator = /*[|js_staticrypt|]*/ 0;
+const templateError = "/*[|template_error|]*/0",
+  templateToggleAltShow = "/*[|template_toggle_show|]*/0",
+  templateToggleAltHide = "/*[|template_toggle_hide|]*/0",
+  isRememberEnabled = /*[|is_remember_enabled|]*/ 0,
+  staticryptConfig = /*[|staticrypt_config|]*/ 0;
+
+const templateConfig = {
+  rememberExpirationKey: "staticrypt_expiration",
+  rememberPassphraseKey: "staticrypt_passphrase",
+  replaceHtmlCallback: null,
+  clearLocalStorageCallback: null,
+};
+const staticrypt = staticryptInitiator.init(staticryptConfig, templateConfig);
+const $ = id => document.getElementById(id);
+
+// Název aplikace = část titulku před „ · “ → slovní značka (první slovo 300, zbytek 600) + ikona z brand/icons
+const appName = document.title.split(' · ')[0].trim();
+const words = appName.split(/\s+/);
+const wm = $('wordmark');
+wm.textContent = words[0] + (words.length > 1 ? ' ' : '');
+if (words.length > 1) { const b = document.createElement('b'); b.textContent = words.slice(1).join(' '); wm.appendChild(b); }
+const slug = appName.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+const iconUrl = `https://www.jan-kuchar.cz/brand/icons/${slug}.svg`;
+const img = new Image();
+img.alt = '';
+img.onload = () => { $('appIcon').replaceChildren(img); $('favicon').href = iconUrl; };
+img.src = iconUrl;
+$('year').textContent = new Date().getFullYear();
+
+window.onload = async function () {
+  const { isSuccessful } = await staticrypt.handleDecryptOnLoad();
+  if (!isSuccessful) {
+    $('staticrypt_loading').classList.add('hidden');
+    $('staticrypt_content').classList.remove('hidden');
+    $('staticrypt-password').focus();
+    if (isRememberEnabled) $('staticrypt-remember-label').classList.remove('hidden');
+  }
+};
+
+// Zobrazit / skrýt heslo
+$('eye').addEventListener('click', () => {
+  const input = $('staticrypt-password'), eye = $('eye'), show = input.type === 'password';
+  input.type = show ? 'text' : 'password';
+  eye.classList.toggle('on', show);
+  const label = show ? templateToggleAltHide : templateToggleAltShow;
+  eye.title = label; eye.setAttribute('aria-label', label);
+  input.focus();
+});
+
+// Chyba se zobrazí pod polem (místo alert), zmizí při psaní
+$('staticrypt-password').addEventListener('input', () => { $('err').classList.add('hidden'); $('field').classList.remove('error'); });
+
+$('staticrypt-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const btn = $('submit'), input = $('staticrypt-password');
+  if (!input.value) { input.focus(); return; }
+  btn.disabled = true;
+  const { isSuccessful } = await staticrypt.handleDecryptionOfPage(input.value, $('staticrypt-remember').checked);
+  if (!isSuccessful) {
+    btn.disabled = false;
+    $('err').classList.remove('hidden');
+    $('field').classList.add('error');
+    input.select();
+  }
+});
+</script>
+</body>
+</html>
