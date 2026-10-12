@@ -1,0 +1,684 @@
+<title>Grafický manuál JK</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Layout: úzký sloupec manuálu (Spotlight estetika hlavního webu), široké ukázky aplikací. Záměrně jen tmavý režim. */
+:root{
+  color-scheme:dark;
+  --jk-bg:#08080c; --jk-surface-1:#111117; --jk-surface-2:#18181f; --jk-surface-3:#22222b;
+  --jk-glass:rgba(32,32,40,.72);
+  --jk-line:rgba(255,255,255,.10); --jk-line-2:rgba(255,255,255,.14); --jk-line-3:rgba(255,255,255,.22);
+  --jk-text:#f5f5f7; --jk-text-2:rgba(235,235,245,.60); --jk-text-3:rgba(235,235,245,.38);
+  --jk-accent:#0a84ff; --jk-accent-hover:#409cff; --jk-accent-strong:#0071e3; --jk-accent-strong-hover:#0077ed;
+  --jk-accent-soft:rgba(10,132,255,.16); --jk-focus:0 0 0 3px rgba(10,132,255,.45);
+  --jk-success:#30d158; --jk-success-soft:rgba(48,209,88,.16);
+  --jk-warning:#ff9f0a; --jk-warning-soft:rgba(255,159,10,.16);
+  --jk-danger:#ff453a; --jk-danger-soft:rgba(255,69,58,.16);
+  --jk-info:#64d2ff; --jk-info-soft:rgba(100,210,255,.16);
+  --c1:#0a84ff; --c2:#30d158; --c3:#ff9f0a; --c4:#bf5af2; --c5:#ff375f; --c6:#64d2ff; --c7:#ffd60a; --c8:#ac8e68;
+  --jk-brand-gradient:linear-gradient(135deg,#0a84ff,#bf5af2 50%,#ff375f);
+  --tile-blue:linear-gradient(160deg,#5ac8fa,#0a60ff); --tile-yellow:linear-gradient(160deg,#ffd60a,#ff9f0a);
+  --tile-green:linear-gradient(160deg,#30d158,#1fa045); --tile-pink:linear-gradient(160deg,#ff6482,#fa233b);
+  --tile-purple:linear-gradient(160deg,#bf5af2,#5e5ce6);
+  --jk-font:-apple-system,BlinkMacSystemFont,"SF Pro Text","Inter",system-ui,sans-serif;
+  --jk-font-mono:"SF Mono",ui-monospace,"JetBrains Mono",Menlo,Consolas,monospace;
+  --jk-r-xs:5px; --jk-r-sm:8px; --jk-r-md:10px; --jk-r-lg:14px; --jk-r-xl:18px;
+  --jk-ease:cubic-bezier(.2,.9,.3,1);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{background:var(--jk-bg);color:var(--jk-text);font-family:var(--jk-font);font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased;padding-inline:16px}
+.ambient{position:fixed;inset:0;z-index:-1;pointer-events:none;background:
+  radial-gradient(60% 50% at 50% 0%,rgba(94,92,230,.18),transparent 70%),
+  radial-gradient(40% 40% at 90% 100%,rgba(255,55,95,.07),transparent 70%),
+  radial-gradient(35% 35% at 5% 90%,rgba(10,132,255,.06),transparent 70%)}
+a{color:var(--jk-accent);text-decoration:none}
+a:hover{color:var(--jk-accent-hover)}
+:focus-visible{outline:none;box-shadow:var(--jk-focus);border-radius:6px}
+code,.mono{font-family:var(--jk-font-mono);font-size:.92em}
+p code,li code,td code{background:var(--jk-surface-2);padding:1px 5px;border-radius:var(--jk-r-xs);box-shadow:0 0 0 .5px var(--jk-line) inset}
+
+/* ---------- Kostra manuálu ---------- */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;margin-inline:-16px;padding:10px 16px;
+  background:var(--jk-glass);backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);
+  border-bottom:.5px solid var(--jk-line)}
+.nav-in{max-width:1080px;margin:0 auto;display:flex;align-items:center;gap:14px}
+.nav .mark{flex:none}
+.nav-links{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;min-width:0}
+.nav-links a{color:var(--jk-text-2);font-size:13px;padding:5px 10px;border-radius:999px;white-space:nowrap}
+.nav-links a:hover{color:var(--jk-text);background:rgba(255,255,255,.06)}
+.wrap{max-width:1080px;margin:0 auto;padding-block:56px 80px;display:grid;gap:88px}
+.hero{text-align:center;display:grid;justify-items:center;gap:14px;padding-top:24px}
+.hero h1{font-size:clamp(42px,8vw,72px);font-weight:200;letter-spacing:-.04em;line-height:1;margin:0;text-wrap:balance}
+.hero h1 b{font-weight:600}
+.hero p{margin:0;color:var(--jk-text-2);font-size:16px;max-width:58ch;text-wrap:pretty}
+.hero .meta-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:8px}
+section{display:grid;gap:22px;min-width:0}
+.sec-head{display:grid;gap:6px;max-width:68ch}
+.sec-head .k{font-size:11px;font-weight:600;color:var(--jk-text-3);letter-spacing:.06em;text-transform:uppercase}
+.sec-head h2{font-size:28px;font-weight:600;letter-spacing:-.02em;margin:0;line-height:1.15;text-wrap:balance}
+.sec-head h2 span{font-weight:200}
+.sec-head p{margin:0;color:var(--jk-text-2);font-size:15px;text-wrap:pretty}
+h3{font-size:15px;font-weight:600;margin:0 0 10px;letter-spacing:-.01em}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr))}
+.g4{grid-template-columns:repeat(auto-fill,minmax(min(100%,180px),1fr))}
+.panel{background:var(--jk-surface-1);border-radius:var(--jk-r-lg);box-shadow:0 0 0 .5px var(--jk-line-2) inset;padding:20px;min-width:0}
+.dim{color:var(--jk-text-2)}
+.small{font-size:12px;color:var(--jk-text-3)}
+
+/* ---------- Princip ---------- */
+.principles{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr))}
+.principles .panel p{margin:0;color:var(--jk-text-2)}
+.principles .panel b{display:block;color:var(--jk-text);font-size:15px;margin-bottom:4px}
+
+/* ---------- Barvy ---------- */
+.sw{border-radius:var(--jk-r-lg);overflow:hidden;box-shadow:0 0 0 .5px var(--jk-line-2) inset;background:var(--jk-surface-1);display:flex;flex-direction:column}
+.sw .chip-c{height:76px;box-shadow:0 -.5px 0 var(--jk-line) inset}
+.sw .info{padding:10px 12px 12px;display:grid;gap:2px}
+.sw .info b{font-size:13px;font-weight:600}
+.sw .info code{font-size:11.5px;color:var(--jk-text-2)}
+.sw .info span{font-size:11.5px;color:var(--jk-text-3)}
+.ramp{display:flex;border-radius:var(--jk-r-lg);overflow:hidden;box-shadow:0 0 0 .5px var(--jk-line-2) inset}
+.ramp div{flex:1;height:64px;display:flex;align-items:flex-end;padding:8px;font-size:11px;font-family:var(--jk-font-mono);color:var(--jk-text-2);min-width:0}
+.textsamples{display:grid;gap:8px}
+.textsamples div{display:flex;justify-content:space-between;gap:12px;align-items:baseline;border-bottom:.5px solid var(--jk-line);padding-bottom:8px}
+.textsamples div:last-child{border:0;padding:0}
+.textsamples code{color:var(--jk-text-3);font-size:11.5px;white-space:nowrap}
+
+/* ---------- Typografie ---------- */
+.typerow{display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:baseline;padding:14px 0;border-bottom:.5px solid var(--jk-line)}
+.typerow:last-child{border:0}
+.typerow .spec{font-size:11.5px;color:var(--jk-text-3);font-family:var(--jk-font-mono);line-height:1.4}
+.typerow .sample{min-width:0;overflow-wrap:anywhere}
+.wordmarks{display:flex;gap:28px 40px;flex-wrap:wrap;align-items:center}
+.wm{font-size:26px;letter-spacing:-.02em;font-weight:300;white-space:nowrap}
+.wm b{font-weight:600}
+
+/* ---------- Tvary ---------- */
+.radii{display:flex;gap:14px;flex-wrap:wrap}
+.radii div{width:92px;height:72px;background:var(--jk-surface-2);box-shadow:0 0 0 .5px var(--jk-line-2) inset;display:flex;align-items:flex-end;padding:8px;font-size:11px;color:var(--jk-text-2);font-family:var(--jk-font-mono)}
+.space{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap}
+.space div{background:var(--jk-accent-soft);box-shadow:0 0 0 .5px rgba(10,132,255,.4) inset;border-radius:3px}
+.space figure{margin:0;display:grid;gap:6px;justify-items:center;font-size:11px;color:var(--jk-text-3);font-family:var(--jk-font-mono)}
+
+/* ---------- Ikony aplikací ---------- */
+.tile{display:grid;place-items:center;flex:none;box-shadow:0 0 0 .5px rgba(255,255,255,.15) inset;color:#fff}
+.tile svg{width:58%;height:58%}
+.apps{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
+.app{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start}
+.app h3{margin:0}
+.app p{margin:4px 0 0;color:var(--jk-text-2);font-size:13px}
+.app .dom{font-family:var(--jk-font-mono);font-size:11.5px;color:var(--jk-text-3);margin-top:6px;overflow-wrap:anywhere}
+.mark{width:26px;height:26px;border-radius:7px;background:var(--jk-brand-gradient);display:grid;place-items:center;font-weight:800;font-size:11px;color:#fff;letter-spacing:-.02em;box-shadow:0 0 0 .5px rgba(255,255,255,.18) inset}
+
+/* ---------- Komponenty (reálné třídy, které appky převezmou) ---------- */
+.row-demo{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 14px;border-radius:var(--jk-r-md);font:inherit;font-size:14px;font-weight:500;border:0;cursor:pointer;transition:background .15s,color .15s,box-shadow .15s;white-space:nowrap}
+.btn svg{width:16px;height:16px;flex:none}
+.btn-primary{background:var(--jk-accent-strong);color:#fff}
+.btn-primary:hover{background:var(--jk-accent-strong-hover)}
+.btn-secondary{background:rgba(255,255,255,.07);color:var(--jk-text);box-shadow:0 0 0 .5px var(--jk-line-2) inset}
+.btn-secondary:hover{background:rgba(255,255,255,.12)}
+.btn-ghost{background:transparent;color:var(--jk-accent)}
+.btn-ghost:hover{background:var(--jk-accent-soft)}
+.btn-danger{background:transparent;color:var(--jk-danger);box-shadow:0 0 0 .5px rgba(255,69,58,.4) inset}
+.btn-danger:hover{background:var(--jk-danger-soft)}
+.btn-sm{height:28px;padding:0 10px;font-size:13px;border-radius:var(--jk-r-sm)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.field{display:grid;gap:6px;min-width:0}
+.field label{font-size:12px;font-weight:500;color:var(--jk-text-2)}
+.input{height:36px;width:100%;padding:0 12px;border-radius:var(--jk-r-sm);border:0;background:var(--jk-surface-2);color:var(--jk-text);font:inherit;box-shadow:0 0 0 .5px var(--jk-line-2) inset;transition:box-shadow .15s}
+.input::placeholder{color:var(--jk-text-3)}
+.input:focus{outline:none;box-shadow:0 0 0 1px var(--jk-accent) inset,var(--jk-focus)}
+textarea.input{height:96px;padding:10px 12px;resize:vertical;font-family:var(--jk-font-mono);font-size:12.5px}
+.search{display:flex;align-items:center;gap:10px;height:40px;padding:0 14px;border-radius:999px;background:var(--jk-glass);box-shadow:0 0 0 .5px var(--jk-line-2) inset}
+.search input{flex:1;min-width:0;background:none;border:0;outline:0;color:var(--jk-text);font:inherit;font-size:15px;caret-color:var(--jk-accent)}
+.search input::placeholder{color:var(--jk-text-3)}
+kbd{font-family:inherit;font-size:11.5px;color:var(--jk-text-2);background:rgba(255,255,255,.08);border-radius:var(--jk-r-xs);padding:2px 7px;box-shadow:0 0 0 .5px var(--jk-line) inset;white-space:nowrap}
+.seg{display:inline-flex;padding:3px;gap:2px;border-radius:var(--jk-r-md);background:rgba(255,255,255,.06);box-shadow:0 0 0 .5px var(--jk-line) inset}
+.seg button{border:0;background:none;color:var(--jk-text-2);font:inherit;font-size:13px;font-weight:500;padding:5px 12px;border-radius:7px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--jk-surface-3);color:var(--jk-text);box-shadow:0 1px 2px rgba(0,0,0,.4),0 0 0 .5px var(--jk-line-2) inset}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;font-size:12.5px;background:rgba(255,255,255,.06);box-shadow:0 0 0 .5px var(--jk-line-2) inset;color:rgba(235,235,245,.82)}
+.badge{display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 8px;border-radius:6px;font-size:12px;font-weight:500;white-space:nowrap}
+.badge::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.b-ok{color:var(--jk-success);background:var(--jk-success-soft)}
+.b-warn{color:var(--jk-warning);background:var(--jk-warning-soft)}
+.b-err{color:var(--jk-danger);background:var(--jk-danger-soft)}
+.b-info{color:var(--jk-info);background:var(--jk-info-soft)}
+.b-neutral{color:var(--jk-text-2);background:rgba(255,255,255,.07)}
+.b-neutral::before{display:none}
+.ver{font-family:var(--jk-font-mono);font-size:11px;color:var(--jk-text-3);padding:1px 6px;border-radius:var(--jk-r-xs);box-shadow:0 0 0 .5px var(--jk-line-2) inset}
+
+/* Tabulka */
+.tbl-wrap{overflow-x:auto;border-radius:var(--jk-r-lg);box-shadow:0 0 0 .5px var(--jk-line-2) inset;background:var(--jk-surface-1)}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:13px}
+th{font-size:11px;font-weight:600;color:var(--jk-text-3);text-align:left;padding:10px 14px;border-bottom:.5px solid var(--jk-line);white-space:nowrap}
+td{padding:10px 14px;border-bottom:.5px solid var(--jk-line);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+tbody tr:hover td{background:rgba(255,255,255,.03)}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+td .q{font-family:var(--jk-font-mono);font-size:12px}
+
+/* ---------- Ukázka aplikace ---------- */
+.device{border-radius:var(--jk-r-xl);overflow:hidden;background:var(--jk-bg);box-shadow:0 0 0 .5px var(--jk-line-2) inset,0 40px 100px -20px rgba(0,0,0,.8);position:relative;isolation:isolate}
+.device::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(70% 40% at 50% -10%,rgba(94,92,230,.16),transparent 70%)}
+.topbar{height:56px;display:flex;align-items:center;gap:12px;padding:0 20px;background:var(--jk-glass);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);border-bottom:.5px solid var(--jk-line)}
+.crumb{display:flex;align-items:center;gap:10px;min-width:0}
+.crumb .slash{color:var(--jk-text-3);font-weight:300;font-size:18px}
+.crumb .name{font-size:15px;font-weight:300;letter-spacing:-.01em;white-space:nowrap}
+.crumb .name b{font-weight:600}
+.topbar .spacer{flex:1}
+.topbar .ctx{font-size:12px;color:var(--jk-text-3)}
+.app-body{padding:28px 24px 32px;display:grid;gap:18px}
+.page-title{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.page-title h4{margin:0;font-size:24px;font-weight:600;letter-spacing:-.02em}
+.page-title p{margin:2px 0 0;color:var(--jk-text-2);font-size:13px}
+.drop{border-radius:var(--jk-r-xl);border:1px dashed var(--jk-line-3);background:rgba(255,255,255,.02);padding:40px 20px;display:grid;justify-items:center;text-align:center;gap:10px;transition:border-color .15s,background .15s}
+.drop.over,.drop:hover{border-color:var(--jk-accent);background:var(--jk-accent-soft)}
+.drop h5{margin:6px 0 0;font-size:20px;font-weight:600;letter-spacing:-.01em}
+.drop p{margin:0;color:var(--jk-text-2);max-width:46ch}
+.drop .small{margin-top:2px}
+.steps{margin:0;padding-left:20px;display:grid;gap:6px;color:var(--jk-text-2)}
+.steps b{color:var(--jk-text);font-weight:600}
+.statusbar{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:10px 20px;border-top:.5px solid var(--jk-line);font-size:12px;color:var(--jk-text-3)}
+
+/* KPI + graf */
+.kpis{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr))}
+.kpi{background:var(--jk-surface-1);border-radius:var(--jk-r-lg);box-shadow:0 0 0 .5px var(--jk-line-2) inset;padding:14px 16px;display:grid;gap:2px}
+.kpi span{font-size:12px;color:var(--jk-text-2)}
+.kpi b{font-size:26px;font-weight:600;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.kpi small{font-size:12px;font-variant-numeric:tabular-nums}
+.up{color:var(--jk-success)} .down{color:var(--jk-danger)}
+.chart{width:100%;height:auto;display:block}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--jk-text-2)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+
+/* ---------- Pravidla ---------- */
+.dd{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr))}
+.dd ul{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+.dd li{display:grid;grid-template-columns:18px 1fr;gap:10px;color:var(--jk-text-2)}
+.dd li b{color:var(--jk-text);font-weight:600}
+.dd .yes li::before{content:"✓";color:var(--jk-success);font-weight:700}
+.dd .no li::before{content:"✕";color:var(--jk-danger);font-weight:700}
+.audit td:first-child{white-space:nowrap;font-weight:500}
+
+/* ---------- Kód ---------- */
+.code{position:relative;background:#050508;border-radius:var(--jk-r-lg);box-shadow:0 0 0 .5px var(--jk-line-2) inset;min-width:0}
+.code pre{margin:0;padding:16px 18px;overflow-x:auto;font-family:var(--jk-font-mono);font-size:12px;line-height:1.6;color:rgba(235,235,245,.85);max-height:420px}
+.code .copy{position:absolute;top:10px;right:10px}
+.code .hl{color:var(--c6)} .code .cm{color:var(--jk-text-3)}
+.tabs{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+footer.foot{max-width:1080px;margin:0 auto;padding-block:0 40px;font-size:12px;color:var(--jk-text-3);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+@media (max-width:640px){
+  .wrap{padding-block:32px 56px;gap:64px}
+  .typerow{grid-template-columns:1fr;gap:4px}
+  .topbar{padding:0 14px}
+  .topbar .ctx{display:none}
+  .app-body{padding:20px 16px 24px}
+  .drop{padding:28px 14px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+
+<div class="ambient" aria-hidden="true"></div>
+
+<nav class="nav" aria-label="Kapitoly">
+  <div class="nav-in">
+    <span class="mark" aria-hidden="true">JK</span>
+    <div class="nav-links">
+      <a href="#princip">Princip</a><a href="#barvy">Barvy</a><a href="#typografie">Typografie</a>
+      <a href="#tvary">Tvary</a><a href="#ikony">Ikony</a><a href="#komponenty">Komponenty</a>
+      <a href="#aplikace">Aplikace</a><a href="#grafy">Grafy</a><a href="#pravidla">Pravidla</a><a href="#kod">Kód</a>
+    </div>
+  </div>
+</nav>
+
+<main class="wrap">
+
+  <header class="hero">
+    <span class="tile" style="width:64px;height:64px;border-radius:16px;background:var(--jk-brand-gradient);font-weight:800;font-size:24px;letter-spacing:-.02em">JK</span>
+    <h1>Grafický <b>manuál</b></h1>
+    <p>Jeden vizuální jazyk pro www.jan-kuchar.cz a nástroje AI Statistiky. Vychází z hlavního webu: tmavá Spotlight estetika, jedna modrá a skleněné plochy.</p>
+    <div class="meta-row"><span class="chip">v1.0 · říjen 2026</span><span class="chip">Jen tmavý režim</span><span class="chip">Tailwind v3 i v4</span></div>
+  </header>
+
+  <!-- PRINCIP -->
+  <section id="princip">
+    <div class="sec-head"><span class="k">Princip</span><h2>Méně omáčky, <span>více dat</span></h2>
+      <p>Nástroje jsou pracovní: obsah a čísla mají přednost před efekty. Charakter dává typografie a jemné pozadí, ne barevnost.</p></div>
+    <div class="principles">
+      <div class="panel"><b>Jedna modrá</b><p>#0a84ff je jediný akcent. Ostatní barvy nesou stav nebo sérii v grafu.</p></div>
+      <div class="panel"><b>Hairline místo stínů</b><p>Plochy oddělují tenké světlé linky 0,5 px. Velký stín jen u vyskakovacích vrstev.</p></div>
+      <div class="panel"><b>Gradient jen ve značce</b><p>Barevný přechod patří logu JK, avataru a ikonám aplikací. Nikdy na tlačítka ani nadpisy.</p></div>
+      <div class="panel"><b>Dvě váhy v názvu</b><p>Podpis značky je kontrast lehké a tučné váhy: Jan <b style="display:inline;font-size:inherit">Kuchař</b>, Chat <b style="display:inline;font-size:inherit">Inspector</b>.</p></div>
+    </div>
+  </section>
+
+  <!-- BARVY -->
+  <section id="barvy">
+    <div class="sec-head"><span class="k">Barvy</span><h2>Paleta</h2>
+      <p>Neutrální téměř černá místo modro-šedé Tailwind <code>slate</code>. Plochy se zesvětlují po krocích, hloubku dělá jas, ne barva.</p></div>
+
+    <h3>Plochy</h3>
+    <div class="ramp" role="img" aria-label="Stupně ploch od pozadí po hover">
+      <div style="background:#08080c">bg #08080c</div>
+      <div style="background:#111117">surface-1 #111117</div>
+      <div style="background:#18181f">surface-2 #18181f</div>
+      <div style="background:#22222b">surface-3 #22222b</div>
+    </div>
+    <div class="grid g3 small" style="margin-top:-8px">
+      <span><b style="color:var(--jk-text-2)">bg</b> pozadí stránky · <b style="color:var(--jk-text-2)">surface-1</b> karty a panely</span>
+      <span><b style="color:var(--jk-text-2)">surface-2</b> vstupy, vnořené bloky</span>
+      <span><b style="color:var(--jk-text-2)">surface-3</b> hover, vybraný řádek, aktivní segment</span>
+    </div>
+
+    <div class="grid g2">
+      <div class="panel">
+        <h3>Akcent</h3>
+        <div class="grid g3" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,130px),1fr))">
+          <div class="sw"><div class="chip-c" style="background:#0a84ff"></div><div class="info"><b>accent</b><code>#0a84ff</code><span>odkazy, ikony, focus</span></div></div>
+          <div class="sw"><div class="chip-c" style="background:#0071e3"></div><div class="info"><b>accent-strong</b><code>#0071e3</code><span>výplň tlačítka</span></div></div>
+          <div class="sw"><div class="chip-c" style="background:rgba(10,132,255,.16)"></div><div class="info"><b>accent-soft</b><code>accent / 16 %</code><span>pozadí aktivní položky</span></div></div>
+        </div>
+        <p class="small" style="margin:12px 0 0">Bílý text na #0a84ff má kontrast jen 3,6 : 1, proto mají tlačítka tmavší #0071e3 (4,7 : 1).</p>
+      </div>
+      <div class="panel">
+        <h3>Text</h3>
+        <div class="textsamples">
+          <div><span>Primární text a nadpisy</span><code>text #f5f5f7</code></div>
+          <div><span style="color:var(--jk-text-2)">Popisky a sekundární text</span><code>text-2 · 60 %</code></div>
+          <div><span style="color:var(--jk-text-3)">Meta, labely, osy grafů</span><code>text-3 · 38 %</code></div>
+          <div><span style="color:var(--jk-accent)">Odkaz a interaktivní text</span><code>accent</code></div>
+        </div>
+        <p class="small" style="margin:12px 0 0">text-3 nepoužívej pro souvislý text, jen pro krátké popisky.</p>
+      </div>
+    </div>
+
+    <h3>Stavové barvy</h3>
+    <div class="grid g4">
+      <div class="sw"><div class="chip-c" style="background:#30d158"></div><div class="info"><b>success</b><code>#30d158</code><span>hotovo, kladný trend</span></div></div>
+      <div class="sw"><div class="chip-c" style="background:#ff9f0a"></div><div class="info"><b>warning</b><code>#ff9f0a</code><span>pozor, neúplná data</span></div></div>
+      <div class="sw"><div class="chip-c" style="background:#ff453a"></div><div class="info"><b>danger</b><code>#ff453a</code><span>chyba, mazání</span></div></div>
+      <div class="sw"><div class="chip-c" style="background:#64d2ff"></div><div class="info"><b>info</b><code>#64d2ff</code><span>nápověda, neutrální stav</span></div></div>
+    </div>
+
+    <h3>Značka</h3>
+    <div class="grid g2">
+      <div class="sw"><div class="chip-c" style="background:var(--jk-brand-gradient);height:64px"></div><div class="info"><b>brand-gradient</b><code>135° #0a84ff → #bf5af2 → #ff375f</code><span>logo JK, avatar, favicon</span></div></div>
+      <div class="sw"><div class="chip-c" style="background:radial-gradient(60% 90% at 50% 0%,rgba(94,92,230,.35),transparent 70%),#08080c;height:64px"></div><div class="info"><b>ambient</b><code>radial rgba(94,92,230,.14–.20)</code><span>jemná záře nahoře za obsahem</span></div></div>
+    </div>
+  </section>
+
+  <!-- TYPOGRAFIE -->
+  <section id="typografie">
+    <div class="sec-head"><span class="k">Typografie</span><h2>Systémové písmo, <span>Inter jako záloha</span></h2>
+      <p>Na Macu se vykreslí SF Pro, jinde Inter z Google Fonts. Mono jen pro data, kód a dotazy. Žádné patkové písmo ani mono kapitálky pro hlášky.</p></div>
+    <div class="panel">
+      <div class="typerow"><div class="spec">Display<br>clamp 46–76 · 200/600</div><div class="sample" style="font-size:52px;font-weight:200;letter-spacing:-.04em;line-height:1">Jan <b style="font-weight:600">Kuchař</b></div></div>
+      <div class="typerow"><div class="spec">Titulek stránky<br>32 · 600 · −0,02em</div><div class="sample" style="font-size:32px;font-weight:600;letter-spacing:-.02em;line-height:1.15">Analýza vyhledávání</div></div>
+      <div class="typerow"><div class="spec">Sekce<br>24 · 600</div><div class="sample" style="font-size:24px;font-weight:600;letter-spacing:-.02em">Nejčastější dotazy</div></div>
+      <div class="typerow"><div class="spec">Karta<br>20 · 600</div><div class="sample" style="font-size:20px;font-weight:600;letter-spacing:-.01em">Nahrajte logy k analýze</div></div>
+      <div class="typerow"><div class="spec">Perex<br>16 · 400 · text-2</div><div class="sample dim" style="font-size:16px">Přetáhněte jeden nebo více JSON souborů s logy.</div></div>
+      <div class="typerow"><div class="spec">Základ UI<br>14 · 400 / 500</div><div class="sample">Konverzace s asistentem seřazené od nejnovější.</div></div>
+      <div class="typerow"><div class="spec">Meta<br>12 · text-3</div><div class="sample small">Aktualizováno 12. 10. 2026 · 1 284 záznamů</div></div>
+      <div class="typerow"><div class="spec">Label sekce<br>11 · 600 · text-3</div><div class="sample" style="font-size:11px;font-weight:600;color:var(--jk-text-3)">Nejlepší shoda</div></div>
+      <div class="typerow"><div class="spec">Mono<br>12–13 · SF Mono</div><div class="sample mono" style="color:var(--jk-info)">SEARCH("search_datart_tool called with query")</div></div>
+    </div>
+    <div class="panel">
+      <h3>Slovní značky aplikací</h3>
+      <p class="dim" style="margin:0 0 16px">Kategorie lehce (300), vlastní jméno tučně (600). Stejný vzor jako „Jan <b>Kuchař</b>“ na hlavním webu.</p>
+      <div class="wordmarks">
+        <span class="wm">Chat <b>Inspector</b></span>
+        <span class="wm">Search <b>Analyzer</b></span>
+        <span class="wm">Reports <b>Visualizer</b></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- TVARY -->
+  <section id="tvary">
+    <div class="sec-head"><span class="k">Tvary a prostor</span><h2>Zaoblení a mřížka 4 px</h2>
+      <p>Čím větší objekt, tím větší zaoblení. Vnitřní prvek má vždy menší poloměr než jeho rodič.</p></div>
+    <div class="grid g2">
+      <div class="panel">
+        <h3>Poloměry</h3>
+        <div class="radii">
+          <div style="border-radius:5px">xs 5</div><div style="border-radius:8px">sm 8</div><div style="border-radius:10px">md 10</div>
+          <div style="border-radius:14px">lg 14</div><div style="border-radius:18px">xl 18</div><div style="border-radius:999px;justify-content:center">pill</div>
+        </div>
+        <p class="small" style="margin:14px 0 0">xs kbd a verze · sm řádky a vstupy · md tlačítka · lg karty · xl panely a dropzóna · pill vyhledávání a čipy</p>
+      </div>
+      <div class="panel">
+        <h3>Mezery</h3>
+        <div class="space">
+          <figure><div style="width:4px;height:4px"></div>4</figure><figure><div style="width:8px;height:8px"></div>8</figure>
+          <figure><div style="width:12px;height:12px"></div>12</figure><figure><div style="width:16px;height:16px"></div>16</figure>
+          <figure><div style="width:24px;height:24px"></div>24</figure><figure><div style="width:32px;height:32px"></div>32</figure>
+          <figure><div style="width:56px;height:56px"></div>56</figure>
+        </div>
+        <p class="small" style="margin:14px 0 0">Okraj obsahu 24 px (mobil 16 px) · max. šířka 1200 px · horní lišta 56 px · mezera mezi kartami 12–16 px</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- IKONY -->
+  <section id="ikony">
+    <div class="sec-head"><span class="k">Ikony aplikací</span><h2>Dlaždice ve stylu Spotlightu</h2>
+      <p>Každá aplikace má vlastní barevnou dlaždici se stejným přechodem jako ikony na hlavním webu. Slouží jako favicon a v horní liště. SVG soubory jsou v <code>brand/icons/</code>.</p></div>
+    <div class="apps">
+      <div class="panel app">
+        <span class="tile" style="width:52px;height:52px;border-radius:13px;background:var(--tile-blue)"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M10 12h44a4 4 0 0 1 4 4v24a4 4 0 0 1-4 4H30l-12 10V44h-8a4 4 0 0 1-4-4V16a4 4 0 0 1 4-4z" fill="#fff"/><g fill="#0a60ff"><circle cx="20" cy="28" r="4"/><circle cx="32" cy="28" r="4"/><circle cx="44" cy="28" r="4"/></g></svg></span>
+        <div><h3>Chat <b>Inspector</b></h3><p>Prohlížení a hodnocení konverzací s asistentem.</p><div class="dom">chatbot-message-reader.jan-kuchar.cz</div></div>
+      </div>
+      <div class="panel app">
+        <span class="tile" style="width:52px;height:52px;border-radius:13px;background:var(--tile-yellow)"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="27" cy="27" r="16" fill="none" stroke="#fff" stroke-width="7"/><path d="m39 39 15 15" stroke="#fff" stroke-width="9" stroke-linecap="round"/></svg></span>
+        <div><h3>Search <b>Analyzer</b></h3><p>Analýza logů vyhledávacího nástroje.</p><div class="dom">search-log-analyzer.jan-kuchar.cz</div></div>
+      </div>
+      <div class="panel app">
+        <span class="tile" style="width:52px;height:52px;border-radius:13px;background:var(--tile-green)"><svg viewBox="0 0 64 64" aria-hidden="true"><g fill="#fff"><rect x="8" y="34" width="12" height="22" rx="3"/><rect x="26" y="20" width="12" height="36" rx="3"/><rect x="44" y="8" width="12" height="48" rx="3"/></g></svg></span>
+        <div><h3>Reports <b>Visualizer</b></h3><p>Vizualizace CSV reportů z BloomReach a Looker Studia.</p><div class="dom">blmr-reports-visualizer.jan-kuchar.cz</div></div>
+      </div>
+    </div>
+    <p class="small" style="margin:0">Další nástroj dostane volnou barvu z řady: růžová <code>#ff6482 → #fa233b</code>, fialová <code>#bf5af2 → #5e5ce6</code>. Glyf je vždy bílý, plný, bez obrysu. Zaoblení dlaždice = 25 % strany.</p>
+  </section>
+
+  <!-- KOMPONENTY -->
+  <section id="komponenty">
+    <div class="sec-head"><span class="k">Komponenty</span><h2>Základní prvky</h2>
+      <p>Ukázky jsou živé, s reálnými stavy hover a focus. Tab je projde.</p></div>
+    <div class="grid g2">
+      <div class="panel">
+        <h3>Tlačítka</h3>
+        <div class="row-demo">
+          <button class="btn btn-primary" type="button"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 11V3M4.5 6.5 8 3l3.5 3.5M3 13h10"/></svg>Vybrat soubory</button>
+          <button class="btn btn-secondary" type="button">Exportovat CSV</button>
+          <button class="btn btn-ghost" type="button">Zobrazit vše</button>
+          <button class="btn btn-danger" type="button">Smazat data</button>
+          <button class="btn btn-primary" type="button" disabled>Analyzovat</button>
+        </div>
+        <p class="small" style="margin:14px 0 0">Výška 36 px (malé 28 px). Na obrazovce nejvýš jedno primární tlačítko. Text je sloveso: „Nahrát JSON“, ne „OK“.</p>
+      </div>
+      <div class="panel">
+        <h3>Vstupy</h3>
+        <div class="grid" style="gap:12px">
+          <div class="search"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" style="opacity:.55;flex:none" aria-hidden="true"><circle cx="6.5" cy="6.5" r="5"/><path d="m10.5 10.5 4 4" stroke-linecap="round"/></svg><input id="demo-search" type="text" placeholder="Hledat v konverzacích" aria-label="Hledat v konverzacích"><kbd>⌘K</kbd></div>
+          <div class="field"><label for="demo-date">Období</label><input class="input" id="demo-date" type="text" value="1. 10. – 12. 10. 2026"></div>
+          <div class="field"><label for="demo-json">Vložit JSON</label><textarea class="input" id="demo-json" placeholder='[{"chat_id": "123", …}]'></textarea></div>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>Stavy a štítky</h3>
+        <div class="row-demo">
+          <span class="badge b-ok">Načteno</span><span class="badge b-warn">Bez výsledků</span><span class="badge b-err">Chyba parsování</span>
+          <span class="badge b-info">Zpracovává se</span><span class="badge b-neutral">412 dotazů</span><span class="ver">v1.1</span>
+        </div>
+        <h3 style="margin-top:20px">Čipy a přepínač</h3>
+        <div class="row-demo">
+          <div class="seg" role="group" aria-label="Období"><button type="button" aria-pressed="false">Den</button><button type="button" aria-pressed="true">Týden</button><button type="button" aria-pressed="false">Měsíc</button></div>
+          <span class="chip">Datart</span><span class="chip">ETA</span><span class="chip">NAY</span>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>Klávesové zkratky</h3>
+        <div class="grid" style="gap:10px">
+          <div style="display:flex;justify-content:space-between;gap:10px"><span class="dim">Hledat</span><span><kbd>⌘K</kbd> <kbd>/</kbd></span></div>
+          <div style="display:flex;justify-content:space-between;gap:10px"><span class="dim">Pohyb v seznamu</span><span><kbd>↑</kbd> <kbd>↓</kbd></span></div>
+          <div style="display:flex;justify-content:space-between;gap:10px"><span class="dim">Otevřít detail</span><kbd>↵ Enter</kbd></div>
+          <div style="display:flex;justify-content:space-between;gap:10px"><span class="dim">Zavřít, vymazat</span><kbd>Esc</kbd></div>
+        </div>
+        <p class="small" style="margin:14px 0 0">Stejné zkratky jako na hlavním webu, ve všech nástrojích.</p>
+      </div>
+    </div>
+
+    <h3 style="margin-bottom:0">Tabulka</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Dotaz</th><th class="num">Hledání</th><th class="num">Výsledků</th><th class="num">CTR</th><th>Stav</th></tr></thead>
+        <tbody>
+          <tr><td class="q">pračka bosch</td><td class="num">1 284</td><td class="num">96</td><td class="num">38,2 %</td><td><span class="badge b-ok">OK</span></td></tr>
+          <tr><td class="q">iphone 17 pro max</td><td class="num">962</td><td class="num">41</td><td class="num">44,7 %</td><td><span class="badge b-ok">OK</span></td></tr>
+          <tr><td class="q">sluchatka do usi bezdratova</td><td class="num">418</td><td class="num">12</td><td class="num">9,4 %</td><td><span class="badge b-warn">Nízké CTR</span></td></tr>
+          <tr><td class="q">mikrovlna s horkovzduchem 900w</td><td class="num">177</td><td class="num">0</td><td class="num">–</td><td><span class="badge b-err">0 výsledků</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small" style="margin:-8px 0 0">Čísla zarovnaná vpravo a s <code>tabular-nums</code>. Český formát: mezera jako oddělovač tisíců, desetinná čárka. Data v tabulce jsou ilustrační.</p>
+  </section>
+
+  <!-- APLIKACE -->
+  <section id="aplikace">
+    <div class="sec-head"><span class="k">Rozvržení aplikace</span><h2>Společná kostra</h2>
+      <p>Horní lišta 56 px: logo JK (odkaz na hlavní web), lomítko, ikona a slovní značka aplikace, vpravo akce. Pod ní titulek stránky a obsah. Prázdný stav s nahráním souboru je ve všech třech nástrojích stejný.</p></div>
+
+    <div class="device">
+      <div class="topbar">
+        <div class="crumb">
+          <a class="mark" href="https://www.jan-kuchar.cz" aria-label="jan-kuchar.cz" style="color:#fff">JK</a>
+          <span class="slash" aria-hidden="true">/</span>
+          <span class="tile" style="width:26px;height:26px;border-radius:7px;background:var(--tile-yellow)"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="27" cy="27" r="16" fill="none" stroke="#fff" stroke-width="8"/><path d="m39 39 15 15" stroke="#fff" stroke-width="10" stroke-linecap="round"/></svg></span>
+          <span class="name">Search <b>Analyzer</b></span>
+          <span class="ver">v2.0</span>
+        </div>
+        <span class="spacer"></span>
+        <span class="ctx">Datart</span>
+        <button class="btn btn-secondary btn-sm" type="button">Nahrát JSON</button>
+      </div>
+      <div class="app-body">
+        <div class="page-title"><div><h4>Analýza vyhledávání</h4><p>Sloučí volání <code>search_datart_tool</code> z exportu Google Cloud.</p></div></div>
+        <div class="drop" id="drop">
+          <span class="tile" style="width:52px;height:52px;border-radius:50%;background:var(--jk-accent-soft);color:var(--jk-accent);box-shadow:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V4M7.5 8.5 12 4l4.5 4.5M5 20h14"/></svg></span>
+          <h5>Nahrajte logy k analýze</h5>
+          <p>Přetáhněte sem jeden nebo více JSON souborů, nebo je vyberte z počítače.</p>
+          <button class="btn btn-primary" type="button" style="margin-top:6px">Vybrat soubory</button>
+          <span class="small">Podporované formáty: .json · data zůstávají jen v prohlížeči</span>
+        </div>
+        <div class="panel" style="background:transparent">
+          <h3>Jak získat logy z Google Cloud</h3>
+          <ol class="steps">
+            <li>Otevřete <a href="https://console.cloud.google.com/logs" target="_blank" rel="noopener">Log Explorer</a> v Google Cloud Console.</li>
+            <li>Do vyhledávání vložte filtr <code>SEARCH("search_datart_tool called with query")</code>.</li>
+            <li>Vpravo nahoře zvolte <b>Actions</b> → <b>Download</b>, formát <b>JSON</b>.</li>
+            <li>Stažený soubor nahrajte sem.</li>
+          </ol>
+        </div>
+      </div>
+      <div class="statusbar"><span>Stav: <span style="color:var(--jk-success)">připraveno</span> · žádná data</span><span>AI Statistiky · © 2026 Jan Kuchař</span></div>
+    </div>
+    <p class="small" style="margin:0">Dropzóna reaguje na přetažení: okraj <code>accent</code>, pozadí <code>accent-soft</code>. Zkus na ni najet myší.</p>
+  </section>
+
+  <!-- GRAFY -->
+  <section id="grafy">
+    <div class="sec-head"><span class="k">Grafy a čísla</span><h2>Datové pohledy</h2>
+      <p>KPI dlaždice nahoře, pod nimi graf, pak tabulka. Série barvi v pevném pořadí, aby stejná metrika měla v každém nástroji stejnou barvu.</p></div>
+
+    <div class="grid g4" style="grid-template-columns:repeat(auto-fill,minmax(min(100%,110px),1fr))">
+      <div class="sw"><div class="chip-c" style="background:var(--c1);height:40px"></div><div class="info"><b>1</b><code>#0a84ff</code></div></div>
+      <div class="sw"><div class="chip-c" style="background:var(--c2);height:40px"></div><div class="info"><b>2</b><code>#30d158</code></div></div>
+      <div class="sw"><div class="chip-c" style="background:var(--c3);height:40px"></div><div class="info"><b>3</b><code>#ff9f0a</code></div></div>
+      <div class="sw"><div class="chip-c" style="background:var(--c4);height:40px"></div><div class="info"><b>4</b><code>#bf5af2</code></div></div>
+      <div class="sw"><div class="chip-c" style="background:var(--c5);height:40px"></div><div class="info"><b>5</b><code>#ff375f</code></div></div>
+      <div class="sw"><div class="chip-c" style="background:var(--c6);height:40px"></div><div class="info"><b>6</b><code>#64d2ff</code></div></div>
+      <div class="sw"><div class="chip-c" style="background:var(--c7);height:40px"></div><div class="info"><b>7</b><code>#ffd60a</code></div></div>
+      <div class="sw"><div class="chip-c" style="background:var(--c8);height:40px"></div><div class="info"><b>8</b><code>#ac8e68</code></div></div>
+    </div>
+
+    <div class="kpis">
+      <div class="kpi"><span>Konverzací</span><b>3 412</b><small class="up">▲ 12,4 % proti minulému týdnu</small></div>
+      <div class="kpi"><span>Průměrné hodnocení</span><b>4,3</b><small class="up">▲ 0,2</small></div>
+      <div class="kpi"><span>Dotazy bez výsledku</span><b>6,8 %</b><small class="down">▲ 1,1 p. b.</small></div>
+      <div class="kpi"><span>Medián odpovědi</span><b>2,4 s</b><small class="dim">beze změny</small></div>
+    </div>
+
+    <div class="panel">
+      <div class="tabs" style="margin-bottom:12px"><h3 style="margin:0">Konverzace podle dne</h3>
+        <div class="legend"><span><i style="background:var(--c1)"></i>Datart</span><span><i style="background:var(--c2)"></i>ETA</span><span><i style="background:var(--c3)"></i>NAY</span></div></div>
+      <svg class="chart" viewBox="0 0 640 220" role="img" aria-label="Ukázkový spojnicový graf tří sérií za 7 dní">
+        <g stroke="rgba(255,255,255,.08)" stroke-width="1">
+          <line x1="44" y1="20" x2="630" y2="20"/><line x1="44" y1="70" x2="630" y2="70"/><line x1="44" y1="120" x2="630" y2="120"/><line x1="44" y1="170" x2="630" y2="170"/>
+        </g>
+        <g fill="rgba(235,235,245,.38)" font-size="11" font-family="-apple-system,Inter,sans-serif" text-anchor="end">
+          <text x="36" y="24">600</text><text x="36" y="74">400</text><text x="36" y="124">200</text><text x="36" y="174">0</text>
+        </g>
+        <g fill="rgba(235,235,245,.38)" font-size="11" font-family="-apple-system,Inter,sans-serif" text-anchor="middle">
+          <text x="60" y="198">Po</text><text x="155" y="198">Út</text><text x="250" y="198">St</text><text x="345" y="198">Čt</text><text x="440" y="198">Pá</text><text x="535" y="198">So</text><text x="614" y="198">Ne</text>
+        </g>
+        <defs><linearGradient id="fa" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a84ff" stop-opacity=".28"/><stop offset="1" stop-color="#0a84ff" stop-opacity="0"/></linearGradient></defs>
+        <!-- Datart: 410 450 430 480 520 390 360 → y = 170 - v/4 -->
+        <path d="M60 67.5 L155 57.5 L250 62.5 L345 50 L440 40 L535 72.5 L614 80 L614 170 L60 170Z" fill="url(#fa)"/>
+        <path d="M60 67.5 L155 57.5 L250 62.5 L345 50 L440 40 L535 72.5 L614 80" fill="none" stroke="#0a84ff" stroke-width="2" stroke-linejoin="round"/>
+        <!-- ETA: 180 210 190 230 240 170 150 -->
+        <path d="M60 125 L155 117.5 L250 122.5 L345 112.5 L440 110 L535 127.5 L614 132.5" fill="none" stroke="#30d158" stroke-width="2" stroke-linejoin="round"/>
+        <!-- NAY: 90 100 110 95 120 80 70 -->
+        <path d="M60 147.5 L155 145 L250 142.5 L345 146.25 L440 140 L535 150 L614 152.5" fill="none" stroke="#ff9f0a" stroke-width="2" stroke-linejoin="round"/>
+        <circle cx="614" cy="80" r="4" fill="#0a84ff" stroke="#111117" stroke-width="2"/>
+        <circle cx="614" cy="132.5" r="4" fill="#30d158" stroke="#111117" stroke-width="2"/>
+        <circle cx="614" cy="152.5" r="4" fill="#ff9f0a" stroke="#111117" stroke-width="2"/>
+      </svg>
+      <p class="small" style="margin:8px 0 0">Mřížka 8 % bílé, popisky os <code>text-3</code> 11 px, čára 2 px, plocha jen pod první sérií, zvýrazněný poslední bod. Data jsou ilustrační.</p>
+    </div>
+  </section>
+
+  <!-- PRAVIDLA -->
+  <section id="pravidla">
+    <div class="sec-head"><span class="k">Pravidla</span><h2>Co sjednotit v současných webech</h2>
+      <p>Konkrétní rozdíly, které jsem na webech našel, a čím je nahradit.</p></div>
+    <div class="tbl-wrap">
+      <table class="audit">
+        <thead><tr><th>Web</th><th>Teď</th><th>Nově</th></tr></thead>
+        <tbody>
+          <tr><td>Všechny tři</td><td>Pozadí Tailwind <code>slate-900</code> / <code>gray-900</code> (modrošedé)</td><td><code>bg #08080c</code>, karty <code>surface-1</code></td></tr>
+          <tr><td>Všechny tři</td><td>Akcent <code>blue-500</code> / <code>blue-600</code></td><td><code>accent #0a84ff</code>, tlačítka <code>#0071e3</code></td></tr>
+          <tr><td>Všechny tři</td><td>Bez faviconu, bez odkazu na hlavní web</td><td>Dlaždice z <code>brand/icons/</code>, logo JK v liště</td></tr>
+          <tr><td>Chat Inspector</td><td>„DATART INSPECTOR | AI STATISTIKY“, mono kapitálky („SNÍMAČ PŘIPRAVEN K NÁBORU DAT“)</td><td>„Chat <b>Inspector</b>“, běžná věta v normálním písmu</td></tr>
+          <tr><td>Search Analyzer</td><td>Podtitul patkovou kurzívou, <code>lang="en"</code>, titulek anglicky</td><td>Podtitul <code>text-2</code> 13 px, <code>lang="cs"</code></td></tr>
+          <tr><td>Reports Visualizer</td><td>Název „CSV Analyzer“, přepínač světlého režimu, Tailwind z CDN</td><td>„Reports <b>Visualizer</b>“, jen tmavý režim, preset v3</td></tr>
+          <tr><td>Všechny tři</td><td>Titulky karet různé (Prohlížeč Chatů, Datart Search Log Analyzer…)</td><td><code>&lt;title&gt;</code> = „Search Analyzer · AI Statistiky“</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="dd">
+      <div class="panel yes"><h3>Dělej</h3><ul>
+        <li><span>Barvy ber jen z tokenů, nikdy z výchozí palety Tailwindu.</span></li>
+        <li><span>Oddělení ploch řeš <b>hairline</b> linkou 0,5 px a o stupeň světlejší plochou.</span></li>
+        <li><span>Stav ukazuj štítkem s tečkou, ne jen barvou čísla.</span></li>
+        <li><span>Piš česky, v nástrojích vykej, tlačítka jako sloveso („Nahrát JSON“).</span></li>
+        <li><span>Čísla v českém formátu a <code>tabular-nums</code>.</span></li>
+        <li><span>Na každé obrazovce nejvýš jedno primární tlačítko.</span></li>
+      </ul></div>
+      <div class="panel no"><h3>Nedělej</h3><ul>
+        <li><span>Gradient na tlačítkách, nadpisech nebo pozadí karet.</span></li>
+        <li><span>Mono písmo a kapitálky pro běžné hlášky a nadpisy.</span></li>
+        <li><span>Druhý akcent (fialová, oranžová) pro interaktivní prvky.</span></li>
+        <li><span>Velké stíny pod kartami. Stín má jen popover a modal.</span></li>
+        <li><span>Světlý režim. Brand je výhradně tmavý.</span></li>
+        <li><span>Emoji jako ikony v rozhraní nástrojů.</span></li>
+      </ul></div>
+    </div>
+  </section>
+
+  <!-- KÓD -->
+  <section id="kod">
+    <div class="sec-head"><span class="k">Kód</span><h2>Jak to zapracovat</h2>
+      <p>Soubory jsou v repozitáři <code>jan-kuchar</code> ve složce <code>brand/</code>. Po sloučení do <code>main</code> budou i na <code>www.jan-kuchar.cz/brand/</code>, takže je appky můžou načítat přímo.</p></div>
+    <div class="grid g2">
+      <div class="panel"><h3>Tailwind v4</h3><p class="dim" style="margin:0">Chat Inspector a Search Analyzer. Do hlavního CSS za <code>@import "tailwindcss"</code> vlož obsah <code>brand/tailwind-v4.css</code>. Pak třídy <code>bg-bg</code>, <code>bg-surface-1</code>, <code>text-fg-muted</code>, <code>border-line</code>, <code>bg-accent-strong</code>, <code>rounded-card</code>.</p></div>
+      <div class="panel"><h3>Tailwind v3 (CDN)</h3><p class="dim" style="margin:0">Reports Visualizer. Obsah <code>brand/tailwind-preset.js</code> vlož do <code>tailwind.config.theme.extend</code>, odstraň <code>darkMode</code> a přepínač. Ideálně přejít na build místo Play CDN.</p></div>
+    </div>
+    <div class="tabs">
+      <div class="seg" role="tablist" aria-label="Ukázka kódu">
+        <button type="button" role="tab" aria-pressed="true" data-tab="v4">tailwind-v4.css</button>
+        <button type="button" role="tab" aria-pressed="false" data-tab="shell">Kostra lišty (JSX)</button>
+        <button type="button" role="tab" aria-pressed="false" data-tab="head">&lt;head&gt;</button>
+      </div>
+    </div>
+    <div class="code">
+      <button class="btn btn-secondary btn-sm copy" type="button" id="copy">Kopírovat</button>
+<pre id="code-v4"><span class="cm">/* za @import "tailwindcss"; */</span>
+<span class="hl">@theme</span> {
+  --color-bg:#08080c;
+  --color-surface-1:#111117;
+  --color-surface-2:#18181f;
+  --color-surface-3:#22222b;
+  --color-line:rgba(255,255,255,.10);
+  --color-line-strong:rgba(255,255,255,.14);
+  --color-fg:#f5f5f7;
+  --color-fg-muted:rgba(235,235,245,.60);
+  --color-fg-subtle:rgba(235,235,245,.38);
+  --color-accent:#0a84ff;
+  --color-accent-hover:#409cff;
+  --color-accent-strong:#0071e3;
+  --color-accent-soft:rgba(10,132,255,.16);
+  --color-success:#30d158;
+  --color-warning:#ff9f0a;
+  --color-danger:#ff453a;
+  --color-info:#64d2ff;
+  --font-sans:-apple-system,BlinkMacSystemFont,"SF Pro Text","Inter",system-ui,sans-serif;
+  --font-mono:"SF Mono",ui-monospace,"JetBrains Mono",Menlo,Consolas,monospace;
+  --radius-row:8px;
+  --radius-button:10px;
+  --radius-card:14px;
+  --radius-panel:18px;
+}
+html{color-scheme:dark}
+body{@apply bg-bg text-fg font-sans antialiased text-sm}</pre>
+<pre id="code-shell" hidden>&lt;header className="sticky top-0 z-10 h-14 flex items-center gap-3 px-6
+  bg-[rgba(32,32,40,.72)] backdrop-blur-xl border-b border-line"&gt;
+  &lt;a href="https://www.jan-kuchar.cz" aria-label="jan-kuchar.cz"
+     className="size-[26px] rounded-[7px] grid place-items-center text-[11px] font-extrabold text-white
+                bg-[linear-gradient(135deg,#0a84ff,#bf5af2_50%,#ff375f)]"&gt;JK&lt;/a&gt;
+  &lt;span className="text-fg-subtle text-lg font-light"&gt;/&lt;/span&gt;
+  &lt;img src="/favicon.svg" alt="" className="size-[26px]" /&gt;
+  &lt;span className="text-[15px] font-light tracking-tight"&gt;
+    Search &lt;b className="font-semibold"&gt;Analyzer&lt;/b&gt;
+  &lt;/span&gt;
+  &lt;div className="flex-1" /&gt;
+  &lt;button className="h-7 px-2.5 rounded-row text-[13px] font-medium bg-white/7
+                     ring-[.5px] ring-inset ring-line-strong hover:bg-white/12"&gt;
+    Nahrát JSON
+  &lt;/button&gt;
+&lt;/header&gt;</pre>
+<pre id="code-head" hidden>&lt;html lang="cs"&gt;
+&lt;meta name="color-scheme" content="dark"&gt;
+&lt;meta name="theme-color" content="#08080c"&gt;
+&lt;title&gt;Search Analyzer · AI Statistiky&lt;/title&gt;
+&lt;link rel="icon" href="/favicon.svg" type="image/svg+xml"&gt;  <span class="cm">&lt;!-- brand/icons/search-analyzer.svg --&gt;</span>
+&lt;link rel="preconnect" href="https://fonts.googleapis.com"&gt;
+&lt;link rel="preconnect" href="https://fonts.gstatic.com" crossorigin&gt;
+&lt;link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&amp;display=swap" rel="stylesheet"&gt;
+<span class="cm">&lt;!-- volitelně všechny proměnné --jk-* pro vlastní CSS: --&gt;</span>
+&lt;link rel="stylesheet" href="https://www.jan-kuchar.cz/brand/tokens.css"&gt;</pre>
+    </div>
+  </section>
+</main>
+
+<footer class="foot"><span>Grafický manuál JK · v1.0</span><span>© 2026 Jan Kuchař</span></footer>
+
+<script>
+// Přepínač ukázek kódu
+const tabs = document.querySelectorAll('[data-tab]');
+tabs.forEach(t => t.addEventListener('click', () => {
+  tabs.forEach(x => x.setAttribute('aria-pressed', x === t));
+  ['v4','shell','head'].forEach(id => document.getElementById('code-' + id).hidden = id !== t.dataset.tab);
+}));
+// Kopírování aktivní ukázky
+document.getElementById('copy').addEventListener('click', e => {
+  const pre = [...document.querySelectorAll('.code pre')].find(p => !p.hidden);
+  const btn = e.currentTarget;
+  navigator.clipboard.writeText(pre.innerText).then(() => {
+    btn.textContent = 'Zkopírováno'; setTimeout(() => btn.textContent = 'Kopírovat', 1600);
+  }).catch(() => { const r = document.createRange(); r.selectNodeContents(pre); const s = getSelection(); s.removeAllRanges(); s.addRange(r); });
+});
+// Segmentový přepínač v komponentách
+document.querySelectorAll('.seg:not([role="tablist"]) button').forEach(b => b.addEventListener('click', () => {
+  b.parentElement.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b));
+}));
+// Dropzóna – vizuální reakce na přetažení
+const drop = document.getElementById('drop');
+['dragenter','dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('over'); }));
+['dragleave','drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('over'); }));
+</script>

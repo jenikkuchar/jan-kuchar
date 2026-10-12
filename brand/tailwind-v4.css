@@ -1,0 +1,33 @@
+/* Tailwind v4 – vlož do hlavního CSS za @import "tailwindcss";
+   Vznikne bg-bg, bg-surface-1, text-fg-muted, border-line, bg-accent, rounded-card ... */
+@theme {
+  --color-bg:#08080c;
+  --color-surface-1:#111117;
+  --color-surface-2:#18181f;
+  --color-surface-3:#22222b;
+  --color-line:rgba(255,255,255,.10);
+  --color-line-strong:rgba(255,255,255,.14);
+  --color-fg:#f5f5f7;
+  --color-fg-muted:rgba(235,235,245,.60);
+  --color-fg-subtle:rgba(235,235,245,.38);
+  --color-accent:#0a84ff;
+  --color-accent-hover:#409cff;
+  --color-accent-strong:#0071e3;
+  --color-accent-soft:rgba(10,132,255,.16);
+  --color-success:#30d158;
+  --color-warning:#ff9f0a;
+  --color-danger:#ff453a;
+  --color-info:#64d2ff;
+  --color-chart-1:#0a84ff; --color-chart-2:#30d158; --color-chart-3:#ff9f0a; --color-chart-4:#bf5af2;
+  --color-chart-5:#ff375f; --color-chart-6:#64d2ff; --color-chart-7:#ffd60a; --color-chart-8:#ac8e68;
+
+  --font-sans:-apple-system,BlinkMacSystemFont,"SF Pro Text","Inter",system-ui,sans-serif;
+  --font-mono:"SF Mono",ui-monospace,"JetBrains Mono",Menlo,Consolas,monospace;
+
+  --radius-row:8px;
+  --radius-button:10px;
+  --radius-card:14px;
+  --radius-panel:18px;
+}
+html{color-scheme:dark}
+body{@apply bg-bg text-fg font-sans antialiased text-sm}
