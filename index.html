@@ -161,6 +161,17 @@ body.searching .panel{display:flex;animation:open .22s ease-out}
 .act i{width:42px;height:42px;border-radius:50%;background:rgba(10,132,255,.16);display:grid;place-items:center;font-style:normal;font-size:16px;font-weight:600}
 .tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
 
+/* Nastavení – řádek s přepínačem (iOS switch) */
+.setting{display:flex;align-items:center;justify-content:space-between;gap:16px;max-width:360px;margin-top:20px;padding:10px 12px 10px 16px;
+  border-radius:12px;background:var(--fill);box-shadow:0 0 0 .5px var(--stroke) inset;font-size:14px;cursor:pointer}
+.switch{position:relative;width:51px;height:31px;border-radius:999px;flex:none;background:var(--fill-2);
+  box-shadow:0 0 0 .5px var(--stroke) inset;transition:background .25s}
+.switch::after{content:"";position:absolute;top:2px;left:2px;width:27px;height:27px;border-radius:50%;background:#fff;
+  box-shadow:0 3px 8px rgba(0,0,0,.15),0 1px 1px rgba(0,0,0,.16);transition:transform .25s cubic-bezier(.3,.7,.4,1.2)}
+.switch[aria-checked="true"]{background:var(--blue)}
+.switch[aria-checked="true"]::after{transform:translateX(20px)}
+.switch:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(10,132,255,.45)}
+
 /* Návrhy pod polem */
 .chips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
 body.searching .chips{display:none}
@@ -185,6 +196,7 @@ body.searching footer{display:none}
   main{padding-top:72px}
   body.searching main{padding-top:24px}
   body.searching header{display:none}
+  body.searching .theme{display:none}            /* nepřekrývat pole hledání; režim jde přepnout i ve Spotlightu */
   .tagline{margin-bottom:26px}
   .bar{height:50px;padding:0 16px}
   .bar input{font-size:17px}
@@ -300,10 +312,8 @@ const ITEMS = [
   { id:'manual', section:'Nástroje', title:'Grafický manuál', icon:'🎨', color:G.purple, kind:'↗',
     href:'https://www.jan-kuchar.cz/brand/manual.html', sub:'Design systém pro nástroje AI Statistiky',
     keys:'graficky manual design system tokeny barvy brand styl ai statistiky nastroje' },
-  { id:'light', section:'Nastavení', title:'Světlý režim', icon:'☀', color:G.yellow, kind:'Nastavení', hidden:true,
-    keys:'svetly rezim light mode bily den theme tema vzhled', theme:'light' },
-  { id:'dark', section:'Nastavení', title:'Tmavý režim', icon:'☾', color:G.purple, kind:'Nastavení', hidden:true,
-    keys:'tmavy rezim dark mode cerny noc theme tema vzhled', theme:'dark' },
+  { id:'theme', section:'Nastavení', title:'Tmavý režim', icon:'☾', color:G.purple, kind:'Nastavení', hidden:true,
+    keys:'tmavy svetly rezim dark light mode cerny bily noc den theme tema vzhled', theme:true },
 ];
 
 /* ======== Logika ======== */
@@ -343,7 +353,7 @@ function renderList(){
     const sec = best ? 'Nejlepší shoda' : it.section;
     if (sec !== lastSec) html += `<div class="sec">${sec}</div>`;
     lastSec = best ? null : sec;
-    html += `<button class="row${i === sel ? ' sel' : ''}" role="option" aria-selected="${i === sel}" data-i="${i}">${icon(it)}${it.title}<small>${it.locked ? LOCK : ''}${it.kind}</small></button>`;
+    html += `<button class="row${i === sel ? ' sel' : ''}" role="option" aria-selected="${i === sel}" data-i="${i}">${icon(it)}${it.title}<small>${it.locked ? LOCK : ''}${it.theme ? themeState() : it.kind}</small></button>`;
   });
   list.innerHTML = html;
   renderPreview();
@@ -353,12 +363,11 @@ function renderPreview(){
   const it = results[sel]; if (!it) return;
   const back = `<button class="back" id="back">‹ Zpět</button>`;
   if (it.theme) {
-    const on = theme() === it.theme;
     prev.innerHTML = back + `${icon(it, true)}<h2>${it.title}</h2>
-      <p class="dim">${on ? 'Už je zapnutý. 😎' : 'Přepne vzhled stránky.'}</p>
-      ${on ? '' : `<div class="acts"><button class="act" id="apply"><i>${it.icon}</i>Zapnout</button></div>`}
-      <div class="meta"><span>Aktuálně</span><span>${theme() === 'light' ? 'světlý' : 'tmavý'}</span><span>Přepnout</span><span><kbd>↵ Enter</kbd> · <kbd>⌘⇧L</kbd></span></div>`;
-    const a = $('#apply'); if (a) a.onclick = () => setTheme(it.theme);
+      <p class="dim">Vzhled stránky. Dokud ho nepřepneš, řídí se nastavením systému.</p>
+      <label class="setting"><span>Tmavý režim</span><button class="switch" id="sw" role="switch" aria-checked="${theme() === 'dark'}" aria-label="Tmavý režim"></button></label>
+      <div class="meta"><span>Aktuálně</span><span id="theme-now">${themeName()}</span><span>Přepnout</span><span><kbd>↵ Enter</kbd> · <kbd>⌘⇧L</kbd></span></div>`;
+    $('#sw').onclick = toggleTheme;
   } else if (it.contact) {
     prev.innerHTML = back + `
       <div class="contact"><div class="av"><div>JK</div></div>
@@ -392,7 +401,7 @@ function update(){
 function choose(i, viaKeyboard){
   sel = i;
   const it = results[i];
-  if (it.theme && viaKeyboard) { setTheme(it.theme); return; }
+  if (it.theme && viaKeyboard) { toggleTheme(); return; }
   if (it.href && viaKeyboard) { window.open(it.href, it.href.startsWith('http') ? '_blank' : '_self'); return; }
   renderList();
   if (isMobile()) { panel.classList.add('detail'); window.scrollTo({ top:0 }); }
@@ -424,13 +433,20 @@ $('#chips').addEventListener('click', e => {
 
 // Světlý / tmavý režim – volba se pamatuje, bez ní platí nastavení systému
 const theme = () => document.documentElement.dataset.theme;
+const themeName = () => theme() === 'light' ? 'světlý' : 'tmavý';
+const themeState = () => theme() === 'dark' ? 'Zapnuto' : 'Vypnuto';
 function setTheme(t, save = true){
   document.documentElement.dataset.theme = t;
   document.querySelector('meta[name=theme-color]').content = t === 'light' ? '#f5f5f7' : '#08080c';
   if (save) try { localStorage.setItem('theme', t); } catch (e) {}
-  if (document.body.classList.contains('searching')) renderList();
+  // položku „Tmavý režim“ ve Spotlightu jen aktualizovat (bez překreslení, ať přepínač animuje)
+  const sw = $('#sw'); if (sw) sw.setAttribute('aria-checked', t === 'dark');
+  const now = $('#theme-now'); if (now) now.textContent = themeName();
+  const i = results.findIndex(it => it.theme), row = list.querySelector(`.row[data-i="${i}"] small`);
+  if (row) row.textContent = themeState();
 }
-$('#theme').onclick = () => setTheme(theme() === 'light' ? 'dark' : 'light');
+const toggleTheme = () => setTheme(theme() === 'light' ? 'dark' : 'light');
+$('#theme').onclick = toggleTheme;
 matchMedia('(prefers-color-scheme: light)').addEventListener('change', e => {
   let saved; try { saved = localStorage.getItem('theme'); } catch (_) {}
   if (!saved) setTheme(e.matches ? 'light' : 'dark', false);
