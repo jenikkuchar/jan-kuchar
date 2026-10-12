@@ -191,8 +191,8 @@ button.chip:hover{background:var(--fill-2)}
   background:var(--glass);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);
   box-shadow:0 0 0 .5px var(--stroke-2) inset,0 20px 50px -20px var(--shadow)}
 .dock a{position:relative;width:52px;height:52px;flex:none;transform-origin:50% 100%;transition:width .12s,height .12s;outline:none}
-.dock a svg{width:100%;height:100%;display:block;border-radius:23%;box-shadow:0 0 0 .5px rgba(0,0,0,.18),0 4px 10px -4px rgba(0,0,0,.4)}
-.dock a:focus-visible svg{box-shadow:0 0 0 3px rgba(10,132,255,.6)}
+.dock a img{width:100%;height:100%;display:block;border-radius:23%;box-shadow:0 0 0 .5px rgba(0,0,0,.18),0 4px 10px -4px rgba(0,0,0,.4)}
+.dock a:focus-visible img{box-shadow:0 0 0 3px rgba(10,132,255,.6)}
 .dock .tip{position:absolute;bottom:calc(100% + 10px);left:50%;transform:translateX(-50%);padding:4px 10px;border-radius:7px;font-size:12px;white-space:nowrap;
   background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 0 0 .5px var(--stroke-2) inset;
   color:var(--text);opacity:0;pointer-events:none;transition:opacity .12s}
@@ -338,28 +338,18 @@ let results = [], sel = 0;
 $('#year').textContent = new Date().getFullYear();
 
 /* ======== Dock: AI asistenti ======== */
-// Ikony jsou zjednodušené značky (inspirované logy), aby nebyly potřeba externí obrázky
-const SPARK = 'M32 10c0 12 10 22 22 22-12 0-22 10-22 22 0-12-10-22-22-22 12 0 22-10 22-22z';
+// Oficiální ikony poskytovatelů, uložené v brand/icons/ai/ (128 px)
 const DOCK = [
-  { name:'Claude', href:'https://claude.ai',
-    svg:`<rect width="64" height="64" fill="#d97757"/><g stroke="#fff" stroke-width="5" stroke-linecap="round">${[0,30,60,90,120,150].map(a => `<path d="M32 15v34" transform="rotate(${a} 32 32)"/>`).join('')}</g>` },
-  { name:'ChatGPT', href:'https://chatgpt.com',
-    svg:`<rect width="64" height="64" fill="#0d0d0d"/><g fill="none" stroke="#fff" stroke-width="4">${[0,60,120].map(a => `<ellipse cx="32" cy="32" rx="8" ry="18" transform="rotate(${a} 32 32)"/>`).join('')}</g>` },
-  { name:'Perplexity', href:'https://www.perplexity.ai',
-    svg:`<rect width="64" height="64" fill="#1f8a96"/><g fill="none" stroke="#fff" stroke-width="3.6" stroke-linejoin="round"><path d="M32 12v40M18 18l14 12 14-12v14H18zM18 32v16l14-12 14 12V32"/></g>` },
-  { name:'Gemini', href:'https://gemini.google.com',
-    svg:`<defs><linearGradient id="dg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4c8df6"/><stop offset=".5" stop-color="#9b72cb"/><stop offset="1" stop-color="#d96570"/></linearGradient></defs><rect width="64" height="64" fill="#fff"/><path d="${SPARK}" fill="url(#dg1)"/>` },
-  { name:'Gemini Enterprise', href:'https://business.gemini.google',
-    svg:`<defs><linearGradient id="dg2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8ab4f8"/><stop offset="1" stop-color="#c58af9"/></linearGradient></defs><rect width="64" height="64" fill="#1b2a4a"/><path d="${SPARK}" fill="url(#dg2)"/><rect x="40" y="42" width="16" height="12" rx="3" fill="#fff"/><path d="M45 42v-2.5h6V42" fill="none" stroke="#fff" stroke-width="2"/>` },
-  { name:'Google AI Mode', href:'https://www.google.com/search?udm=50',
-    svg:`<rect width="64" height="64" fill="#fff"/><g fill="none" stroke-width="5.5" stroke-linecap="round"><path d="M38 20a13 13 0 0 0-18 0" stroke="#ea4335"/><path d="M20 20a13 13 0 0 0 0 18" stroke="#fbbc04"/><path d="M20 38a13 13 0 0 0 18 0" stroke="#34a853"/><path d="M38 38l11 11" stroke="#4285f4"/></g><path d="M44 10c0 5 3 8 8 8-5 0-8 3-8 8 0-5-3-8-8-8 5 0 8-3 8-8z" fill="#4285f4"/>` },
-  { name:'Mistral', href:'https://chat.mistral.ai',
-    svg:`<rect width="64" height="64" fill="#fff7e6"/>${[['#ffd800',14],['#ffaf00',22],['#ff8205',30],['#fa500f',38],['#e10500',46]].map(([c,y]) => `<rect x="12" y="${y}" width="40" height="7" fill="${c}"/>`).join('')}<g fill="#fff7e6"><rect x="20" y="14" width="8" height="8"/><rect x="36" y="14" width="8" height="8"/><rect x="20" y="30" width="2" height="23"/><rect x="28" y="22" width="8" height="8"/><rect x="28" y="38" width="8" height="15"/><rect x="42" y="30" width="2" height="23"/></g>` },
-  { name:'Grok', href:'https://grok.com',
-    svg:`<rect width="64" height="64" fill="#000"/><g fill="none" stroke="#fff" stroke-width="4.5" stroke-linecap="round"><path d="M41 19a15 15 0 1 0 6 12"/><path d="M22 46L48 16"/></g>` },
+  { name:'Claude',         href:'https://claude.ai',                    icon:'claude' },
+  { name:'ChatGPT',        href:'https://chatgpt.com',                  icon:'chatgpt' },
+  { name:'Perplexity',     href:'https://www.perplexity.ai',            icon:'perplexity' },
+  { name:'Gemini',         href:'https://gemini.google.com',            icon:'gemini' },
+  { name:'Google AI Mode', href:'https://www.google.com/search?udm=50', icon:'google-ai-mode' },
+  { name:'Mistral',        href:'https://chat.mistral.ai',              icon:'mistral' },
+  { name:'Grok',           href:'https://grok.com',                     icon:'grok' },
 ];
 $('#dock').innerHTML = DOCK.map(d =>
-  `<a href="${d.href}" target="_blank" rel="noopener" aria-label="${d.name}"><svg viewBox="0 0 64 64" aria-hidden="true">${d.svg}</svg><span class="tip">${d.name}</span></a>`).join('');
+  `<a href="${d.href}" target="_blank" rel="noopener" aria-label="${d.name}"><img src="/brand/icons/ai/${d.icon}.png" alt="" width="128" height="128"><span class="tip">${d.name}</span></a>`).join('');
 
 // Zvětšování ikon pod myší (jako v macOS)
 const dockEl = $('#dock'), DOCK_BASE = 52, DOCK_MAX = 76;
