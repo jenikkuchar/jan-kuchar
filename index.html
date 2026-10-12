@@ -268,44 +268,41 @@ const G = {                                     // barvy ikon
   purple:'linear-gradient(160deg,#bf5af2,#5e5ce6)',
 };
 
+const aiIcon = name => `<img src="/brand/icons/ai/${name}.png" alt="" style="width:100%;height:100%;border-radius:inherit">`;
 const appIcon = name => `<img src="/brand/icons/${name}.svg" alt="" style="width:100%;height:100%;border-radius:inherit">`;
 
 const LOCK = '<svg class="lock" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="1.8"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></svg>';
 // locked: nástroj jen pro přihlášené – zámek v seznamu i v náhledu
-// section: skupina v seznamu · chip: návrh pod polem · keys: slova, podle kterých se položka najde (bez diakritiky)
+// section: skupina v seznamu (hledá se podle ní a podle title) · chip: návrh pod polem
 // hidden: v seznamu se neukáže, najde se jen když se na ni někdo zeptá
 const ITEMS = [
   { id:'kdo', section:'O mně', title:'Kdo jsem', icon:'👤', color:G.blue, kind:'Info', chip:'👋 Kdo jsi?',
-    keys:'kdo jsi jan honza o mne about info jmeno clovek beskydy odkud hory priroda',
     body:fromHtml('kdo'),
     meta:[['Druh','Info'],['Lokalita','Beskydy'],['Režim','světlý i tmavý']] },
   { id:'co', section:'O mně', title:'Co dělám', icon:'✦', color:G.yellow, kind:'Poznámka', chip:'💼 Co děláš?',
-    keys:'co delas prace job zamestnani pozice product owner hp tronic datart eta nay ai umela inteligence ecommerce eshop automatizace',
     body:fromHtml('co'),
     meta:[['Druh','Poznámka'],['Upraveno','dnes'],['Štítky','AI · e-commerce · automatizace']] },
   { id:'zajmy', section:'O mně', title:'Zájmy', icon:'♥', color:G.pink, kind:'Seznam', chip:'✨ Co tě baví?',
-    keys:'zajmy konicky hobby bavi volny cas sport hory priroda cestovani turistika',
     body:fromHtml('zajmy') },
-  { id:'kontakt', section:'O mně', title:'Kontakt', icon:'✉', color:G.green, kind:'Kontakt', chip:'✉️ Jak tě kontaktovat?',
-    keys:'kontakt email mail napis spojeni linkedin', contact:true },
-  { id:'mail', section:'Akce', title:'Napsat e-mail', icon:'✉', color:G.green, kind:'Akce', href:'mailto:'+EMAIL,
-    keys:'napsat email mail zprava', sub:EMAIL },
-  { id:'li', section:'Odkazy', title:'LinkedIn', icon:'in', color:'#0a66c2', kind:'↗', href:LINKEDIN,
-    keys:'linkedin profil cv zivotopis', sub:'Profesní profil' },
+  { id:'kontakt', section:'O mně', title:'Kontakt', icon:'✉', color:G.green, kind:'Kontakt', chip:'✉️ Jak tě kontaktovat?', contact:true },
+  { id:'mail', section:'Akce', title:'Napsat e-mail', icon:'✉', color:G.green, kind:'Akce', href:'mailto:'+EMAIL, sub:EMAIL },
+  { id:'li', section:'Odkazy', title:'LinkedIn', icon:'in', color:'#0a66c2', kind:'↗', href:LINKEDIN, sub:'Profesní profil' },
   { id:'chat', section:'Nástroje', title:'Chat Inspector', icon:appIcon('chat-inspector'), color:G.blue, kind:'↗',
-    href:'https://chatbot-message-reader.jan-kuchar.cz', locked:true, sub:'Čtečka zpráv chatbota · AI Statistiky',
-    keys:'chat inspector chatbot zpravy konverzace message reader ai statistiky nastroje' },
+    href:'https://chatbot-message-reader.jan-kuchar.cz', locked:true, sub:'Čtečka zpráv chatbota · AI Statistiky' },
   { id:'search', section:'Nástroje', title:'Search Analyzer', icon:appIcon('search-analyzer'), color:G.yellow, kind:'↗',
-    href:'https://search-log-analyzer.jan-kuchar.cz', locked:true, sub:'Analýza vyhledávacích logů · AI Statistiky',
-    keys:'search analyzer vyhledavani hledani logy log analyza ai statistiky nastroje' },
+    href:'https://search-log-analyzer.jan-kuchar.cz', locked:true, sub:'Analýza vyhledávacích logů · AI Statistiky' },
   { id:'reports', section:'Nástroje', title:'Reports Visualizer', icon:appIcon('reports-visualizer'), color:G.green, kind:'↗',
-    href:'https://blmr-reports-visualizer.jan-kuchar.cz', locked:true, sub:'Vizualizace reportů · AI Statistiky',
-    keys:'reports visualizer reporty grafy vizualizace blmr ai statistiky nastroje' },
+    href:'https://blmr-reports-visualizer.jan-kuchar.cz', locked:true, sub:'Vizualizace reportů · AI Statistiky' },
+  { id:'claude', section:'AI asistenti', title:'Claude', icon:aiIcon('claude'), color:'#fff', kind:'↗', href:'https://claude.ai' },
+  { id:'chatgpt', section:'AI asistenti', title:'ChatGPT', icon:aiIcon('chatgpt'), color:'#fff', kind:'↗', href:'https://chatgpt.com' },
+  { id:'perplexity', section:'AI asistenti', title:'Perplexity', icon:aiIcon('perplexity'), color:'#000', kind:'↗', href:'https://www.perplexity.ai' },
+  { id:'gemini', section:'AI asistenti', title:'Gemini', icon:aiIcon('gemini'), color:'#fff', kind:'↗', href:'https://gemini.google.com' },
+  { id:'aimode', section:'AI asistenti', title:'Google AI Mode', icon:aiIcon('google-ai-mode'), color:'#fff', kind:'↗', href:'https://www.google.com/search?udm=50' },
+  { id:'mistral', section:'AI asistenti', title:'Mistral', icon:aiIcon('mistral'), color:'#fa500f', kind:'↗', href:'https://chat.mistral.ai' },
+  { id:'grok', section:'AI asistenti', title:'Grok', icon:aiIcon('grok'), color:'#000', kind:'↗', href:'https://grok.com' },
   { id:'manual', section:'Jiné', title:'Grafický manuál', icon:'🎨', color:G.purple, kind:'↗',
-    href:'https://www.jan-kuchar.cz/brand/manual.html', sub:'Design systém pro nástroje AI Statistiky',
-    keys:'graficky manual design system tokeny barvy brand styl ai statistiky nastroje' },
-  { id:'theme', section:'Nastavení', title:'Vzhled', icon:'<svg viewBox="0 0 24 24" style="width:58%;height:58%" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="#fff"/></svg>', color:G.purple, kind:'Nastavení', hidden:true,
-    keys:'tmavy svetly rezim dark light mode cerny bily noc den theme tema vzhled', theme:true },
+    href:'https://www.jan-kuchar.cz/brand/manual.html', sub:'Design systém pro nástroje AI Statistiky' },
+  { id:'theme', section:'Nastavení', title:'Vzhled', icon:'<svg viewBox="0 0 24 24" style="width:58%;height:58%" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="#fff"/></svg>', color:G.purple, kind:'Nastavení', hidden:true, theme:true },
 ];
 
 /* ======== Logika ======== */
@@ -327,8 +324,9 @@ function search(query){
   const words = n.split(/\s+/);
   return ITEMS
     .map(it => {
-      const title = norm(it.title), hay = title + ' ' + it.keys;
-      if (!words.every(w => hay.includes(w))) return null;
+      // jen název a kategorie; každé hledané slovo musí sedět na začátek některého slova („gem“ → Gemini, „ai“ ≠ e-mail)
+      const title = norm(it.title), hay = (title + ' ' + norm(it.section)).split(/[\s\-–·]+/);
+      if (!words.every(w => hay.some(h => h.startsWith(w)))) return null;
       return { it, score: title.startsWith(n) ? 0 : title.includes(n) ? 1 : 2 };
     })
     .filter(Boolean)
@@ -338,7 +336,7 @@ function search(query){
 
 function renderList(){
   if (!results.length) {
-    list.innerHTML = `<div class="empty">Nic jsem nenašel. Zkus třeba „kdo“, „co děláš“, „zájmy“ nebo „kontakt“.</div>`;
+    list.innerHTML = `<div class="empty">Nic jsem nenašel. Hledám podle názvu nebo kategorie – zkus třeba „kontakt“, „nástroje“ nebo „AI“.</div>`;
     prev.innerHTML = ''; return;
   }
   let html = '', lastSec = null;
