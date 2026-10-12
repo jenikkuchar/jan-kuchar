@@ -410,6 +410,12 @@ function choose(i, viaKeyboard){
 q.addEventListener('input', update);
 q.addEventListener('keydown', e => {
   if (!results.length) return;
+  // Šipka dolů v zavřeném Spotlightu ho otevře (i s prázdným polem) a vybere první položku
+  if (e.key === 'ArrowDown' && !document.body.classList.contains('searching')) {
+    e.preventDefault();
+    document.body.classList.add('searching'); sel = 0; renderList();
+    return;
+  }
   // Tab skočí z pole rovnou na odkaz / přepínač v detailu položky
   if (e.key === 'Tab' && !e.shiftKey) {
     const target = prev.querySelector('#seg [aria-checked="true"]') || prev.querySelector('.act');
