@@ -323,6 +323,7 @@ function search(query){
   const n = norm(query);
   if (!n) return ITEMS.filter(i => !i.hidden);
   if (n === '*') return ITEMS;                  // hvězdička = všechny položky včetně skrytých
+  if (n === '...' || n === '…') return ITEMS.filter(i => i.section === 'Nástroje');   // tři tečky = jen nástroje
   const words = n.split(/\s+/);
   return ITEMS
     .map(it => {
@@ -342,7 +343,7 @@ function renderList(){
   }
   let html = '', lastSec = null;
   results.forEach((it, i) => {
-    const best = i === 0 && results.length > 1;
+    const best = i === 0 && results.length > 1 && !['*', '...', '…'].includes(norm(q.value));   // u výpisů bez „nejlepší shody“
     const sec = best ? 'Nejlepší shoda' : it.section;
     if (sec !== lastSec) html += `<div class="sec">${sec}</div>`;
     lastSec = best ? null : sec;
