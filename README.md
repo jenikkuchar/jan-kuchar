@@ -1,6 +1,6 @@
 # jan-kuchar.cz
 
-Osobní stránka ve stylu macOS Spotlight – jméno a vyhledávací pole, přes které se dohledají informace. Jen dark mode, jeden statický `index.html`, žádný build.
+Osobní stránka ve stylu macOS Spotlight – jméno a vyhledávací pole, přes které se dohledají informace. Světlý i tmavý režim (podle systému, přepínač vpravo nahoře – volba se pamatuje), jeden statický `index.html`, žádný build.
 
 - Texty „Kdo jsem“, „Co dělám“ a „Zájmy“ jsou v HTML v `<div id="obsah">` (vizuálně skryté, kvůli vyhledávačům a AI) – Spotlight je načítá odtud. Ostatní položky, e-mail a odkazy jsou v bloku `Obsah – uprav podle sebe` na začátku `<script>`.
 - SEO/AEO: strukturovaná data JSON-LD (`Person`) v `<head>`, `robots.txt`, `sitemap.xml` a `llms.txt` – při změně textů aktualizuj i `llms.txt`.

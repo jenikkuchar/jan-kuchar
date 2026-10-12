@@ -6,7 +6,14 @@
 <title>Jan Kuchař</title>
 <meta name="description" content="Jan Kuchař – AI, technologie, inovace.">
 <meta name="theme-color" content="#08080c">
-<meta name="color-scheme" content="dark">
+<meta name="color-scheme" content="dark light">
+<script>
+// Téma: uložená volba, jinak systémové nastavení – nastaví se hned, ať stránka neprobliká
+(()=>{let t;try{t=localStorage.getItem('theme')}catch(e){}
+  if(t!=='light'&&t!=='dark')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';
+  document.documentElement.dataset.theme=t;
+  document.querySelector('meta[name=theme-color]').content=t==='light'?'#f5f5f7':'#08080c'})();
+</script>
 <meta property="og:title" content="Jan Kuchař">
 <meta property="og:description" content="Jan Kuchař – AI, technologie, inovace.">
 <meta property="og:url" content="https://www.jan-kuchar.cz">
@@ -46,20 +53,52 @@
   --text-2:rgba(235,235,245,.6);
   --text-3:rgba(235,235,245,.38);
   --blue:#0a84ff;
+  --body:rgba(245,245,247,.82);
+  --chip-text:rgba(235,235,245,.82);
+  --fill:rgba(255,255,255,.06);
+  --fill-2:rgba(255,255,255,.12);
+  --kbd:rgba(255,255,255,.08);
+  --clear:rgba(255,255,255,.22);
+  --clear-fg:#000;
+  --shadow:rgba(0,0,0,.8);
+  --av-in:#15151d;
+  --glow:1;
   --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","Inter",system-ui,sans-serif;
+  color-scheme:dark;
+}
+:root[data-theme="light"]{
+  --bg:#f5f5f7;
+  --glass:rgba(255,255,255,.72);
+  --stroke:rgba(0,0,0,.08);
+  --stroke-2:rgba(0,0,0,.1);
+  --text:#1d1d1f;
+  --text-2:rgba(60,60,67,.62);
+  --text-3:rgba(60,60,67,.42);
+  --blue:#007aff;
+  --body:rgba(29,29,31,.82);
+  --chip-text:rgba(29,29,31,.82);
+  --fill:rgba(0,0,0,.05);
+  --fill-2:rgba(0,0,0,.09);
+  --kbd:rgba(0,0,0,.06);
+  --clear:rgba(0,0,0,.25);
+  --clear-fg:#fff;
+  --shadow:rgba(0,0,0,.18);
+  --av-in:#fff;
+  --glow:.7;
+  color-scheme:light;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{min-height:100%}
-body{background:var(--bg);color:var(--text);font-family:var(--font);-webkit-font-smoothing:antialiased;font-size:14px;
+body{background:var(--bg);color:var(--text);transition:background-color .3s,color .3s;font-family:var(--font);-webkit-font-smoothing:antialiased;font-size:14px;
   display:flex;flex-direction:column;min-height:100vh;min-height:100dvh}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 a{color:inherit;text-decoration:none}
 
-.bg{position:fixed;inset:0;z-index:-1;pointer-events:none;
+.bg{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:var(--glow);transition:opacity .3s;
   background:
     radial-gradient(60% 50% at 50% 30%,rgba(94,92,230,.2),transparent 70%),
     radial-gradient(40% 40% at 85% 95%,rgba(255,55,95,.09),transparent 70%),
-    radial-gradient(35% 35% at 10% 90%,rgba(10,132,255,.07),transparent 70%),var(--bg)}
+    radial-gradient(35% 35% at 10% 90%,rgba(10,132,255,.07),transparent 70%)}
 
 main{flex:1 0 auto;width:min(760px,calc(100vw - 32px));margin:0 auto;padding-top:clamp(56px,18vh,180px);padding-bottom:60px;
   transition:padding-top .4s cubic-bezier(.2,.9,.3,1)}
@@ -72,16 +111,16 @@ h1 b{font-weight:600}
 
 /* ---------- Vyhledávání ---------- */
 .search{background:var(--glass);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);
-  border-radius:29px;box-shadow:0 0 0 .5px var(--stroke-2) inset,0 40px 100px -20px rgba(0,0,0,.8);overflow:hidden;
+  border-radius:29px;box-shadow:0 0 0 .5px var(--stroke-2) inset,0 40px 100px -20px var(--shadow);overflow:hidden;
   transition:border-radius .25s}
 body.searching .search{border-radius:18px}
 .bar{display:flex;align-items:center;gap:14px;padding:0 22px;height:58px}
 .bar svg{flex:none;opacity:.55}
 .bar input{flex:1;min-width:0;background:transparent;border:0;outline:0;color:var(--text);font:inherit;font-size:20px;font-weight:300;caret-color:var(--blue)}
 .bar input::placeholder{color:var(--text-3)}
-kbd{font-family:inherit;font-size:12px;color:var(--text-2);background:rgba(255,255,255,.08);border-radius:5px;padding:2px 7px;box-shadow:0 0 0 .5px var(--stroke) inset;white-space:nowrap}
+kbd{font-family:inherit;font-size:12px;color:var(--text-2);background:var(--kbd);border-radius:5px;padding:2px 7px;box-shadow:0 0 0 .5px var(--stroke) inset;white-space:nowrap}
 body.searching .bar kbd.k{display:none}
-.clear{display:none;width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,.22);place-items:center;flex:none}
+.clear{display:none;width:20px;height:20px;border-radius:50%;background:var(--clear);color:var(--clear-fg);place-items:center;flex:none}
 body.searching .clear{display:grid}
 
 .panel{display:none;border-top:.5px solid var(--stroke);height:400px}
@@ -91,8 +130,8 @@ body.searching .panel{display:flex;animation:open .22s ease-out}
 .sec{font-size:11px;font-weight:600;color:var(--text-3);padding:10px 10px 6px}
 .row{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:8px;font-size:14px;width:100%;text-align:left}
 .row small{margin-left:auto;font-size:11px;opacity:.6;white-space:nowrap}
-.row.sel{background:var(--blue)}
-.row:not(.sel):hover{background:rgba(255,255,255,.06)}
+.row.sel{background:var(--blue);color:#fff}
+.row:not(.sel):hover{background:var(--fill)}
 .empty{padding:22px 12px;color:var(--text-2);font-size:13px;line-height:1.5}
 
 .ico{width:28px;height:28px;border-radius:7px;display:grid;place-items:center;flex:none;font-size:14px;color:#fff;font-weight:600;
@@ -101,7 +140,7 @@ body.searching .panel{display:flex;animation:open .22s ease-out}
 
 .prev{flex:1;min-width:0;padding:28px 30px;overflow:auto}
 .prev h2{font-size:24px;font-weight:600;letter-spacing:-.01em;margin:14px 0 8px}
-.prev p{font-size:14px;line-height:1.65;color:rgba(245,245,247,.82);margin-bottom:12px}
+.prev p{font-size:14px;line-height:1.65;color:var(--body);margin-bottom:12px}
 .prev .dim{color:var(--text-2)}
 .meta{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:12px;margin-top:22px;padding-top:14px;border-top:.5px solid var(--stroke)}
 .meta span:nth-child(odd){color:var(--text-3);text-align:right}
@@ -110,7 +149,7 @@ body.searching .panel{display:flex;animation:open .22s ease-out}
 /* Kontaktní karta */
 .contact{display:flex;gap:18px;align-items:center;margin-top:4px}
 .av{width:76px;height:76px;border-radius:50%;flex:none;padding:2px;background:conic-gradient(from 210deg,#0a84ff,#bf5af2,#ff375f,#ff9f0a,#0a84ff)}
-.av div{width:100%;height:100%;border-radius:50%;background:#15151d;display:grid;place-items:center;font-weight:700;font-size:26px}
+.av div{width:100%;height:100%;border-radius:50%;background:var(--av-in);display:grid;place-items:center;font-weight:700;font-size:26px}
 .contact h2{margin:0 0 2px}
 .acts{display:flex;gap:8px;margin-top:22px;flex-wrap:wrap}
 .act{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11px;color:var(--blue);width:76px;padding:6px 0;border-radius:10px;transition:background .15s}
@@ -121,9 +160,18 @@ body.searching .panel{display:flex;animation:open .22s ease-out}
 /* Návrhy pod polem */
 .chips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
 body.searching .chips{display:none}
-.chip{display:inline-flex;align-items:center;gap:6px;padding:7px 13px;border-radius:999px;font-size:13px;background:rgba(255,255,255,.06);
-  box-shadow:0 0 0 .5px var(--stroke-2) inset;color:rgba(235,235,245,.82);transition:background .15s}
-button.chip:hover{background:rgba(255,255,255,.12)}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:7px 13px;border-radius:999px;font-size:13px;background:var(--fill);
+  box-shadow:0 0 0 .5px var(--stroke-2) inset;color:var(--chip-text);transition:background .15s}
+button.chip:hover{background:var(--fill-2)}
+
+/* Přepínač tématu */
+.theme{position:fixed;top:max(14px,env(safe-area-inset-top));right:max(14px,env(safe-area-inset-right));z-index:10;
+  width:38px;height:38px;border-radius:50%;display:grid;place-items:center;color:var(--text-2);
+  background:var(--glass);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
+  box-shadow:0 0 0 .5px var(--stroke-2) inset;transition:color .15s,background .15s}
+.theme:hover{color:var(--text)}
+.theme svg{width:18px;height:18px}
+:root[data-theme="light"] .theme .sun,:root:not([data-theme="light"]) .theme .moon{display:none}
 
 footer{padding:0 16px max(18px,env(safe-area-inset-bottom));text-align:center;font-size:12px;color:var(--text-3)}
 body.searching footer{display:none}
@@ -144,7 +192,7 @@ body.searching footer{display:none}
   .panel.detail .prev{display:block}
   .back{display:inline-block}
   .row{padding:11px 10px;font-size:16px}
-  .row.sel{background:transparent}
+  .row.sel{background:transparent;color:inherit}
 }
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -152,6 +200,10 @@ body.searching footer{display:none}
 </head>
 <body>
 <div class="bg" aria-hidden="true"></div>
+<button class="theme" id="theme" aria-label="Přepnout světlý / tmavý režim" title="Přepnout režim (⌘⇧L)">
+  <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+  <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11z"/></svg>
+</button>
 
 <main>
   <header>
@@ -161,10 +213,10 @@ body.searching footer{display:none}
 
   <div class="search" role="search">
     <div class="bar">
-      <svg width="20" height="20" viewBox="0 0 16 16" fill="none" stroke="#fff" stroke-width="1.6" aria-hidden="true"><circle cx="6.5" cy="6.5" r="5"/><path d="m10.5 10.5 4 4" stroke-linecap="round"/></svg>
+      <svg width="20" height="20" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="6.5" cy="6.5" r="5"/><path d="m10.5 10.5 4 4" stroke-linecap="round"/></svg>
       <input id="q" type="text" placeholder="Hledat ve Spotlightu" autocomplete="off" spellcheck="false"
              aria-label="Hledat" aria-controls="list" aria-autocomplete="list">
-      <button class="clear" id="clear" aria-label="Smazat"><svg width="8" height="8" viewBox="0 0 8 8" stroke="#000" stroke-width="1.6" stroke-linecap="round"><path d="M1 1l6 6M7 1 1 7"/></svg></button>
+      <button class="clear" id="clear" aria-label="Smazat"><svg width="8" height="8" viewBox="0 0 8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M1 1l6 6M7 1 1 7"/></svg></button>
       <kbd class="k">⌘K</kbd>
     </div>
     <div class="panel" id="panel">
@@ -214,7 +266,7 @@ const ITEMS = [
   { id:'kdo', section:'O Janovi', title:'Kdo jsem', icon:'👤', color:G.blue, kind:'Info', chip:'👋 Kdo jsi?',
     keys:'kdo jsi jan honza o mne about info jmeno clovek beskydy odkud hory priroda',
     body:fromHtml('kdo'),
-    meta:[['Druh','Info'],['Lokalita','Beskydy'],['Režim','výhradně tmavý']] },
+    meta:[['Druh','Info'],['Lokalita','Beskydy'],['Režim','světlý i tmavý']] },
   { id:'co', section:'O Janovi', title:'Co dělám', icon:'✦', color:G.yellow, kind:'Poznámka', chip:'💼 Co děláš?',
     keys:'co delas prace job zamestnani pozice product owner hp tronic datart eta nay ai umela inteligence ecommerce eshop automatizace',
     body:fromHtml('co'),
@@ -231,9 +283,10 @@ const ITEMS = [
   { id:'caj', section:'Jiné', title:'Čaj', icon:'🫖', color:G.brown, kind:'Easter egg', hidden:true,
     keys:'caj tea konvice',
     body:`<p>No jasně, jdu si uvařit 🫖</p>` },
-  { id:'light', section:'Jiné', title:'Světlý režim', icon:'☀', color:G.purple, kind:'Nastavení', hidden:true,
-    keys:'svetly rezim light mode bily theme tema',
-    body:`<p>To neprojde! 🌙</p><p class="dim">Tahle stránka je výhradně v tmavém režimu.</p>` },
+  { id:'light', section:'Nastavení', title:'Světlý režim', icon:'☀', color:G.yellow, kind:'Nastavení', hidden:true,
+    keys:'svetly rezim light mode bily den theme tema vzhled', theme:'light' },
+  { id:'dark', section:'Nastavení', title:'Tmavý režim', icon:'☾', color:G.purple, kind:'Nastavení', hidden:true,
+    keys:'tmavy rezim dark mode cerny noc theme tema vzhled', theme:'dark' },
 ];
 
 /* ======== Logika ======== */
@@ -282,7 +335,14 @@ function renderList(){
 function renderPreview(){
   const it = results[sel]; if (!it) return;
   const back = `<button class="back" id="back">‹ Zpět</button>`;
-  if (it.contact) {
+  if (it.theme) {
+    const on = theme() === it.theme;
+    prev.innerHTML = back + `${icon(it, true)}<h2>${it.title}</h2>
+      <p class="dim">${on ? 'Už je zapnutý. 😎' : 'Přepne vzhled stránky.'}</p>
+      ${on ? '' : `<div class="acts"><button class="act" id="apply"><i>${it.icon}</i>Zapnout</button></div>`}
+      <div class="meta"><span>Aktuálně</span><span>${theme() === 'light' ? 'světlý' : 'tmavý'}</span><span>Přepnout</span><span><kbd>↵ Enter</kbd> · <kbd>⌘⇧L</kbd></span></div>`;
+    const a = $('#apply'); if (a) a.onclick = () => setTheme(it.theme);
+  } else if (it.contact) {
     prev.innerHTML = back + `
       <div class="contact"><div class="av"><div>JK</div></div>
         <div><h2>Jan Kuchař</h2><div class="dim">Ozvi se – rád pokecám o AI a produktech.</div></div></div>
@@ -314,6 +374,7 @@ function update(){
 function choose(i, viaKeyboard){
   sel = i;
   const it = results[i];
+  if (it.theme && viaKeyboard) { setTheme(it.theme); return; }
   if (it.href && viaKeyboard) { window.open(it.href, it.href.startsWith('http') ? '_blank' : '_self'); return; }
   renderList();
   if (isMobile()) { panel.classList.add('detail'); window.scrollTo({ top:0 }); }
@@ -341,6 +402,27 @@ $('#chips').addEventListener('click', e => {
   const c = e.target.closest('.chip'); if (!c) return;
   q.value = ITEMS.find(i => i.id === c.dataset.id).title; update();
   if (isMobile()) choose(0); else q.focus();
+});
+
+// Světlý / tmavý režim – volba se pamatuje, bez ní platí nastavení systému
+const theme = () => document.documentElement.dataset.theme;
+function setTheme(t, save = true){
+  document.documentElement.dataset.theme = t;
+  document.querySelector('meta[name=theme-color]').content = t === 'light' ? '#f5f5f7' : '#08080c';
+  if (save) try { localStorage.setItem('theme', t); } catch (e) {}
+  if (document.body.classList.contains('searching')) renderList();
+}
+$('#theme').onclick = () => setTheme(theme() === 'light' ? 'dark' : 'light');
+matchMedia('(prefers-color-scheme: light)').addEventListener('change', e => {
+  let saved; try { saved = localStorage.getItem('theme'); } catch (_) {}
+  if (!saved) setTheme(e.matches ? 'light' : 'dark', false);
+});
+
+// ⌘⇧L / Ctrl+Shift+L – přepnout režim
+document.addEventListener('keydown', e => {
+  if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key.toLowerCase() === 'l') {
+    e.preventDefault(); $('#theme').click();
+  }
 });
 
 // ⌘K / Ctrl+K / "/" – zaměřit hledání
