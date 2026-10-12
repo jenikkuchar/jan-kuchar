@@ -11,6 +11,7 @@ Jednotný vizuální jazyk pro www.jan-kuchar.cz a nástroje **AI Statistiky**. 
 | `tailwind-v4.css` | Blok `@theme` pro Tailwind v4 (Chat Inspector, Search Analyzer) |
 | `tailwind-preset.js` | `theme.extend` pro Tailwind v3 / Play CDN (Reports Visualizer) |
 | `icons/*.svg` | Favicony a ikony aplikací do horní lišty |
+| `staticrypt.html` | Šablona přihlašovací obrazovky pro StatiCrypt (`-t`). Ikona a slovní značka se berou z `--template-title` („Název · přihlášení“) |
 
 ## Názvy aplikací
 
