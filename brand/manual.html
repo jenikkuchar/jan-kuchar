@@ -170,6 +170,8 @@ h3{font-size:15px;font-weight:600;margin:0 0 10px;letter-spacing:-.01em}
 .app{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start}
 .app h3{margin:0}
 .app p{margin:4px 0 0;color:var(--jk-text-2);font-size:13px}
+.app .locked{display:flex;align-items:center;gap:6px;margin-top:4px;font-size:12px;color:var(--jk-text-2)}
+.app .locked .lock{width:12px;height:12px;flex:none}
 .app .dom{font-family:var(--jk-font-mono);font-size:11.5px;color:var(--jk-text-3);margin-top:6px;overflow-wrap:anywhere}
 .mark{width:26px;height:26px;border-radius:7px;background:var(--jk-brand-gradient);display:grid;place-items:center;font-weight:800;font-size:11px;color:#fff;letter-spacing:-.02em;box-shadow:0 0 0 .5px rgba(255,255,255,.18) inset}
 
@@ -468,15 +470,15 @@ footer.foot{max-width:1080px;margin:0 auto;padding-block:0 40px;font-size:12px;c
     <div class="apps">
       <div class="panel app">
         <span class="tile" style="width:52px;height:52px;border-radius:13px;background:var(--tile-blue)"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M10 12h44a4 4 0 0 1 4 4v24a4 4 0 0 1-4 4H30l-12 10V44h-8a4 4 0 0 1-4-4V16a4 4 0 0 1 4-4z" fill="#fff"/><g fill="#0a60ff"><circle cx="20" cy="28" r="4"/><circle cx="32" cy="28" r="4"/><circle cx="44" cy="28" r="4"/></g></svg></span>
-        <div><h3>Chat <b>Inspector</b></h3><p>Prohlížení a hodnocení konverzací s asistentem.</p><div class="dom">chatbot-message-reader.jan-kuchar.cz</div></div>
+        <div><h3>Chat <b>Inspector</b></h3><p>Prohlížení a hodnocení konverzací s asistentem.</p><div class="dom">chatbot-message-reader.jan-kuchar.cz</div><div class="locked"><svg class="lock" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="1.8"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></svg>Pouze pro přihlášené uživatele</div></div>
       </div>
       <div class="panel app">
         <span class="tile" style="width:52px;height:52px;border-radius:13px;background:var(--tile-yellow)"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="27" cy="27" r="16" fill="none" stroke="#fff" stroke-width="7"/><path d="m39 39 15 15" stroke="#fff" stroke-width="9" stroke-linecap="round"/></svg></span>
-        <div><h3>Search <b>Analyzer</b></h3><p>Analýza logů vyhledávacího nástroje.</p><div class="dom">search-log-analyzer.jan-kuchar.cz</div></div>
+        <div><h3>Search <b>Analyzer</b></h3><p>Analýza logů vyhledávacího nástroje.</p><div class="dom">search-log-analyzer.jan-kuchar.cz</div><div class="locked"><svg class="lock" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="1.8"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></svg>Pouze pro přihlášené uživatele</div></div>
       </div>
       <div class="panel app">
         <span class="tile" style="width:52px;height:52px;border-radius:13px;background:var(--tile-green)"><svg viewBox="0 0 64 64" aria-hidden="true"><g fill="#fff"><rect x="8" y="34" width="12" height="22" rx="3"/><rect x="26" y="20" width="12" height="36" rx="3"/><rect x="44" y="8" width="12" height="48" rx="3"/></g></svg></span>
-        <div><h3>Reports <b>Visualizer</b></h3><p>Vizualizace CSV reportů z BloomReach a Looker Studia.</p><div class="dom">blmr-reports-visualizer.jan-kuchar.cz</div></div>
+        <div><h3>Reports <b>Visualizer</b></h3><p>Vizualizace CSV reportů z BloomReach a Looker Studia.</p><div class="dom">blmr-reports-visualizer.jan-kuchar.cz</div><div class="locked"><svg class="lock" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="1.8"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></svg>Pouze pro přihlášené uživatele</div></div>
       </div>
     </div>
     <p class="small" style="margin:0">Další nástroj dostane volnou barvu z řady: růžová <code>#ff6482 → #fa233b</code>, fialová <code>#bf5af2 → #5e5ce6</code>. Glyf je vždy bílý, plný, bez obrysu. Zaoblení dlaždice = 25 % strany.</p>

@@ -129,7 +129,11 @@ body.searching .panel{display:flex;animation:open .22s ease-out}
 .list{width:290px;flex:none;border-right:.5px solid var(--stroke);padding:8px;overflow:auto}
 .sec{font-size:11px;font-weight:600;color:var(--text-3);padding:10px 10px 6px}
 .row{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:8px;font-size:14px;width:100%;text-align:left}
-.row small{margin-left:auto;font-size:11px;opacity:.6;white-space:nowrap}
+.row small{margin-left:auto;font-size:11px;opacity:.6;white-space:nowrap;display:inline-flex;align-items:center;gap:5px}
+.lock{width:11px;height:11px;flex:none}
+.prev .locked{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--text-2);background:var(--fill);
+  box-shadow:0 0 0 .5px var(--stroke) inset;border-radius:999px;padding:4px 10px 4px 9px}
+.prev .locked .lock{width:12px;height:12px}
 .row.sel{background:var(--blue);color:#fff}
 .row:not(.sel):hover{background:var(--fill)}
 .empty{padding:22px 12px;color:var(--text-2);font-size:13px;line-height:1.5}
@@ -257,11 +261,13 @@ const LINKEDIN = 'https://www.linkedin.com/in/jan-kucha%C5%99-16925532/';
 const G = {                                     // barvy ikon
   blue:'linear-gradient(160deg,#5ac8fa,#0a60ff)', yellow:'linear-gradient(160deg,#ffd60a,#ff9f0a)',
   pink:'linear-gradient(160deg,#ff6482,#fa233b)', green:'linear-gradient(160deg,#30d158,#1fa045)',
-  purple:'linear-gradient(160deg,#bf5af2,#5e5ce6)', brown:'linear-gradient(160deg,#c08552,#7b4a24)',
+  purple:'linear-gradient(160deg,#bf5af2,#5e5ce6)',
 };
 
 const appIcon = name => `<img src="/brand/icons/${name}.svg" alt="" style="width:100%;height:100%;border-radius:inherit">`;
 
+const LOCK = '<svg class="lock" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="1.8"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></svg>';
+// locked: nástroj jen pro přihlášené – zámek v seznamu i v náhledu
 // section: skupina v seznamu · chip: návrh pod polem · keys: slova, podle kterých se položka najde (bez diakritiky)
 // hidden: v seznamu se neukáže, najde se jen když se na ni někdo zeptá
 const ITEMS = [
@@ -283,20 +289,17 @@ const ITEMS = [
   { id:'li', section:'Odkazy', title:'LinkedIn', icon:'in', color:'#0a66c2', kind:'↗', href:LINKEDIN,
     keys:'linkedin profil cv zivotopis', sub:'Profesní profil' },
   { id:'chat', section:'Nástroje', title:'Chat Inspector', icon:appIcon('chat-inspector'), color:G.blue, kind:'↗',
-    href:'https://chatbot-message-reader.jan-kuchar.cz', sub:'Čtečka zpráv chatbota · AI Statistiky',
+    href:'https://chatbot-message-reader.jan-kuchar.cz', locked:true, sub:'Čtečka zpráv chatbota · AI Statistiky',
     keys:'chat inspector chatbot zpravy konverzace message reader ai statistiky nastroje' },
   { id:'search', section:'Nástroje', title:'Search Analyzer', icon:appIcon('search-analyzer'), color:G.yellow, kind:'↗',
-    href:'https://search-log-analyzer.jan-kuchar.cz', sub:'Analýza vyhledávacích logů · AI Statistiky',
+    href:'https://search-log-analyzer.jan-kuchar.cz', locked:true, sub:'Analýza vyhledávacích logů · AI Statistiky',
     keys:'search analyzer vyhledavani hledani logy log analyza ai statistiky nastroje' },
   { id:'reports', section:'Nástroje', title:'Reports Visualizer', icon:appIcon('reports-visualizer'), color:G.green, kind:'↗',
-    href:'https://blmr-reports-visualizer.jan-kuchar.cz', sub:'Vizualizace reportů · AI Statistiky',
+    href:'https://blmr-reports-visualizer.jan-kuchar.cz', locked:true, sub:'Vizualizace reportů · AI Statistiky',
     keys:'reports visualizer reporty grafy vizualizace blmr ai statistiky nastroje' },
   { id:'manual', section:'Nástroje', title:'Grafický manuál', icon:'🎨', color:G.purple, kind:'↗',
     href:'https://www.jan-kuchar.cz/brand/manual.html', sub:'Design systém pro nástroje AI Statistiky',
     keys:'graficky manual design system tokeny barvy brand styl ai statistiky nastroje' },
-  { id:'caj', section:'Jiné', title:'Čaj', icon:'🫖', color:G.brown, kind:'Easter egg', hidden:true,
-    keys:'caj tea konvice',
-    body:`<p>No jasně, jdu si uvařit 🫖</p>` },
   { id:'light', section:'Nastavení', title:'Světlý režim', icon:'☀', color:G.yellow, kind:'Nastavení', hidden:true,
     keys:'svetly rezim light mode bily den theme tema vzhled', theme:'light' },
   { id:'dark', section:'Nastavení', title:'Tmavý režim', icon:'☾', color:G.purple, kind:'Nastavení', hidden:true,
@@ -340,7 +343,7 @@ function renderList(){
     const sec = best ? 'Nejlepší shoda' : it.section;
     if (sec !== lastSec) html += `<div class="sec">${sec}</div>`;
     lastSec = best ? null : sec;
-    html += `<button class="row${i === sel ? ' sel' : ''}" role="option" aria-selected="${i === sel}" data-i="${i}">${icon(it)}${it.title}<small>${it.kind}</small></button>`;
+    html += `<button class="row${i === sel ? ' sel' : ''}" role="option" aria-selected="${i === sel}" data-i="${i}">${icon(it)}${it.title}<small>${it.locked ? LOCK : ''}${it.kind}</small></button>`;
   });
   list.innerHTML = html;
   renderPreview();
@@ -369,8 +372,9 @@ function renderPreview(){
     const ext = it.href.startsWith('http') ? 'target="_blank" rel="noopener"' : '';
     prev.innerHTML = back + `${icon(it, true)}<h2>${it.title}</h2>
       <p class="dim">${it.sub || it.href.replace(/^https?:\/\//, '')}</p>
+      ${it.locked ? `<p class="locked">${LOCK}Pouze pro přihlášené uživatele</p>` : ''}
       <div class="acts"><a class="act" href="${it.href}" ${ext}><i>↗</i>Otevřít</a></div>
-      <div class="meta"><span>Otevřít</span><span><kbd>↵ Enter</kbd></span></div>`;
+      <div class="meta">${it.locked ? `<span>Přístup</span><span>${it.href.replace(/^https?:\/\//, '')} · jen po přihlášení</span>` : ''}<span>Otevřít</span><span><kbd>↵ Enter</kbd></span></div>`;
   } else {
     prev.innerHTML = back + `${icon(it, true)}<h2>${it.title}</h2>${it.body}` +
       (it.meta ? `<div class="meta">${it.meta.map(([k, v]) => `<span>${k}</span><span>${v}</span>`).join('')}</div>` : '');
