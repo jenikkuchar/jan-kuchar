@@ -4,12 +4,28 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#08080c">
 <title>Grafický manuál JK</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+<script>
+// Režim – stejná logika jako brand/theme.js (tady inline, aby manuál fungoval i samostatně)
+(() => {
+  const KEY = 'theme', root = document.documentElement, mq = matchMedia('(prefers-color-scheme: light)');
+  const saved = () => { try { const t = localStorage.getItem(KEY); return t === 'light' || t === 'dark' ? t : null; } catch (e) { return null; } };
+  const apply = t => { root.dataset.theme = t; const m = document.querySelector('meta[name="theme-color"]'); if (m) m.content = t === 'light' ? '#f5f5f7' : '#08080c'; };
+  const set = t => { try { localStorage.setItem(KEY, t); } catch (e) {} apply(t); };
+  const toggle = () => set(root.dataset.theme === 'light' ? 'dark' : 'light');
+  apply(saved() || (mq.matches ? 'light' : 'dark'));
+  mq.addEventListener('change', e => { if (!saved()) apply(e.matches ? 'light' : 'dark'); });
+  document.addEventListener('click', e => { if (e.target.closest('[data-theme-toggle]')) toggle(); });
+  document.addEventListener('keydown', e => { if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key.toLowerCase() === 'l') { e.preventDefault(); toggle(); } });
+})();
+</script>
 <style>
-/* Layout: úzký sloupec manuálu (Spotlight estetika hlavního webu), široké ukázky aplikací. Záměrně jen tmavý režim. */
+/* Layout: úzký sloupec manuálu (Spotlight estetika hlavního webu), široké ukázky aplikací. Tmavý i světlý režim, tokeny shodné s brand/tokens.css. */
 :root{
   color-scheme:dark;
   --jk-bg:#08080c; --jk-surface-1:#111117; --jk-surface-2:#18181f; --jk-surface-3:#22222b;
@@ -31,14 +47,49 @@
   --jk-font-mono:"SF Mono",ui-monospace,"JetBrains Mono",Menlo,Consolas,monospace;
   --jk-r-xs:5px; --jk-r-sm:8px; --jk-r-md:10px; --jk-r-lg:14px; --jk-r-xl:18px;
   --jk-ease:cubic-bezier(.2,.9,.3,1);
+  --jk-fill:rgba(255,255,255,.07); --jk-fill-hover:rgba(255,255,255,.12); --jk-code-bg:#050508;
+  --jk-shadow-color:rgba(0,0,0,.8); --jk-chart-grid:rgba(255,255,255,.08); --jk-chart-axis:rgba(235,235,245,.38);
+  --chip-text:rgba(235,235,245,.82); --code-text:rgba(235,235,245,.85); --fill-weak:rgba(255,255,255,.02);
+  --seg-on:var(--jk-surface-3); --seg-shadow:rgba(0,0,0,.4);
+  --amb-1:rgba(94,92,230,.18); --amb-2:rgba(255,55,95,.07); --amb-3:rgba(10,132,255,.06); --amb-app:rgba(94,92,230,.16);
 }
+/* Světlý režim – stejné hodnoty jako [data-theme="light"] v brand/tokens.css.
+   .force-light / .force-dark vynutí režim v ukázce bez ohledu na stránku. */
+:root[data-theme="light"],.force-light{
+  color-scheme:light;
+  --jk-bg:#f5f5f7; --jk-surface-1:#ffffff; --jk-surface-2:#f2f2f5; --jk-surface-3:#e8e8ed;
+  --jk-glass:rgba(255,255,255,.72);
+  --jk-line:rgba(0,0,0,.08); --jk-line-2:rgba(0,0,0,.10); --jk-line-3:rgba(0,0,0,.18);
+  --jk-text:#1d1d1f; --jk-text-2:rgba(60,60,67,.62); --jk-text-3:rgba(60,60,67,.42);
+  --jk-accent:#007aff; --jk-accent-hover:#0062cc; --jk-accent-soft:rgba(0,122,255,.12); --jk-focus:0 0 0 3px rgba(0,122,255,.35);
+  --jk-success:#248a3d; --jk-success-soft:rgba(52,199,89,.16);
+  --jk-warning:#c93400; --jk-warning-soft:rgba(255,149,0,.16);
+  --jk-danger:#d70015; --jk-danger-soft:rgba(255,59,48,.12);
+  --jk-info:#0071a4; --jk-info-soft:rgba(50,173,230,.14);
+  --jk-fill:rgba(0,0,0,.05); --jk-fill-hover:rgba(0,0,0,.09); --jk-code-bg:#fbfbfd;
+  --jk-shadow-color:rgba(0,0,0,.18); --jk-chart-grid:rgba(0,0,0,.08); --jk-chart-axis:rgba(60,60,67,.5);
+  --chip-text:rgba(29,29,31,.82); --code-text:rgba(29,29,31,.88); --fill-weak:rgba(0,0,0,.015);
+  --seg-on:var(--jk-surface-1); --seg-shadow:rgba(0,0,0,.12);
+  --amb-1:rgba(94,92,230,.12); --amb-2:rgba(255,55,95,.05); --amb-3:rgba(10,132,255,.05); --amb-app:rgba(94,92,230,.08);
+}
+.force-dark{
+  color-scheme:dark;
+  --jk-bg:#08080c; --jk-surface-1:#111117; --jk-surface-2:#18181f; --jk-surface-3:#22222b;
+  --jk-glass:rgba(32,32,40,.72);
+  --jk-line:rgba(255,255,255,.10); --jk-line-2:rgba(255,255,255,.14); --jk-line-3:rgba(255,255,255,.22);
+  --jk-text:#f5f5f7; --jk-text-2:rgba(235,235,245,.60); --jk-text-3:rgba(235,235,245,.38);
+  --jk-accent:#0a84ff; --jk-accent-hover:#409cff; --jk-accent-soft:rgba(10,132,255,.16); --jk-focus:0 0 0 3px rgba(10,132,255,.45);
+  --jk-fill:rgba(255,255,255,.07); --jk-fill-hover:rgba(255,255,255,.12);
+  --chip-text:rgba(235,235,245,.82); --amb-1:rgba(94,92,230,.18);
+}
+.force-light,.force-dark{color:var(--jk-text);background:var(--jk-bg)}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:72px}
-body{background:var(--jk-bg);color:var(--jk-text);font-family:var(--jk-font);font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased;padding-inline:16px}
+body{background:var(--jk-bg);color:var(--jk-text);transition:background-color .3s,color .3s;font-family:var(--jk-font);font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased;padding-inline:16px}
 .ambient{position:fixed;inset:0;z-index:-1;pointer-events:none;background:
-  radial-gradient(60% 50% at 50% 0%,rgba(94,92,230,.18),transparent 70%),
-  radial-gradient(40% 40% at 90% 100%,rgba(255,55,95,.07),transparent 70%),
-  radial-gradient(35% 35% at 5% 90%,rgba(10,132,255,.06),transparent 70%)}
+  radial-gradient(60% 50% at 50% 0%,var(--amb-1),transparent 70%),
+  radial-gradient(40% 40% at 90% 100%,var(--amb-2),transparent 70%),
+  radial-gradient(35% 35% at 5% 90%,var(--amb-3),transparent 70%)}
 a{color:var(--jk-accent);text-decoration:none}
 a:hover{color:var(--jk-accent-hover)}
 :focus-visible{outline:none;box-shadow:var(--jk-focus);border-radius:6px}
@@ -53,7 +104,8 @@ p code,li code,td code{background:var(--jk-surface-2);padding:1px 5px;border-rad
 .nav .mark{flex:none}
 .nav-links{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;min-width:0}
 .nav-links a{color:var(--jk-text-2);font-size:13px;padding:5px 10px;border-radius:999px;white-space:nowrap}
-.nav-links a:hover{color:var(--jk-text);background:rgba(255,255,255,.06)}
+.nav-links a:hover{color:var(--jk-text);background:var(--jk-fill)}
+.nav .theme-toggle{margin-left:auto}
 .wrap{max-width:1080px;margin:0 auto;padding-block:56px 80px;display:grid;gap:88px}
 .hero{text-align:center;display:grid;justify-items:center;gap:14px;padding-top:24px}
 .hero h1{font-size:clamp(42px,8vw,72px);font-weight:200;letter-spacing:-.04em;line-height:1;margin:0;text-wrap:balance}
@@ -88,7 +140,8 @@ h3{font-size:15px;font-weight:600;margin:0 0 10px;letter-spacing:-.01em}
 .sw .info code{font-size:11.5px;color:var(--jk-text-2)}
 .sw .info span{font-size:11.5px;color:var(--jk-text-3)}
 .ramp{display:flex;border-radius:var(--jk-r-lg);overflow:hidden;box-shadow:0 0 0 .5px var(--jk-line-2) inset}
-.ramp div{flex:1;height:64px;display:flex;align-items:flex-end;padding:8px;font-size:11px;font-family:var(--jk-font-mono);color:var(--jk-text-2);min-width:0}
+.ramp div{flex:1;height:64px;display:flex;align-items:flex-end;padding:8px;font-size:11px;font-family:var(--jk-font-mono);color:rgba(235,235,245,.6);min-width:0}
+.ramp.light div{color:rgba(60,60,67,.62)}
 .textsamples{display:grid;gap:8px}
 .textsamples div{display:flex;justify-content:space-between;gap:12px;align-items:baseline;border-bottom:.5px solid var(--jk-line);padding-bottom:8px}
 .textsamples div:last-child{border:0;padding:0}
@@ -126,8 +179,8 @@ h3{font-size:15px;font-weight:600;margin:0 0 10px;letter-spacing:-.01em}
 .btn svg{width:16px;height:16px;flex:none}
 .btn-primary{background:var(--jk-accent-strong);color:#fff}
 .btn-primary:hover{background:var(--jk-accent-strong-hover)}
-.btn-secondary{background:rgba(255,255,255,.07);color:var(--jk-text);box-shadow:0 0 0 .5px var(--jk-line-2) inset}
-.btn-secondary:hover{background:rgba(255,255,255,.12)}
+.btn-secondary{background:var(--jk-fill);color:var(--jk-text);box-shadow:0 0 0 .5px var(--jk-line-2) inset}
+.btn-secondary:hover{background:var(--jk-fill-hover)}
 .btn-ghost{background:transparent;color:var(--jk-accent)}
 .btn-ghost:hover{background:var(--jk-accent-soft)}
 .btn-danger{background:transparent;color:var(--jk-danger);box-shadow:0 0 0 .5px rgba(255,69,58,.4) inset}
@@ -143,18 +196,18 @@ textarea.input{height:96px;padding:10px 12px;resize:vertical;font-family:var(--j
 .search{display:flex;align-items:center;gap:10px;height:40px;padding:0 14px;border-radius:999px;background:var(--jk-glass);box-shadow:0 0 0 .5px var(--jk-line-2) inset}
 .search input{flex:1;min-width:0;background:none;border:0;outline:0;color:var(--jk-text);font:inherit;font-size:15px;caret-color:var(--jk-accent)}
 .search input::placeholder{color:var(--jk-text-3)}
-kbd{font-family:inherit;font-size:11.5px;color:var(--jk-text-2);background:rgba(255,255,255,.08);border-radius:var(--jk-r-xs);padding:2px 7px;box-shadow:0 0 0 .5px var(--jk-line) inset;white-space:nowrap}
-.seg{display:inline-flex;padding:3px;gap:2px;border-radius:var(--jk-r-md);background:rgba(255,255,255,.06);box-shadow:0 0 0 .5px var(--jk-line) inset}
+kbd{font-family:inherit;font-size:11.5px;color:var(--jk-text-2);background:var(--jk-fill);border-radius:var(--jk-r-xs);padding:2px 7px;box-shadow:0 0 0 .5px var(--jk-line) inset;white-space:nowrap}
+.seg{display:inline-flex;padding:3px;gap:2px;border-radius:var(--jk-r-md);background:var(--jk-fill);box-shadow:0 0 0 .5px var(--jk-line) inset}
 .seg button{border:0;background:none;color:var(--jk-text-2);font:inherit;font-size:13px;font-weight:500;padding:5px 12px;border-radius:7px;cursor:pointer}
-.seg button[aria-pressed="true"]{background:var(--jk-surface-3);color:var(--jk-text);box-shadow:0 1px 2px rgba(0,0,0,.4),0 0 0 .5px var(--jk-line-2) inset}
-.chip{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;font-size:12.5px;background:rgba(255,255,255,.06);box-shadow:0 0 0 .5px var(--jk-line-2) inset;color:rgba(235,235,245,.82)}
+.seg button[aria-pressed="true"]{background:var(--seg-on);color:var(--jk-text);box-shadow:0 1px 2px var(--seg-shadow),0 0 0 .5px var(--jk-line-2) inset}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;font-size:12.5px;background:var(--jk-fill);box-shadow:0 0 0 .5px var(--jk-line-2) inset;color:var(--chip-text)}
 .badge{display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 8px;border-radius:6px;font-size:12px;font-weight:500;white-space:nowrap}
 .badge::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
 .b-ok{color:var(--jk-success);background:var(--jk-success-soft)}
 .b-warn{color:var(--jk-warning);background:var(--jk-warning-soft)}
 .b-err{color:var(--jk-danger);background:var(--jk-danger-soft)}
 .b-info{color:var(--jk-info);background:var(--jk-info-soft)}
-.b-neutral{color:var(--jk-text-2);background:rgba(255,255,255,.07)}
+.b-neutral{color:var(--jk-text-2);background:var(--jk-fill)}
 .b-neutral::before{display:none}
 .ver{font-family:var(--jk-font-mono);font-size:11px;color:var(--jk-text-3);padding:1px 6px;border-radius:var(--jk-r-xs);box-shadow:0 0 0 .5px var(--jk-line-2) inset}
 
@@ -164,13 +217,13 @@ table{border-collapse:collapse;width:100%;min-width:560px;font-size:13px}
 th{font-size:11px;font-weight:600;color:var(--jk-text-3);text-align:left;padding:10px 14px;border-bottom:.5px solid var(--jk-line);white-space:nowrap}
 td{padding:10px 14px;border-bottom:.5px solid var(--jk-line);vertical-align:middle}
 tr:last-child td{border-bottom:0}
-tbody tr:hover td{background:rgba(255,255,255,.03)}
+tbody tr:hover td{background:var(--fill-weak)}
 td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
 td .q{font-family:var(--jk-font-mono);font-size:12px}
 
 /* ---------- Ukázka aplikace ---------- */
-.device{border-radius:var(--jk-r-xl);overflow:hidden;background:var(--jk-bg);box-shadow:0 0 0 .5px var(--jk-line-2) inset,0 40px 100px -20px rgba(0,0,0,.8);position:relative;isolation:isolate}
-.device::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(70% 40% at 50% -10%,rgba(94,92,230,.16),transparent 70%)}
+.device{border-radius:var(--jk-r-xl);overflow:hidden;background:var(--jk-bg);box-shadow:0 0 0 .5px var(--jk-line-2) inset,0 40px 100px -20px var(--jk-shadow-color);position:relative;isolation:isolate}
+.device::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(70% 40% at 50% -10%,var(--amb-app),transparent 70%)}
 .topbar{height:56px;display:flex;align-items:center;gap:12px;padding:0 20px;background:var(--jk-glass);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);border-bottom:.5px solid var(--jk-line)}
 .crumb{display:flex;align-items:center;gap:10px;min-width:0}
 .crumb .slash{color:var(--jk-text-3);font-weight:300;font-size:18px}
@@ -182,7 +235,7 @@ td .q{font-family:var(--jk-font-mono);font-size:12px}
 .page-title{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
 .page-title h4{margin:0;font-size:24px;font-weight:600;letter-spacing:-.02em}
 .page-title p{margin:2px 0 0;color:var(--jk-text-2);font-size:13px}
-.drop{border-radius:var(--jk-r-xl);border:1px dashed var(--jk-line-3);background:rgba(255,255,255,.02);padding:40px 20px;display:grid;justify-items:center;text-align:center;gap:10px;transition:border-color .15s,background .15s}
+.drop{border-radius:var(--jk-r-xl);border:1px dashed var(--jk-line-3);background:var(--fill-weak);padding:40px 20px;display:grid;justify-items:center;text-align:center;gap:10px;transition:border-color .15s,background .15s}
 .drop.over,.drop:hover{border-color:var(--jk-accent);background:var(--jk-accent-soft)}
 .drop h5{margin:6px 0 0;font-size:20px;font-weight:600;letter-spacing:-.01em}
 .drop p{margin:0;color:var(--jk-text-2);max-width:46ch}
@@ -201,6 +254,32 @@ td .q{font-family:var(--jk-font-mono);font-size:12px}
 .chart{width:100%;height:auto;display:block}
 .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--jk-text-2)}
 .legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.grid-l{stroke:var(--jk-chart-grid)} .axis-l{fill:var(--jk-chart-axis)} .pt{stroke:var(--jk-surface-1)}
+
+/* ---------- Režim: přepínač (stejná třída jako v aplikacích) ---------- */
+.theme-toggle{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;flex:none;padding:0;
+  color:var(--jk-text-2);background:var(--jk-fill);box-shadow:0 0 0 .5px var(--jk-line-2) inset;border:0;cursor:pointer;
+  transition:color .15s,background .15s}
+.theme-toggle:hover{color:var(--jk-text);background:var(--jk-fill-hover)}
+.theme-toggle:focus-visible{box-shadow:var(--jk-focus);border-radius:50%}
+.theme-toggle svg{width:18px;height:18px}
+.theme-toggle.float{width:38px;height:38px;background:var(--jk-glass)}
+:root[data-theme="light"] .theme-toggle .sun,:root:not([data-theme="light"]) .theme-toggle .moon{display:none}
+:root .force-light .theme-toggle .moon,:root .force-dark .theme-toggle .sun{display:block}
+:root .force-light .theme-toggle .sun,:root .force-dark .theme-toggle .moon{display:none}
+.modes{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))}
+.mode{border-radius:var(--jk-r-lg);overflow:hidden;box-shadow:0 0 0 .5px var(--jk-line-2) inset}
+.mode .topbar{padding:0 14px}
+.mode .cap{padding:10px 14px;font-size:12px;color:var(--jk-text-3);display:flex;justify-content:space-between;gap:10px}
+.callout{position:relative}
+.callout::after{content:"";position:absolute;inset:-5px;border-radius:50%;box-shadow:0 0 0 1.5px var(--jk-accent);pointer-events:none}
+.corner{position:relative;height:150px;border-radius:var(--jk-r-lg);box-shadow:0 0 0 .5px var(--jk-line-2) inset;background:
+  radial-gradient(60% 70% at 50% 30%,var(--amb-1),transparent 70%),var(--jk-bg);overflow:hidden}
+.corner .theme-toggle{position:absolute;top:14px;right:14px}
+.corner .t{position:absolute;inset:auto 0 30px;text-align:center;font-size:30px;font-weight:200;letter-spacing:-.04em}
+.corner .t b{font-weight:600}
+.spec-list{margin:0;padding:0;list-style:none;display:grid;gap:8px;color:var(--jk-text-2)}
+.spec-list b{color:var(--jk-text);font-weight:600}
 
 /* ---------- Pravidla ---------- */
 .dd{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr))}
@@ -212,10 +291,10 @@ td .q{font-family:var(--jk-font-mono);font-size:12px}
 .audit td:first-child{white-space:nowrap;font-weight:500}
 
 /* ---------- Kód ---------- */
-.code{position:relative;background:#050508;border-radius:var(--jk-r-lg);box-shadow:0 0 0 .5px var(--jk-line-2) inset;min-width:0}
-.code pre{margin:0;padding:16px 18px;overflow-x:auto;font-family:var(--jk-font-mono);font-size:12px;line-height:1.6;color:rgba(235,235,245,.85);max-height:420px}
+.code{position:relative;background:var(--jk-code-bg);border-radius:var(--jk-r-lg);box-shadow:0 0 0 .5px var(--jk-line-2) inset;min-width:0}
+.code pre{margin:0;padding:16px 18px;overflow-x:auto;font-family:var(--jk-font-mono);font-size:12px;line-height:1.6;color:var(--code-text);max-height:420px}
 .code .copy{position:absolute;top:10px;right:10px}
-.code .hl{color:var(--c6)} .code .cm{color:var(--jk-text-3)}
+.code .hl{color:var(--jk-info)} .code .cm{color:var(--jk-text-3)}
 .tabs{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
 footer.foot{max-width:1080px;margin:0 auto;padding-block:0 40px;font-size:12px;color:var(--jk-text-3);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 
@@ -227,6 +306,7 @@ footer.foot{max-width:1080px;margin:0 auto;padding-block:0 40px;font-size:12px;c
   .app-body{padding:20px 16px 24px}
   .drop{padding:28px 14px}
 }
+@media (max-width:640px){ .mode .topbar .ctx,.mode .topbar .ver,.mode .topbar .btn{display:none} }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
@@ -240,8 +320,9 @@ footer.foot{max-width:1080px;margin:0 auto;padding-block:0 40px;font-size:12px;c
     <div class="nav-links">
       <a href="#princip">Princip</a><a href="#barvy">Barvy</a><a href="#typografie">Typografie</a>
       <a href="#tvary">Tvary</a><a href="#ikony">Ikony</a><a href="#komponenty">Komponenty</a>
-      <a href="#aplikace">Aplikace</a><a href="#grafy">Grafy</a><a href="#pravidla">Pravidla</a><a href="#kod">Kód</a>
+      <a href="#aplikace">Aplikace</a><a href="#grafy">Grafy</a><a href="#rezim">Režim</a><a href="#pravidla">Pravidla</a><a href="#kod">Kód</a>
     </div>
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="Přepnout světlý / tmavý režim" title="Přepnout režim (⌘⇧L)"><svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11z"/></svg></button>
   </div>
 </nav>
 
@@ -250,8 +331,8 @@ footer.foot{max-width:1080px;margin:0 auto;padding-block:0 40px;font-size:12px;c
   <header class="hero">
     <span class="tile" style="width:64px;height:64px;border-radius:16px;background:var(--jk-brand-gradient);font-weight:800;font-size:24px;letter-spacing:-.02em">JK</span>
     <h1>Grafický <b>manuál</b></h1>
-    <p>Jeden vizuální jazyk pro www.jan-kuchar.cz a nástroje AI Statistiky. Vychází z hlavního webu: tmavá Spotlight estetika, jedna modrá a skleněné plochy.</p>
-    <div class="meta-row"><span class="chip">v1.0 · říjen 2026</span><span class="chip">Jen tmavý režim</span><span class="chip">Tailwind v3 i v4</span></div>
+    <p>Jeden vizuální jazyk pro www.jan-kuchar.cz a nástroje AI Statistiky. Vychází z hlavního webu: Spotlight estetika, jedna modrá a skleněné plochy. Tmavý i světlý režim.</p>
+    <div class="meta-row"><span class="chip">v1.1 · říjen 2026</span><span class="chip">Tmavý i světlý režim</span><span class="chip">Tailwind v3 i v4</span></div>
   </header>
 
   <!-- PRINCIP -->
@@ -260,7 +341,7 @@ footer.foot{max-width:1080px;margin:0 auto;padding-block:0 40px;font-size:12px;c
       <p>Nástroje jsou pracovní: obsah a čísla mají přednost před efekty. Charakter dává typografie a jemné pozadí, ne barevnost.</p></div>
     <div class="principles">
       <div class="panel"><b>Jedna modrá</b><p>#0a84ff je jediný akcent. Ostatní barvy nesou stav nebo sérii v grafu.</p></div>
-      <div class="panel"><b>Hairline místo stínů</b><p>Plochy oddělují tenké světlé linky 0,5 px. Velký stín jen u vyskakovacích vrstev.</p></div>
+      <div class="panel"><b>Hairline místo stínů</b><p>Plochy oddělují tenké linky 0,5 px. Velký stín jen u vyskakovacích vrstev.</p></div>
       <div class="panel"><b>Gradient jen ve značce</b><p>Barevný přechod patří logu JK, avataru a ikonám aplikací. Nikdy na tlačítka ani nadpisy.</p></div>
       <div class="panel"><b>Dvě váhy v názvu</b><p>Podpis značky je kontrast lehké a tučné váhy: Jan <b style="display:inline;font-size:inherit">Kuchař</b>, Chat <b style="display:inline;font-size:inherit">Inspector</b>.</p></div>
     </div>
@@ -269,14 +350,20 @@ footer.foot{max-width:1080px;margin:0 auto;padding-block:0 40px;font-size:12px;c
   <!-- BARVY -->
   <section id="barvy">
     <div class="sec-head"><span class="k">Barvy</span><h2>Paleta</h2>
-      <p>Neutrální téměř černá místo modro-šedé Tailwind <code>slate</code>. Plochy se zesvětlují po krocích, hloubku dělá jas, ne barva.</p></div>
+      <p>Neutrální téměř černá místo modro-šedé Tailwind <code>slate</code>. Plochy se zesvětlují po krocích, hloubku dělá jas, ne barva. Kde jsou dvě hodnoty, první je tmavý a druhá světlý režim.</p></div>
 
     <h3>Plochy</h3>
-    <div class="ramp" role="img" aria-label="Stupně ploch od pozadí po hover">
+    <div class="ramp" role="img" aria-label="Stupně ploch v tmavém režimu od pozadí po hover">
       <div style="background:#08080c">bg #08080c</div>
       <div style="background:#111117">surface-1 #111117</div>
       <div style="background:#18181f">surface-2 #18181f</div>
       <div style="background:#22222b">surface-3 #22222b</div>
+    </div>
+    <div class="ramp light" role="img" aria-label="Stupně ploch ve světlém režimu od pozadí po hover" style="margin-top:-8px">
+      <div style="background:#f5f5f7">bg #f5f5f7</div>
+      <div style="background:#ffffff">surface-1 #ffffff</div>
+      <div style="background:#f2f2f5">surface-2 #f2f2f5</div>
+      <div style="background:#e8e8ed">surface-3 #e8e8ed</div>
     </div>
     <div class="grid g3 small" style="margin-top:-8px">
       <span><b style="color:var(--jk-text-2)">bg</b> pozadí stránky · <b style="color:var(--jk-text-2)">surface-1</b> karty a panely</span>
@@ -288,18 +375,18 @@ footer.foot{max-width:1080px;margin:0 auto;padding-block:0 40px;font-size:12px;c
       <div class="panel">
         <h3>Akcent</h3>
         <div class="grid g3" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,130px),1fr))">
-          <div class="sw"><div class="chip-c" style="background:#0a84ff"></div><div class="info"><b>accent</b><code>#0a84ff</code><span>odkazy, ikony, focus</span></div></div>
+          <div class="sw"><div class="chip-c" style="background:var(--jk-accent)"></div><div class="info"><b>accent</b><code>#0a84ff / #007aff</code><span>odkazy, ikony, focus</span></div></div>
           <div class="sw"><div class="chip-c" style="background:#0071e3"></div><div class="info"><b>accent-strong</b><code>#0071e3</code><span>výplň tlačítka</span></div></div>
-          <div class="sw"><div class="chip-c" style="background:rgba(10,132,255,.16)"></div><div class="info"><b>accent-soft</b><code>accent / 16 %</code><span>pozadí aktivní položky</span></div></div>
+          <div class="sw"><div class="chip-c" style="background:var(--jk-accent-soft)"></div><div class="info"><b>accent-soft</b><code>16 % / 12 %</code><span>pozadí aktivní položky</span></div></div>
         </div>
         <p class="small" style="margin:12px 0 0">Bílý text na #0a84ff má kontrast jen 3,6 : 1, proto mají tlačítka tmavší #0071e3 (4,7 : 1).</p>
       </div>
       <div class="panel">
         <h3>Text</h3>
         <div class="textsamples">
-          <div><span>Primární text a nadpisy</span><code>text #f5f5f7</code></div>
-          <div><span style="color:var(--jk-text-2)">Popisky a sekundární text</span><code>text-2 · 60 %</code></div>
-          <div><span style="color:var(--jk-text-3)">Meta, labely, osy grafů</span><code>text-3 · 38 %</code></div>
+          <div><span>Primární text a nadpisy</span><code>#f5f5f7 / #1d1d1f</code></div>
+          <div><span style="color:var(--jk-text-2)">Popisky a sekundární text</span><code>text-2 · 60 / 62 %</code></div>
+          <div><span style="color:var(--jk-text-3)">Meta, labely, osy grafů</span><code>text-3 · 38 / 42 %</code></div>
           <div><span style="color:var(--jk-accent)">Odkaz a interaktivní text</span><code>accent</code></div>
         </div>
         <p class="small" style="margin:12px 0 0">text-3 nepoužívej pro souvislý text, jen pro krátké popisky.</p>
@@ -308,16 +395,17 @@ footer.foot{max-width:1080px;margin:0 auto;padding-block:0 40px;font-size:12px;c
 
     <h3>Stavové barvy</h3>
     <div class="grid g4">
-      <div class="sw"><div class="chip-c" style="background:#30d158"></div><div class="info"><b>success</b><code>#30d158</code><span>hotovo, kladný trend</span></div></div>
-      <div class="sw"><div class="chip-c" style="background:#ff9f0a"></div><div class="info"><b>warning</b><code>#ff9f0a</code><span>pozor, neúplná data</span></div></div>
-      <div class="sw"><div class="chip-c" style="background:#ff453a"></div><div class="info"><b>danger</b><code>#ff453a</code><span>chyba, mazání</span></div></div>
-      <div class="sw"><div class="chip-c" style="background:#64d2ff"></div><div class="info"><b>info</b><code>#64d2ff</code><span>nápověda, neutrální stav</span></div></div>
+      <div class="sw"><div class="chip-c" style="background:var(--jk-success)"></div><div class="info"><b>success</b><code>#30d158 / #248a3d</code><span>hotovo, kladný trend</span></div></div>
+      <div class="sw"><div class="chip-c" style="background:var(--jk-warning)"></div><div class="info"><b>warning</b><code>#ff9f0a / #c93400</code><span>pozor, neúplná data</span></div></div>
+      <div class="sw"><div class="chip-c" style="background:var(--jk-danger)"></div><div class="info"><b>danger</b><code>#ff453a / #d70015</code><span>chyba, mazání</span></div></div>
+      <div class="sw"><div class="chip-c" style="background:var(--jk-info)"></div><div class="info"><b>info</b><code>#64d2ff / #0071a4</code><span>nápověda, neutrální stav</span></div></div>
     </div>
+    <p class="small" style="margin:-8px 0 0">Ve světlém režimu jsou stavové barvy tmavší, aby text štítků měl na světlém podkladu kontrast.</p>
 
     <h3>Značka</h3>
     <div class="grid g2">
       <div class="sw"><div class="chip-c" style="background:var(--jk-brand-gradient);height:64px"></div><div class="info"><b>brand-gradient</b><code>135° #0a84ff → #bf5af2 → #ff375f</code><span>logo JK, avatar, favicon</span></div></div>
-      <div class="sw"><div class="chip-c" style="background:radial-gradient(60% 90% at 50% 0%,rgba(94,92,230,.35),transparent 70%),#08080c;height:64px"></div><div class="info"><b>ambient</b><code>radial rgba(94,92,230,.14–.20)</code><span>jemná záře nahoře za obsahem</span></div></div>
+      <div class="sw"><div class="chip-c" style="background:radial-gradient(60% 90% at 50% 0%,var(--amb-1),transparent 70%),var(--jk-bg);height:64px"></div><div class="info"><b>ambient</b><code>radial rgba(94,92,230,.14–.20)</code><span>jemná záře nahoře za obsahem</span></div></div>
     </div>
   </section>
 
@@ -437,6 +525,7 @@ footer.foot{max-width:1080px;margin:0 auto;padding-block:0 40px;font-size:12px;c
           <div style="display:flex;justify-content:space-between;gap:10px"><span class="dim">Pohyb v seznamu</span><span><kbd>↑</kbd> <kbd>↓</kbd></span></div>
           <div style="display:flex;justify-content:space-between;gap:10px"><span class="dim">Otevřít detail</span><kbd>↵ Enter</kbd></div>
           <div style="display:flex;justify-content:space-between;gap:10px"><span class="dim">Zavřít, vymazat</span><kbd>Esc</kbd></div>
+          <div style="display:flex;justify-content:space-between;gap:10px"><span class="dim">Přepnout režim</span><kbd>⌘⇧L</kbd></div>
         </div>
         <p class="small" style="margin:14px 0 0">Stejné zkratky jako na hlavním webu, ve všech nástrojích.</p>
       </div>
@@ -460,7 +549,7 @@ footer.foot{max-width:1080px;margin:0 auto;padding-block:0 40px;font-size:12px;c
   <!-- APLIKACE -->
   <section id="aplikace">
     <div class="sec-head"><span class="k">Rozvržení aplikace</span><h2>Společná kostra</h2>
-      <p>Horní lišta 56 px: logo JK (odkaz na hlavní web), lomítko, ikona a slovní značka aplikace, vpravo akce. Pod ní titulek stránky a obsah. Prázdný stav s nahráním souboru je ve všech třech nástrojích stejný.</p></div>
+      <p>Horní lišta 56 px: logo JK (odkaz na hlavní web), lomítko, ikona a slovní značka aplikace, vpravo akce a jako poslední přepínač režimu. Pod ní titulek stránky a obsah. Prázdný stav s nahráním souboru je ve všech třech nástrojích stejný.</p></div>
 
     <div class="device">
       <div class="topbar">
@@ -474,6 +563,7 @@ footer.foot{max-width:1080px;margin:0 auto;padding-block:0 40px;font-size:12px;c
         <span class="spacer"></span>
         <span class="ctx">Datart</span>
         <button class="btn btn-secondary btn-sm" type="button">Nahrát JSON</button>
+        <button class="theme-toggle" type="button" data-theme-toggle aria-label="Přepnout světlý / tmavý režim" title="Přepnout režim (⌘⇧L)"><svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11z"/></svg></button>
       </div>
       <div class="app-body">
         <div class="page-title"><div><h4>Analýza vyhledávání</h4><p>Sloučí volání <code>search_datart_tool</code> z exportu Google Cloud.</p></div></div>
@@ -496,7 +586,7 @@ footer.foot{max-width:1080px;margin:0 auto;padding-block:0 40px;font-size:12px;c
       </div>
       <div class="statusbar"><span>Stav: <span style="color:var(--jk-success)">připraveno</span> · žádná data</span><span>AI Statistiky · © 2026 Jan Kuchař</span></div>
     </div>
-    <p class="small" style="margin:0">Dropzóna reaguje na přetažení: okraj <code>accent</code>, pozadí <code>accent-soft</code>. Zkus na ni najet myší.</p>
+    <p class="small" style="margin:0">Dropzóna reaguje na přetažení: okraj <code>accent</code>, pozadí <code>accent-soft</code>. Zkus na ni najet myší. Přepínač v liště je živý, přepne celý manuál.</p>
   </section>
 
   <!-- GRAFY -->
@@ -526,13 +616,13 @@ footer.foot{max-width:1080px;margin:0 auto;padding-block:0 40px;font-size:12px;c
       <div class="tabs" style="margin-bottom:12px"><h3 style="margin:0">Konverzace podle dne</h3>
         <div class="legend"><span><i style="background:var(--c1)"></i>Datart</span><span><i style="background:var(--c2)"></i>ETA</span><span><i style="background:var(--c3)"></i>NAY</span></div></div>
       <svg class="chart" viewBox="0 0 640 220" role="img" aria-label="Ukázkový spojnicový graf tří sérií za 7 dní">
-        <g stroke="rgba(255,255,255,.08)" stroke-width="1">
+        <g class="grid-l" stroke-width="1">
           <line x1="44" y1="20" x2="630" y2="20"/><line x1="44" y1="70" x2="630" y2="70"/><line x1="44" y1="120" x2="630" y2="120"/><line x1="44" y1="170" x2="630" y2="170"/>
         </g>
-        <g fill="rgba(235,235,245,.38)" font-size="11" font-family="-apple-system,Inter,sans-serif" text-anchor="end">
+        <g class="axis-l" font-size="11" font-family="-apple-system,Inter,sans-serif" text-anchor="end">
           <text x="36" y="24">600</text><text x="36" y="74">400</text><text x="36" y="124">200</text><text x="36" y="174">0</text>
         </g>
-        <g fill="rgba(235,235,245,.38)" font-size="11" font-family="-apple-system,Inter,sans-serif" text-anchor="middle">
+        <g class="axis-l" font-size="11" font-family="-apple-system,Inter,sans-serif" text-anchor="middle">
           <text x="60" y="198">Po</text><text x="155" y="198">Út</text><text x="250" y="198">St</text><text x="345" y="198">Čt</text><text x="440" y="198">Pá</text><text x="535" y="198">So</text><text x="614" y="198">Ne</text>
         </g>
         <defs><linearGradient id="fa" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a84ff" stop-opacity=".28"/><stop offset="1" stop-color="#0a84ff" stop-opacity="0"/></linearGradient></defs>
@@ -543,12 +633,85 @@ footer.foot{max-width:1080px;margin:0 auto;padding-block:0 40px;font-size:12px;c
         <path d="M60 125 L155 117.5 L250 122.5 L345 112.5 L440 110 L535 127.5 L614 132.5" fill="none" stroke="#30d158" stroke-width="2" stroke-linejoin="round"/>
         <!-- NAY: 90 100 110 95 120 80 70 -->
         <path d="M60 147.5 L155 145 L250 142.5 L345 146.25 L440 140 L535 150 L614 152.5" fill="none" stroke="#ff9f0a" stroke-width="2" stroke-linejoin="round"/>
-        <circle cx="614" cy="80" r="4" fill="#0a84ff" stroke="#111117" stroke-width="2"/>
-        <circle cx="614" cy="132.5" r="4" fill="#30d158" stroke="#111117" stroke-width="2"/>
-        <circle cx="614" cy="152.5" r="4" fill="#ff9f0a" stroke="#111117" stroke-width="2"/>
+        <circle cx="614" cy="80" r="4" fill="#0a84ff" class="pt" stroke-width="2"/>
+        <circle cx="614" cy="132.5" r="4" fill="#30d158" class="pt" stroke-width="2"/>
+        <circle cx="614" cy="152.5" r="4" fill="#ff9f0a" class="pt" stroke-width="2"/>
       </svg>
-      <p class="small" style="margin:8px 0 0">Mřížka 8 % bílé, popisky os <code>text-3</code> 11 px, čára 2 px, plocha jen pod první sérií, zvýrazněný poslední bod. Data jsou ilustrační.</p>
+      <p class="small" style="margin:8px 0 0">Mřížka <code>chart-grid</code> (8 %), popisky os <code>chart-axis</code> 11 px, série v obou režimech stejné, čára 2 px, plocha jen pod první sérií, zvýrazněný poslední bod. Data jsou ilustrační.</p>
     </div>
+  </section>
+
+  <!-- REŽIM -->
+  <section id="rezim">
+    <div class="sec-head"><span class="k">Režim</span><h2>Světlý a tmavý, <span>přepínač vždy vpravo nahoře</span></h2>
+      <p>Každá aplikace podporuje oba režimy. Výchozí je podle systému, přepínač je na stejném místě a chová se stejně jako na hlavním webu. Vše řeší <code>brand/theme.js</code> a tokeny.</p></div>
+
+    <div class="modes">
+      <div class="mode force-dark"><div class="topbar">
+            <div class="crumb">
+              <span class="mark" aria-hidden="true">JK</span>
+              <span class="slash" aria-hidden="true">/</span>
+              <span class="tile" style="width:26px;height:26px;border-radius:7px;background:var(--tile-blue)"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M10 12h44a4 4 0 0 1 4 4v24a4 4 0 0 1-4 4H30l-12 10V44h-8a4 4 0 0 1-4-4V16a4 4 0 0 1 4-4z" fill="#fff"/></svg></span>
+              <span class="name">Chat <b>Inspector</b></span><span class="ver">v1.2</span>
+            </div>
+            <span class="spacer"></span><span class="ctx">Datart</span>
+            <button class="btn btn-secondary btn-sm" type="button" tabindex="-1">Exportovat</button>
+            <span class="callout"><button class="theme-toggle" type="button" tabindex="-1" aria-label="Přepnout světlý / tmavý režim" title="Přepnout režim (⌘⇧L)"><svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11z"/></svg></button></span>
+          </div><div class="cap"><span>Tmavý režim – v liště slunce</span><span>32 px</span></div></div>
+      <div class="mode force-light"><div class="topbar">
+            <div class="crumb">
+              <span class="mark" aria-hidden="true">JK</span>
+              <span class="slash" aria-hidden="true">/</span>
+              <span class="tile" style="width:26px;height:26px;border-radius:7px;background:var(--tile-blue)"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M10 12h44a4 4 0 0 1 4 4v24a4 4 0 0 1-4 4H30l-12 10V44h-8a4 4 0 0 1-4-4V16a4 4 0 0 1 4-4z" fill="#fff"/></svg></span>
+              <span class="name">Chat <b>Inspector</b></span><span class="ver">v1.2</span>
+            </div>
+            <span class="spacer"></span><span class="ctx">Datart</span>
+            <button class="btn btn-secondary btn-sm" type="button" tabindex="-1">Exportovat</button>
+            <span class="callout"><button class="theme-toggle" type="button" tabindex="-1" aria-label="Přepnout světlý / tmavý režim" title="Přepnout režim (⌘⇧L)"><svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11z"/></svg></button></span>
+          </div><div class="cap"><span>Světlý režim – v liště měsíc</span><span>32 px</span></div></div>
+    </div>
+
+    <div class="grid g3">
+      <div class="panel"><h3>Kde</h3><ul class="spec-list">
+        <li><b>Aplikace:</b> v horní liště úplně vpravo, za akcemi, 8 px od posledního tlačítka. Na mobilu zůstává v liště.</li>
+        <li><b>Web bez lišty:</b> plovoucí v pravém horním rohu, 14 px od okrajů (+ safe area).</li>
+        <li><b>Nikdy</b> v patičce, v menu nebo v nastavení. Volitelně navíc položka „Světlý / Tmavý režim“ ve vyhledávání ⌘K.</li>
+      </ul></div>
+      <div class="panel"><h3>Jak vypadá</h3><ul class="spec-list">
+        <li>Kruhové ikonové tlačítko <b>32 px</b> v liště, <b>38 px</b> plovoucí (sklo + blur).</li>
+        <li>Ikona 18 px, tah 1,8. Ukazuje režim, <b>do kterého se přepne</b>: v tmavém slunce, ve světlém měsíc. Bez textu.</li>
+        <li>Výplň <code>fill</code>, linka <code>line-2</code>, ikona <code>text-2</code>, hover <code>text</code> a <code>fill-hover</code>, focus <code>--jk-focus</code>.</li>
+      </ul></div>
+      <div class="panel"><h3>Jak se chová</h3><ul class="spec-list">
+        <li>Výchozí podle systému a dokud uživatel nepřepne, sleduje jeho změny.</li>
+        <li>Volba se uloží do <code>localStorage</code> pod klíč <code>theme</code>. Zkratka <kbd>⌘⇧L</kbd>.</li>
+        <li>Režim se nastaví ještě před vykreslením, stránka nesmí probliknout. Mění se i <code>theme-color</code>.</li>
+      </ul></div>
+    </div>
+
+    <div class="grid g2">
+      <div class="corner force-dark"><button class="theme-toggle float" type="button" tabindex="-1" aria-label="Ukázka přepínače"><svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11z"/></svg></button><div class="t">Jan <b>Kuchař</b></div></div>
+      <div class="corner force-light"><button class="theme-toggle float" type="button" tabindex="-1" aria-label="Ukázka přepínače"><svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11z"/></svg></button><div class="t">Jan <b>Kuchař</b></div></div>
+    </div>
+    <p class="small" style="margin:-8px 0 0">Hlavní web: plovoucí varianta 38 px v pravém horním rohu.</p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Token</th><th>Tmavý</th><th>Světlý</th></tr></thead>
+        <tbody>
+          <tr><td>bg · surface-1 · 2 · 3</td><td class="q">#08080c #111117 #18181f #22222b</td><td class="q">#f5f5f7 #ffffff #f2f2f5 #e8e8ed</td></tr>
+          <tr><td>glass</td><td class="q">rgba(32,32,40,.72)</td><td class="q">rgba(255,255,255,.72)</td></tr>
+          <tr><td>line · line-2 · line-3</td><td>bílá 10 / 14 / 22 %</td><td>černá 8 / 10 / 18 %</td></tr>
+          <tr><td>text · text-2 · text-3</td><td class="q">#f5f5f7 · 60 % · 38 %</td><td class="q">#1d1d1f · 62 % · 42 %</td></tr>
+          <tr><td>fill · fill-hover</td><td>bílá 7 / 12 %</td><td>černá 5 / 9 %</td></tr>
+          <tr><td>accent · hover</td><td class="q">#0a84ff · #409cff</td><td class="q">#007aff · #0062cc</td></tr>
+          <tr><td>accent-strong (tlačítko)</td><td class="q">#0071e3</td><td class="q">#0071e3</td></tr>
+          <tr><td>success · warning · danger · info</td><td class="q">#30d158 #ff9f0a #ff453a #64d2ff</td><td class="q">#248a3d #c93400 #d70015 #0071a4</td></tr>
+          <tr><td>stín popoveru</td><td>černá 80 %</td><td>černá 18 %</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small" style="margin:-8px 0 0">Značka (gradient, dlaždice, logo JK), série grafů, typografie a tvary se mezi režimy nemění.</p>
   </section>
 
   <!-- PRAVIDLA -->
@@ -564,7 +727,8 @@ footer.foot{max-width:1080px;margin:0 auto;padding-block:0 40px;font-size:12px;c
           <tr><td>Všechny tři</td><td>Bez faviconu, bez odkazu na hlavní web</td><td>Dlaždice z <code>brand/icons/</code>, logo JK v liště</td></tr>
           <tr><td>Chat Inspector</td><td>„DATART INSPECTOR | AI STATISTIKY“, mono kapitálky („SNÍMAČ PŘIPRAVEN K NÁBORU DAT“)</td><td>„Chat <b>Inspector</b>“, běžná věta v normálním písmu</td></tr>
           <tr><td>Search Analyzer</td><td>Podtitul patkovou kurzívou, <code>lang="en"</code>, titulek anglicky</td><td>Podtitul <code>text-2</code> 13 px, <code>lang="cs"</code></td></tr>
-          <tr><td>Reports Visualizer</td><td>Název „CSV Analyzer“, přepínač světlého režimu, Tailwind z CDN</td><td>„Reports <b>Visualizer</b>“, jen tmavý režim, preset v3</td></tr>
+          <tr><td>Reports Visualizer</td><td>Název „CSV Analyzer“, vlastní přepínač světlého režimu, Tailwind z CDN</td><td>„Reports <b>Visualizer</b>“, přepínač a tokeny podle sekce Režim, preset v3</td></tr>
+          <tr><td>Chat Inspector, Search Analyzer</td><td>Jen tmavý režim</td><td>Oba režimy, přepínač vpravo v liště</td></tr>
           <tr><td>Všechny tři</td><td>Titulky karet různé (Prohlížeč Chatů, Datart Search Log Analyzer…)</td><td><code>&lt;title&gt;</code> = „Search Analyzer · AI Statistiky“</td></tr>
         </tbody>
       </table>
@@ -577,13 +741,15 @@ footer.foot{max-width:1080px;margin:0 auto;padding-block:0 40px;font-size:12px;c
         <li><span>Piš česky, v nástrojích vykej, tlačítka jako sloveso („Nahrát JSON“).</span></li>
         <li><span>Čísla v českém formátu a <code>tabular-nums</code>.</span></li>
         <li><span>Na každé obrazovce nejvýš jedno primární tlačítko.</span></li>
+        <li><span>Podporuj oba režimy a každou obrazovku zkontroluj v obou.</span></li>
       </ul></div>
       <div class="panel no"><h3>Nedělej</h3><ul>
         <li><span>Gradient na tlačítkách, nadpisech nebo pozadí karet.</span></li>
         <li><span>Mono písmo a kapitálky pro běžné hlášky a nadpisy.</span></li>
         <li><span>Druhý akcent (fialová, oranžová) pro interaktivní prvky.</span></li>
         <li><span>Velké stíny pod kartami. Stín má jen popover a modal.</span></li>
-        <li><span>Světlý režim. Brand je výhradně tmavý.</span></li>
+        <li><span>Barvy natvrdo mimo tokeny (<code>#fff</code>, <code>rgba(255,255,255,…)</code>). Rozbijí světlý režim.</span></li>
+        <li><span>Přepínač režimu jinde než vpravo nahoře, s textem nebo jako výběr ze tří možností.</span></li>
         <li><span>Emoji jako ikony v rozhraní nástrojů.</span></li>
       </ul></div>
     </div>
@@ -594,14 +760,15 @@ footer.foot{max-width:1080px;margin:0 auto;padding-block:0 40px;font-size:12px;c
     <div class="sec-head"><span class="k">Kód</span><h2>Jak to zapracovat</h2>
       <p>Soubory jsou v repozitáři <code>jan-kuchar</code> ve složce <code>brand/</code>. Po sloučení do <code>main</code> budou i na <code>www.jan-kuchar.cz/brand/</code>, takže je appky můžou načítat přímo.</p></div>
     <div class="grid g2">
-      <div class="panel"><h3>Tailwind v4</h3><p class="dim" style="margin:0">Chat Inspector a Search Analyzer. Do hlavního CSS za <code>@import "tailwindcss"</code> vlož obsah <code>brand/tailwind-v4.css</code>. Pak třídy <code>bg-bg</code>, <code>bg-surface-1</code>, <code>text-fg-muted</code>, <code>border-line</code>, <code>bg-accent-strong</code>, <code>rounded-card</code>.</p></div>
-      <div class="panel"><h3>Tailwind v3 (CDN)</h3><p class="dim" style="margin:0">Reports Visualizer. Obsah <code>brand/tailwind-preset.js</code> vlož do <code>tailwind.config.theme.extend</code>, odstraň <code>darkMode</code> a přepínač. Ideálně přejít na build místo Play CDN.</p></div>
+      <div class="panel"><h3>Tailwind v4</h3><p class="dim" style="margin:0">Chat Inspector a Search Analyzer. Do hlavního CSS za <code>@import "tailwindcss"</code> vlož obsah <code>brand/tailwind-v4.css</code> (obsahuje i světlý režim). Pak třídy <code>bg-bg</code>, <code>bg-surface-1</code>, <code>text-fg-muted</code>, <code>border-line</code>, <code>bg-accent-strong</code>, <code>rounded-card</code>.</p></div>
+      <div class="panel"><h3>Tailwind v3 (CDN)</h3><p class="dim" style="margin:0">Reports Visualizer. Obsah <code>brand/tailwind-preset.js</code> vlož do <code>tailwind.config.theme.extend</code>, <code>darkMode</code> vezmi z presetu a jejich přepínač nahraď tím z manuálu. Barvy v presetu čtou <code>tokens.css</code>, který musí být načtený. Ideálně přejít na build místo Play CDN.</p></div>
     </div>
     <div class="tabs">
       <div class="seg" role="tablist" aria-label="Ukázka kódu">
         <button type="button" role="tab" aria-pressed="true" data-tab="v4">tailwind-v4.css</button>
         <button type="button" role="tab" aria-pressed="false" data-tab="shell">Kostra lišty (JSX)</button>
         <button type="button" role="tab" aria-pressed="false" data-tab="head">&lt;head&gt;</button>
+        <button type="button" role="tab" aria-pressed="false" data-tab="toggle">Přepínač režimu</button>
       </div>
     </div>
     <div class="code">
@@ -633,9 +800,15 @@ footer.foot{max-width:1080px;margin:0 auto;padding-block:0 40px;font-size:12px;c
   --radius-panel:18px;
 }
 html{color-scheme:dark}
+html[data-theme="light"]{
+  color-scheme:light;
+  --color-bg:#f5f5f7;
+  --color-surface-1:#ffffff;
+  <span class="cm">/* … ostatní světlé hodnoty v brand/tailwind-v4.css */</span>
+}
 body{@apply bg-bg text-fg font-sans antialiased text-sm}</pre>
 <pre id="code-shell" hidden>&lt;header className="sticky top-0 z-10 h-14 flex items-center gap-3 px-6
-  bg-[rgba(32,32,40,.72)] backdrop-blur-xl border-b border-line"&gt;
+  bg-[var(--jk-glass)] backdrop-blur-xl border-b border-line"&gt;
   &lt;a href="https://www.jan-kuchar.cz" aria-label="jan-kuchar.cz"
      className="size-[26px] rounded-[7px] grid place-items-center text-[11px] font-extrabold text-white
                 bg-[linear-gradient(135deg,#0a84ff,#bf5af2_50%,#ff375f)]"&gt;JK&lt;/a&gt;
@@ -645,14 +818,17 @@ body{@apply bg-bg text-fg font-sans antialiased text-sm}</pre>
     Search &lt;b className="font-semibold"&gt;Analyzer&lt;/b&gt;
   &lt;/span&gt;
   &lt;div className="flex-1" /&gt;
-  &lt;button className="h-7 px-2.5 rounded-row text-[13px] font-medium bg-white/7
-                     ring-[.5px] ring-inset ring-line-strong hover:bg-white/12"&gt;
+  &lt;button className="h-7 px-2.5 rounded-row text-[13px] font-medium bg-fill
+                     ring-[.5px] ring-inset ring-line-strong hover:bg-fill-hover"&gt;
     Nahrát JSON
   &lt;/button&gt;
+  &lt;button data-theme-toggle className="theme-toggle" … /&gt;  <span class="cm">{/* vždy poslední, viz Přepínač režimu */}</span>
 &lt;/header&gt;</pre>
 <pre id="code-head" hidden>&lt;html lang="cs"&gt;
-&lt;meta name="color-scheme" content="dark"&gt;
+&lt;meta name="color-scheme" content="dark light"&gt;
 &lt;meta name="theme-color" content="#08080c"&gt;
+<span class="cm">&lt;!-- režim: synchronně, před styly (žádné probliknutí) --&gt;</span>
+&lt;script src="https://www.jan-kuchar.cz/brand/theme.js"&gt;&lt;/script&gt;
 &lt;title&gt;Search Analyzer · AI Statistiky&lt;/title&gt;
 &lt;link rel="icon" href="/favicon.svg" type="image/svg+xml"&gt;  <span class="cm">&lt;!-- brand/icons/search-analyzer.svg --&gt;</span>
 &lt;link rel="preconnect" href="https://fonts.googleapis.com"&gt;
@@ -660,18 +836,40 @@ body{@apply bg-bg text-fg font-sans antialiased text-sm}</pre>
 &lt;link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&amp;display=swap" rel="stylesheet"&gt;
 <span class="cm">&lt;!-- volitelně všechny proměnné --jk-* pro vlastní CSS: --&gt;</span>
 &lt;link rel="stylesheet" href="https://www.jan-kuchar.cz/brand/tokens.css"&gt;</pre>
+<pre id="code-toggle" hidden><span class="cm">&lt;!-- poslední prvek horní lišty; kliknutí, ⌘⇧L i uložení volby řeší brand/theme.js --&gt;</span>
+&lt;button class="theme-toggle" data-theme-toggle
+        aria-label="Přepnout světlý / tmavý režim" title="Přepnout režim (⌘⇧L)"&gt;
+  &lt;svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"&gt;&lt;circle cx="12" cy="12" r="4"/&gt;&lt;path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/&gt;&lt;/svg&gt;
+  &lt;svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"&gt;&lt;path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11z"/&gt;&lt;/svg&gt;
+&lt;/button&gt;
+
+<span class="cm">/* CSS */</span>
+.theme-toggle{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;flex:none;
+  color:var(--jk-text-2);background:var(--jk-fill);box-shadow:var(--jk-hairline);border:0;cursor:pointer}
+.theme-toggle:hover{color:var(--jk-text);background:var(--jk-fill-hover)}
+.theme-toggle:focus-visible{outline:none;box-shadow:var(--jk-focus)}
+.theme-toggle svg{width:18px;height:18px}
+[data-theme="light"] .theme-toggle .sun,[data-theme="dark"] .theme-toggle .moon{display:none}
+
+<span class="cm">/* Tailwind: totéž utilitami */</span>
+className="size-8 rounded-full grid place-items-center text-fg-muted bg-fill hover:bg-fill-hover hover:text-fg
+           ring-[.5px] ring-inset ring-line-strong [&amp;_svg]:size-[18px]
+           dark:[&amp;_.moon]:hidden light:[&amp;_.sun]:hidden"
+
+<span class="cm">// Reakce na změnu (např. překreslení grafu)</span>
+document.addEventListener('jk-themechange', e =&gt; chart.update(e.detail));</pre>
     </div>
   </section>
 </main>
 
-<footer class="foot"><span>Grafický manuál JK · v1.0</span><span>© 2026 Jan Kuchař</span></footer>
+<footer class="foot"><span>Grafický manuál JK · v1.1</span><span>© 2026 Jan Kuchař</span></footer>
 
 <script>
 // Přepínač ukázek kódu
 const tabs = document.querySelectorAll('[data-tab]');
 tabs.forEach(t => t.addEventListener('click', () => {
   tabs.forEach(x => x.setAttribute('aria-pressed', x === t));
-  ['v4','shell','head'].forEach(id => document.getElementById('code-' + id).hidden = id !== t.dataset.tab);
+  ['v4','shell','head','toggle'].forEach(id => document.getElementById('code-' + id).hidden = id !== t.dataset.tab);
 }));
 // Kopírování aktivní ukázky
 document.getElementById('copy').addEventListener('click', e => {
