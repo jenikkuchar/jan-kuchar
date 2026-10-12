@@ -485,6 +485,13 @@ document.addEventListener('keydown', e => {
   }
 });
 
+// Klik mimo Spotlight – zavřít, ale text v poli nechat; klik / fokus do pole ho znovu otevře
+document.addEventListener('pointerdown', e => {
+  if (!e.target.closest('.search, #theme')) document.body.classList.remove('searching');
+});
+q.addEventListener('focus', () => { if (q.value.trim()) document.body.classList.add('searching'); });
+q.addEventListener('click', () => { if (q.value.trim()) document.body.classList.add('searching'); });
+
 // Esc kdekoliv – zavřít Spotlight a vrátit se do pole
 document.addEventListener('keydown', e => {
   if (e.key !== 'Escape') return;
